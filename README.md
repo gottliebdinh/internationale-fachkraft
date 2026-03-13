@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GeVin – Fachkräfte für Deutschland
+
+B2B recruiting platform connecting German employers (hospitality, hairdressing, nursing) with Vietnamese training schools. IHK-compliant, DSGVO-secure.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router, TypeScript)
+- **UI**: Tailwind CSS + shadcn/ui
+- **Database**: Supabase (PostgreSQL + Row Level Security)
+- **Auth**: Supabase Auth with role-based access (admin, school, employer)
+- **i18n**: next-intl (DE/VI/EN)
+- **Forms**: React Hook Form + Zod validation
+- **Email**: Resend
+- **PDF**: @react-pdf/renderer (IHK document generation)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A Supabase project (EU region recommended: Frankfurt)
+
+### Setup
+
+```bash
+npm install
+```
+
+Copy `.env.local` and fill in your Supabase credentials:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+RESEND_API_KEY=your-resend-api-key
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+### Database Setup
+
+Apply migrations to your Supabase project:
+
+1. Go to Supabase Dashboard → SQL Editor
+2. Run `supabase/migrations/001_initial_schema.sql`
+3. Run `supabase/migrations/002_rls_policies.sql`
+
+Or use the Supabase CLI:
+
+```bash
+npx supabase db push
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/
+    (public)/        → Public pages (landing, FAQ, legal)
+    (auth)/          → Login, registration
+    dashboard/
+      admin/         → Admin dashboard
+      school/        → School dashboard
+      employer/      → Employer dashboard
+    api/             → API routes (documents, notifications)
+  components/
+    ui/              → shadcn/ui components
+    shared/          → Navbar, sidebar, footer, consent banner
+  lib/
+    supabase/        → Client, server, middleware, actions
+    validators/      → Zod schemas
+    matching.ts      → Candidate matching logic
+    pdf-generator.ts → IHK document generation
+    notifications.ts → Notification system
+    email.ts         → Email integration (Resend)
+  i18n/              → Translations (de, vi, en)
+  types/             → TypeScript types
+  hooks/             → Custom hooks
+supabase/
+  migrations/        → SQL schema + RLS policies
+```
 
-## Learn More
+## User Roles
 
-To learn more about Next.js, take a look at the following resources:
+| Role | Access |
+|------|--------|
+| Admin | Full platform management, verification, audit logs |
+| School | Candidate management, match responses |
+| Employer | Job positions, candidate search, match requests |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Key Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **IHK Document Generator**: Auto-fill Berufsausbildungsvertrag and Erklärung zum Beschäftigungsverhältnis
+- **Match Pipeline**: Full status tracking from proposal to arrival
+- **DSGVO Compliance**: Audit logs, consent management, encrypted document storage
+- **Multilingual**: German, Vietnamese, English
