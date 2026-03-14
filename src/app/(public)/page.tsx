@@ -74,7 +74,7 @@ export default function HomePage() {
       >
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] lg:min-h-[calc(100vh-11rem)]">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] lg:min-h-[calc(100vh-18rem)]">
             {/* Linke Spalte: nur Internationale Fachkräfte für Deutschland */}
             <div className="flex min-h-0 flex-col justify-center rounded-r-lg bg-[oklch(0.98_0.008_260)] py-10 sm:py-12 lg:py-14">
             <h1
@@ -128,7 +128,7 @@ export default function HomePage() {
         {/* IHK + Zusammenarbeit mit – unter Bild und Hero-Text */}
         <div
           id="trust-heading"
-          className="home-reveal home-reveal-delay-4 border-t border-border bg-[oklch(0.98_0.008_260)] px-4 py-6 sm:px-6 sm:py-8 lg:px-8"
+          className="home-reveal home-reveal-delay-4 border-t border-border bg-[oklch(0.98_0.008_260)] px-4 py-6 pb-8 sm:px-6 sm:py-8 sm:pb-10 lg:px-8"
         >
           <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-3xl">

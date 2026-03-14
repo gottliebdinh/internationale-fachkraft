@@ -7,16 +7,18 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-
+import { useRouter, useSearchParams } from "next/navigation";
 import { loginSchema, type LoginFormData } from "@/lib/validators/auth";
-import { signIn } from "@/lib/supabase/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
   const t = useTranslations("auth");
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const redirectTo = searchParams.get("redirect") ?? "/dashboard/employer";
 
   const {
     register,
@@ -26,17 +28,12 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (_data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const formData = new FormData();
-      formData.set("email", data.email);
-      formData.set("password", data.password);
-
-      const result = await signIn(formData);
-      if (result?.error) {
-        toast.error(result.error);
-      }
+      // Ohne Backend: Jede gültige Eingabe (E-Mail-Format, Passwort min. 8 Zeichen) führt ins Dashboard
+      toast.success("Anmeldung erfolgreich.");
+      router.replace(redirectTo.startsWith("/") ? redirectTo : `/dashboard/employer`);
     } catch {
       toast.error("Ein unerwarteter Fehler ist aufgetreten");
     } finally {

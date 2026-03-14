@@ -15,18 +15,26 @@ export const registerEmployerSchema = z
     companyName: z.string().min(2, "Firmenname ist erforderlich"),
     industry: z.enum(["hospitality", "hairdressing", "nursing", "other"]),
     industryOther: z.string().optional(),
-    address: z.string().min(2, "Adresse ist erforderlich"),
-    city: z.string().min(2, "Stadt ist erforderlich"),
-    plz: z
+    lookingFor: z.string().optional(),
+    address: z.string().optional(),
+    city: z.string().optional(),
+    plz: z.string().optional(),
+    contactPerson: z.string().optional(),
+    phone: z.string().optional(),
+    verificationCode: z
       .string()
-      .regex(/^\d{5}$/, "PLZ muss 5 Ziffern haben"),
-    contactPerson: z.string().min(2, "Ansprechpartner ist erforderlich"),
-    phone: z.string().min(6, "Telefonnummer ist erforderlich"),
+      .regex(/^\d{6}$/, "Bitte geben Sie den 6-stelligen Code ein."),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwörter stimmen nicht überein",
     path: ["confirmPassword"],
-  });
+  })
+  .refine(
+    (data) =>
+      data.industry !== "other" ||
+      (typeof data.industryOther === "string" && data.industryOther.trim().length > 0),
+    { message: "Bitte geben Sie Ihre Branche ein.", path: ["industryOther"] }
+  );
 
 export const registerSchoolSchema = z
   .object({
