@@ -225,7 +225,7 @@ export default function RegisterSchoolPage() {
 
         <Button
           type="submit"
-          className="h-12 w-full text-base font-semibold bg-[oklch(0.55_0.12_75)] text-white hover:bg-[oklch(0.5_0.12_75)] transition-transform hover:scale-[1.01] active:scale-[0.99]"
+          className="h-12 w-full text-base font-semibold bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)] transition-transform hover:scale-[1.01] active:scale-[0.99]"
           size="lg"
           disabled={isLoading}
         >
@@ -245,7 +245,7 @@ export default function RegisterSchoolPage() {
           {t("hasAccount")}{" "}
           <Link
             href="/auth/login"
-            className="font-medium text-[oklch(0.5_0.12_75)] transition-colors hover:text-[oklch(0.45_0.12_75)]"
+            className="font-medium text-[oklch(0.50_0.11_195)] transition-colors hover:text-[oklch(0.44_0.11_195)]"
           >
             {t("loginTitle")}
           </Link>

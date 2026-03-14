@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   UserPlus,
   Brain,
@@ -19,6 +20,7 @@ const steps = [
   {
     step: "01",
     icon: UserPlus,
+    image: "/funktioniert/anmelden.png",
     title: "Registrierung & Profilerstellung",
     description:
       "Arbeitgeber erstellen ein Firmenprofil mit detaillierten Stellenangeboten. Vietnamesische Partnerschulen laden die Profile ihrer qualifizierten Kandidaten hoch – inklusive Sprachzertifikaten, Qualifikationen und Lebensläufen.",
@@ -32,6 +34,7 @@ const steps = [
   {
     step: "02",
     icon: Brain,
+    image: "/funktioniert/matching.png",
     title: "Intelligentes Matching",
     description:
       "Unser Algorithmus analysiert Anforderungen und Qualifikationen und erstellt optimale Matches. Arbeitgeber erhalten kuratierte Vorschläge und können Kandidaten direkt über die Plattform kontaktieren.",
@@ -45,6 +48,7 @@ const steps = [
   {
     step: "03",
     icon: FileCheck,
+    image: "/funktioniert/dokumentenprozess.png",
     title: "IHK-konformer Dokumentenprozess",
     description:
       "Nach der Auswahl generiert die Plattform automatisch alle benötigten IHK-Dokumente: Berufsausbildungsvertrag, Erklärung zum Beschäftigungsverhältnis, Ausbildungsplan und weitere Pflichtdokumente.",
@@ -58,6 +62,7 @@ const steps = [
   {
     step: "04",
     icon: Plane,
+    image: "/funktioniert/visumAnkunft.png",
     title: "Visum & Ankunft",
     description:
       "Wir begleiten den gesamten Visa-Prozess und koordinieren die Anreise. Von der Zusammenstellung der Visumsunterlagen bis zur Unterstützung bei der Ankunft in Deutschland – alles aus einer Hand.",
@@ -159,12 +164,18 @@ export default function HowItWorksPage() {
                   </ul>
                 </div>
                 <Card
-                  className={`border-0 bg-muted/30 ${
+                  className={`mx-auto max-w-sm overflow-hidden border-0 bg-muted/30 ${
                     i % 2 === 1 ? "lg:order-1" : ""
                   }`}
                 >
-                  <CardContent className="flex items-center justify-center py-24">
-                    <step.icon className="h-24 w-24 text-accent/20" />
+                  <CardContent className="relative aspect-video w-full p-0">
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 1024px) 280px, 320px"
+                    />
                   </CardContent>
                 </Card>
               </div>
@@ -206,7 +217,7 @@ export default function HowItWorksPage() {
         <div
           className="absolute inset-0 opacity-25"
           style={{
-            background: "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.6 0.15 75 / 0.4), transparent 70%)",
+            background: "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.55 0.12 195 / 0.4), transparent 70%)",
           }}
         />
         <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
@@ -220,7 +231,7 @@ export default function HowItWorksPage() {
             <Button
               size="lg"
               asChild
-              className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.55_0.12_75)] text-white hover:bg-[oklch(0.5_0.12_75)]"
+              className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)]"
             >
               <Link href="/auth/register/employer" className="inline-flex items-center justify-center gap-2">
                 Jetzt kostenlos starten

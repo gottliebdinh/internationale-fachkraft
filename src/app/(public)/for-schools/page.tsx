@@ -94,7 +94,7 @@ export default function ForSchoolsPage() {
               <Button
                 size="lg"
                 asChild
-                className="h-12 min-h-12 px-8 text-base font-semibold shadow-sm bg-[oklch(0.55_0.12_75)] text-white hover:bg-[oklch(0.5_0.12_75)]"
+                className="h-12 min-h-12 px-8 text-base font-semibold shadow-sm bg-[oklch(0.28_0.06_255)] text-white hover:bg-[oklch(0.22_0.06_255)]"
               >
                 <Link href="/contact" className="inline-flex items-center justify-center gap-2">
                   Partnerschaft anfragen
@@ -219,7 +219,7 @@ export default function ForSchoolsPage() {
         <div
           className="absolute inset-0 opacity-25"
           style={{
-            background: "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.6 0.15 75 / 0.4), transparent 70%)",
+            background: "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.55 0.12 195 / 0.4), transparent 70%)",
           }}
         />
         <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
@@ -233,7 +233,7 @@ export default function ForSchoolsPage() {
             <Button
               size="lg"
               asChild
-              className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.55_0.12_75)] text-white hover:bg-[oklch(0.5_0.12_75)]"
+              className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)]"
             >
               <Link href="/contact" className="inline-flex items-center justify-center gap-2">
                 Kontakt aufnehmen

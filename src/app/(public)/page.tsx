@@ -67,25 +67,23 @@ export default function HomePage() {
         id="main-content"
         aria-label="Startseite GeVin – Internationale Fachkräfte für Deutschland"
       >
-      {/* Hero: heller Hintergrund oben */}
+      {/* Hero: links Textbox mit Hintergrund, rechts Bild über volle Höhe */}
       <section
-        className="relative min-h-[90vh] overflow-hidden bg-[oklch(0.98_0.008_260)]"
+        className="relative overflow-hidden bg-[oklch(0.98_0.008_260)] lg:min-h-screen"
         aria-labelledby="hero-heading"
       >
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            background: "radial-gradient(ellipse 80% 60% at 50% 0%, oklch(0.75 0.1 75 / 0.25), transparent 60%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-6xl px-4 pt-28 pb-24 sm:px-6 sm:pt-36 lg:px-8">
-          <div className="max-w-3xl">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] lg:min-h-[calc(100vh-11rem)]">
+            {/* Linke Spalte: nur Internationale Fachkräfte für Deutschland */}
+            <div className="flex min-h-0 flex-col justify-center rounded-r-lg bg-[oklch(0.98_0.008_260)] py-10 sm:py-12 lg:py-14">
             <h1
               id="hero-heading"
-              className="home-reveal home-reveal-delay-2 mt-6 font-[var(--font-display)] text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl lg:leading-[1.1]"
+              className="home-reveal home-reveal-delay-2 mt-0 font-[var(--font-display)] text-4xl font-semibold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl"
             >
-              Internationale Fachkräfte{" "}
-              <span className="text-[oklch(0.55_0.12_75)]">für Deutschland</span>
+              Internationale Fachkräfte
+              <br />
+              <span className="text-[oklch(0.50_0.11_195)]">für Deutschland</span>
             </h1>
             <p className="home-reveal home-reveal-delay-3 mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
               Rechtssicher Fachkräfte und Auszubildende finden – IHK-konform,
@@ -98,10 +96,10 @@ export default function HomePage() {
               <Button
                 size="lg"
                 asChild
-                className="h-12 min-h-12 px-8 text-base font-semibold shadow-sm bg-[oklch(0.55_0.12_75)] text-white hover:bg-[oklch(0.5_0.12_75)]"
+                className="h-12 min-h-12 px-8 text-base font-semibold shadow-sm bg-[oklch(0.28_0.06_255)] text-white hover:bg-[oklch(0.22_0.06_255)]"
               >
                 <Link href="/auth/register/employer" className="inline-flex items-center justify-center gap-2">
-                  Jetzt Kandidaten finden
+                  Kandidaten finden
                   <ArrowRight className="h-4 w-4 shrink-0" />
                 </Link>
               </Button>
@@ -111,44 +109,56 @@ export default function HomePage() {
               >
                 So funktioniert’s</Link>
             </div>
+          </div>
+            {/* Rechte Spalte: Bild nutzt gesamte Höhe und Breite */}
+            <div className="relative min-h-[320px] overflow-hidden lg:min-h-0 lg:h-full">
+              <Image
+                src="/bilder/home2verticaladjust.png"
+                alt=""
+                fill
+                className="object-cover object-center"
+                priority
+                sizes="50vw"
+              />
+            </div>
+          </div>
+          </div>
+        </div>
 
-            {/* IHK-konforme Prozesse & Zusammenarbeit direkt im Hero */}
-            <div
-              id="trust-heading"
-              className="home-reveal home-reveal-delay-4 mt-14 flex flex-col gap-6 border-t border-border pt-10 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div>
-                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[oklch(0.5_0.12_75)]">
-                  Höchste Standards
-                </p>
-                <p className="mt-1 font-[var(--font-display)] text-lg font-semibold text-foreground sm:text-xl">
-                  IHK-konforme Prozesse &{" "}
-                  <span className="text-[oklch(0.5_0.12_75)]">DSGVO-sichere Plattform</span>
-                </p>
-                <p className="mt-1 max-w-lg text-sm text-muted-foreground">
-                  Rechtssicher von der Anerkennung bis zur Platzierung.
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 sm:items-end">
-                <span className="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                  Zusammenarbeit mit
-                </span>
-                <div className="flex items-center gap-5">
-                  <Image
-                    src="/Bundesagentur_für_Arbeit/Bundesagentur_für_Arbeit_idefzv9ho6_2.svg"
-                    alt="Bundesagentur für Arbeit"
-                    width={120}
-                    height={32}
-                    className="h-7 w-auto opacity-90"
-                  />
-                  <Image
-                    src="/ihk/id0U3VE7ma_1773417223568.png"
-                    alt="IHK"
-                    width={140}
-                    height={32}
-                    className="h-7 w-auto opacity-90"
-                  />
-                </div>
+        {/* IHK + Zusammenarbeit mit – unter Bild und Hero-Text */}
+        <div
+          id="trust-heading"
+          className="home-reveal home-reveal-delay-4 border-t border-border bg-[oklch(0.98_0.008_260)] px-4 py-6 sm:px-6 sm:py-8 lg:px-8"
+        >
+          <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-3xl">
+              <p className="font-[var(--font-display)] text-lg font-semibold text-foreground sm:text-xl">
+                IHK-konforme Prozesse &{" "}
+                <span className="text-[oklch(0.50_0.11_195)]">DSGVO-sichere Plattform</span>
+              </p>
+              <p className="mt-1 max-w-lg text-sm text-muted-foreground">
+                Rechtssicher von der Anerkennung bis zur Platzierung.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 text-right sm:shrink-0 sm:items-end">
+              <span className="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                Zusammenarbeit mit
+              </span>
+              <div className="flex items-center justify-end gap-5">
+                <Image
+                  src="/Bundesagentur_für_Arbeit/Bundesagentur_für_Arbeit_idefzv9ho6_2.svg"
+                  alt="Bundesagentur für Arbeit"
+                  width={120}
+                  height={32}
+                  className="h-7 w-auto opacity-90"
+                />
+                <Image
+                  src="/ihk/id0U3VE7ma_1773417223568.png"
+                  alt="IHK"
+                  width={140}
+                  height={32}
+                  className="h-7 w-auto opacity-90"
+                />
               </div>
             </div>
           </div>
@@ -183,7 +193,7 @@ export default function HomePage() {
                 key={item.title}
                 className="home-card-hover rounded-2xl border border-border bg-card p-6 shadow-sm"
               >
-                <item.icon className="mb-4 h-9 w-9 text-[oklch(0.55_0.12_75)]" />
+                <item.icon className="mb-4 h-9 w-9 text-[oklch(0.50_0.11_195)]" />
                 <h3 className="font-[var(--font-display)] text-lg font-semibold text-foreground">
                   {item.title}
                 </h3>
@@ -215,7 +225,7 @@ export default function HomePage() {
               { value: "85+", label: "Deutsche Arbeitgeber", icon: Building2 },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <stat.icon className="mx-auto mb-3 h-8 w-8 text-[oklch(0.55_0.12_75)]" />
+                <stat.icon className="mx-auto mb-3 h-8 w-8 text-[oklch(0.50_0.11_195)]" />
                 <div className="font-[var(--font-display)] text-2xl font-semibold text-foreground sm:text-3xl">
                   {stat.value}
                 </div>
@@ -234,7 +244,7 @@ export default function HomePage() {
         aria-labelledby="how-heading"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-[oklch(0.5_0.12_75)]">
+          <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-[oklch(0.50_0.11_195)]">
             Ablauf
           </p>
           <h2 id="how-heading" className="mt-3 text-center font-[var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
@@ -268,7 +278,7 @@ export default function HomePage() {
             ].map((item) => (
               <div key={item.step} className="relative pl-12">
                 <span
-                  className="absolute left-0 top-0 font-[var(--font-display)] text-3xl font-bold text-[oklch(0.55_0.12_75/0.35)]"
+                  className="absolute left-0 top-0 font-[var(--font-display)] text-3xl font-bold text-[oklch(0.50_0.11_195/0.35)]"
                   aria-hidden
                 >
                   {item.step}
@@ -288,7 +298,7 @@ export default function HomePage() {
       {/* Industries: gleiche Section-Hierarchie wie „Ablauf“ */}
       <section className="border-t border-border bg-[oklch(0.97_0.008_260)] py-20 sm:py-24" aria-labelledby="industries-heading">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-[oklch(0.5_0.12_75)]">
+          <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-[oklch(0.50_0.11_195)]">
             Branchen
           </p>
           <h2 id="industries-heading" className="mt-3 text-center font-[var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
@@ -316,7 +326,7 @@ export default function HomePage() {
                 key={industry.title}
                 className="home-card-hover overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm"
               >
-                <div className="h-1.5 w-full bg-[oklch(0.65_0.12_75)]" />
+                <div className="h-1.5 w-full bg-[oklch(0.55_0.10_195)]" />
                 <div className="p-6">
                   <h3 className="font-[var(--font-display)] text-lg font-semibold text-foreground">
                     {industry.title}
@@ -330,7 +340,7 @@ export default function HomePage() {
                         key={role}
                         className="flex items-center gap-2 text-sm text-foreground"
                       >
-                        <CheckCircle2 className="h-4 w-4 shrink-0 text-[oklch(0.55_0.12_75)]" />
+                        <CheckCircle2 className="h-4 w-4 shrink-0 text-[oklch(0.50_0.11_195)]" />
                         {role}
                       </li>
                     ))}
@@ -350,7 +360,7 @@ export default function HomePage() {
         <div
           className="absolute inset-0 opacity-25"
           style={{
-            background: "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.6 0.15 75 / 0.4), transparent 70%)",
+            background: "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.55 0.12 195 / 0.4), transparent 70%)",
           }}
         />
         <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
@@ -364,7 +374,7 @@ export default function HomePage() {
             <Button
               size="lg"
               asChild
-              className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.55_0.12_75)] text-white hover:bg-[oklch(0.5_0.12_75)]"
+              className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)]"
             >
               <Link href="/auth/register/employer">Jetzt kostenlos starten</Link>
             </Button>

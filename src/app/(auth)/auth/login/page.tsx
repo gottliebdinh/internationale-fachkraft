@@ -80,7 +80,7 @@ export default function LoginPage() {
             </Label>
             <Link
               href="/auth/forgot-password"
-              className="text-xs font-medium text-muted-foreground transition-colors hover:text-[oklch(0.5_0.12_75)]"
+              className="text-xs font-medium text-muted-foreground transition-colors hover:text-[oklch(0.50_0.11_195)]"
             >
               {t("forgotPassword")}
             </Link>
@@ -101,7 +101,7 @@ export default function LoginPage() {
 
         <Button
           type="submit"
-          className="h-12 w-full text-base font-semibold bg-[oklch(0.55_0.12_75)] text-white hover:bg-[oklch(0.5_0.12_75)] transition-transform hover:scale-[1.01] active:scale-[0.99]"
+          className="h-12 w-full text-base font-semibold bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)] transition-transform hover:scale-[1.01] active:scale-[0.99]"
           size="lg"
           disabled={isLoading}
         >
@@ -127,7 +127,7 @@ export default function LoginPage() {
         <div className="mt-3 flex flex-col gap-2">
           <Link
             href="/auth/register/employer"
-            className="text-sm font-semibold text-[oklch(0.5_0.12_75)] transition-colors hover:text-[oklch(0.45_0.12_75)]"
+            className="text-sm font-semibold text-[oklch(0.50_0.11_195)] transition-colors hover:text-[oklch(0.44_0.11_195)]"
           >
             Jetzt kostenlos registrieren →
           </Link>

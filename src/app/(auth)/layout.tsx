@@ -19,10 +19,10 @@ export default function AuthLayout({
         <div className="mx-auto flex w-full max-w-lg flex-col items-center">
           <Link
             href="/"
-            className="mb-6 block text-center focus:outline-none focus:ring-2 focus:ring-[oklch(0.55_0.12_75)] focus:ring-offset-2 rounded-md"
+            className="mb-6 block text-center focus:outline-none focus:ring-2 focus:ring-[oklch(0.50_0.11_195)] focus:ring-offset-2 rounded-md"
           >
             <h1 className="font-[var(--font-display)] text-3xl font-semibold tracking-tight text-foreground">
-              Ge<span className="text-[oklch(0.55_0.12_75)]">Vin</span>
+              Ge<span className="text-[oklch(0.50_0.11_195)]">Vin</span>
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Fachkräfte für Deutschland

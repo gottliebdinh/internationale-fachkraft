@@ -152,7 +152,7 @@ export default function RegisterEmployerPage() {
       {/* Fortschrittsbalken: Goal-Gradient – „fast geschafft“ sichtbar */}
       <div className="mt-5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
         <div
-          className="h-full rounded-full bg-[oklch(0.55_0.12_75)] transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-[oklch(0.50_0.11_195)] transition-all duration-500 ease-out"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -170,9 +170,9 @@ export default function RegisterEmployerPage() {
                 className={cn(
                   "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 transition-all",
                   i < step &&
-                    "border-[oklch(0.55_0.12_75)] bg-[oklch(0.55_0.12_75)] text-white cursor-pointer",
+                    "border-[oklch(0.50_0.11_195)] bg-[oklch(0.50_0.11_195)] text-white cursor-pointer",
                   i === step &&
-                    "border-[oklch(0.55_0.12_75)] bg-[oklch(0.55_0.12_75/0.12)] text-[oklch(0.5_0.12_75)]",
+                    "border-[oklch(0.50_0.11_195)] bg-[oklch(0.50_0.11_195/0.12)] text-[oklch(0.50_0.11_195)]",
                   i > step && "border-border bg-muted/50 text-muted-foreground cursor-default"
                 )}
               >
@@ -186,7 +186,7 @@ export default function RegisterEmployerPage() {
                 <div
                   className={cn(
                     "mx-1 h-0.5 flex-1 rounded-full transition-colors",
-                    i < step ? "bg-[oklch(0.55_0.12_75)]" : "bg-border"
+                    i < step ? "bg-[oklch(0.50_0.11_195)]" : "bg-border"
                   )}
                 />
               )}
@@ -484,7 +484,7 @@ export default function RegisterEmployerPage() {
             <Button
               type="button"
               onClick={goNext}
-              className="h-12 gap-1.5 px-6 font-semibold bg-[oklch(0.55_0.12_75)] text-white hover:bg-[oklch(0.5_0.12_75)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              className="h-12 gap-1.5 px-6 font-semibold bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
               Weiter zum nächsten Schritt
               <ArrowRight className="h-4 w-4" />
@@ -494,7 +494,7 @@ export default function RegisterEmployerPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="h-12 gap-1.5 px-6 font-semibold bg-[oklch(0.55_0.12_75)] text-white hover:bg-[oklch(0.5_0.12_75)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="h-12 gap-1.5 px-6 font-semibold bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)] transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 {isLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -519,7 +519,7 @@ export default function RegisterEmployerPage() {
           {t("hasAccount")}{" "}
           <Link
             href="/auth/login"
-            className="font-medium text-[oklch(0.5_0.12_75)] transition-colors hover:text-[oklch(0.45_0.12_75)]"
+            className="font-medium text-[oklch(0.50_0.11_195)] transition-colors hover:text-[oklch(0.44_0.11_195)]"
           >
             {t("loginTitle")}
           </Link>
