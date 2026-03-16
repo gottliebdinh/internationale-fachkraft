@@ -1,293 +1,231 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useParams } from "next/navigation";
-import {
-  ArrowLeft,
-  Calendar,
-  Briefcase,
-  GraduationCap,
-  Globe,
-  FileText,
-  Video,
-  Send,
-} from "lucide-react";
+import { ArrowLeft, FileText, Play, FileCheck, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import type { CandidateWithDocuments, CandidateDocument } from "@/types/database";
+import { cn } from "@/lib/utils";
 
-const mockCandidate: CandidateWithDocuments = {
-  id: "cand-1",
-  school_id: "school-1",
-  first_name: "Thi Mai",
-  last_name: "Nguyen",
-  date_of_birth: "1998-05-12",
-  nationality: "Vietnamesisch",
-  passport_number: "B12345678",
-  passport_expiry: "2030-05-12",
-  gender: "female",
-  specialization: "hospitality",
-  german_level: "B1",
-  b1_certificate_date: "2026-01-10",
-  education_level: "Bachelor Tourismusmanagement",
-  work_experience_years: 3,
-  availability_date: "2026-06-01",
-  urgency: "3_months",
-  video_intro_url: "https://example.com/video/thi-mai",
-  profile_photo_url: null,
-  status: "active",
-  created_at: "2025-12-01T10:00:00Z",
-  updated_at: "2025-12-01T10:00:00Z",
-  documents: [
-    {
-      id: "doc-1",
-      candidate_id: "cand-1",
-      document_type: "passport",
-      file_url: "#",
-      file_name: "passport_nguyen.pdf",
-      verified_by_admin: true,
-      uploaded_at: "2025-12-01T10:00:00Z",
-    },
-    {
-      id: "doc-2",
-      candidate_id: "cand-1",
-      document_type: "b1_certificate",
-      file_url: "#",
-      file_name: "b1_zertifikat.pdf",
-      verified_by_admin: true,
-      uploaded_at: "2026-01-10T10:00:00Z",
-    },
-    {
-      id: "doc-3",
-      candidate_id: "cand-1",
-      document_type: "cv",
-      file_url: "#",
-      file_name: "lebenslauf_nguyen.pdf",
-      verified_by_admin: false,
-      uploaded_at: "2025-12-05T10:00:00Z",
-    },
-    {
-      id: "doc-4",
-      candidate_id: "cand-1",
-      document_type: "diploma",
-      file_url: "#",
-      file_name: "diplom_tourismus.pdf",
-      verified_by_admin: true,
-      uploaded_at: "2025-12-02T10:00:00Z",
-    },
-  ],
-  school: {
-    id: "school-1",
-    user_id: "user-school-1",
-    name: "Hanoi Language & Vocational Academy",
-    license_number: "VN-2024-001",
-    region: "Hanoi",
-    contact_person: "Dr. Tran Van Minh",
-    phone: "+84 24 1234 5678",
-    website: "https://hlva.edu.vn",
-    government_affiliation: "Ministry of Education Vietnam",
-    verified: true,
-    documents: {},
-    created_at: "2024-06-01T00:00:00Z",
-    updated_at: "2024-06-01T00:00:00Z",
+const STATUS_STEPS = [
+  { key: "vorgeschlagen", label: "Vorgeschlagen" },
+  { key: "kontakt", label: "Kontakt aufgenommen" },
+  { key: "interview", label: "Interview geplant" },
+  { key: "vertrag", label: "Vertrag in Vorbereitung" },
+  { key: "abgeschlossen", label: "Abgeschlossen" },
+];
+
+const CANDIDATES_DATA: Record<
+  string,
+  {
+    name: string;
+    age: number;
+    role: string;
+    cv: string;
+    image: string;
+    currentStepIndex: number;
+    papiere: { name: string; status: string }[];
+  }
+> = {
+  "1": {
+    name: "Mai Nguyen",
+    image: "/profilbilder/mai.png",
+    age: 24,
+    role: "Koch / Köchin",
+    cv: "Ausbildung Hotelfach, 2 Jahre Erfahrung in Restaurant. B2 Deutsch.",
+    currentStepIndex: 1,
+    papiere: [
+      { name: "Lebenslauf", status: "Vorhanden" },
+      { name: "Sprachzertifikat B2", status: "Vorhanden" },
+      { name: "Ausbildungsnachweis", status: "Vorhanden" },
+    ],
   },
-};
-
-const documentTypeLabels: Record<string, string> = {
-  passport: "Reisepass",
-  b1_certificate: "B1-Zertifikat",
-  cv: "Lebenslauf",
-  diploma: "Zeugnis/Diplom",
-  health_certificate: "Gesundheitszeugnis",
-  video: "Video",
-  other: "Sonstige",
-};
-
-const specializationLabels: Record<string, string> = {
-  hospitality: "Gastronomie",
-  hairdressing: "Friseurhandwerk",
-  nursing: "Pflege",
-  other: "Andere",
+  "2": {
+    name: "Linh Tran",
+    image: "/profilbilder/linh.png",
+    age: 22,
+    role: "Servicekraft",
+    cv: "Berufserfahrung in Gastronomie, B1 Deutsch. Motiviert für Ausbildung.",
+    currentStepIndex: 0,
+    papiere: [
+      { name: "Lebenslauf", status: "Vorhanden" },
+      { name: "Sprachzertifikat B1", status: "Vorhanden" },
+    ],
+  },
+  "3": {
+    name: "Hoang Le",
+    image: "/profilbilder/hoang.png",
+    age: 26,
+    role: "Koch / Köchin",
+    cv: "Koch-Ausbildung Vietnam, 3 Jahre Küche. B2 Deutsch.",
+    currentStepIndex: 2,
+    papiere: [
+      { name: "Lebenslauf", status: "Vorhanden" },
+      { name: "Sprachzertifikat B2", status: "Vorhanden" },
+      { name: "Berufsabschluss", status: "Vorhanden" },
+    ],
+  },
 };
 
 export default function CandidateDetailPage() {
   const params = useParams();
-  const candidate = mockCandidate;
+  const id = typeof params.id === "string" ? params.id : null;
+  const candidate = id ? CANDIDATES_DATA[id] : null;
 
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href="/dashboard/employer/candidates">
-            <ArrowLeft className="size-4" />
+  if (!candidate) {
+    return (
+      <div className="space-y-6">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/dashboard/employer">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Zurück
           </Link>
         </Button>
-        <div className="flex-1">
-          <h2 className="text-2xl font-bold tracking-tight">
-            {candidate.first_name} {candidate.last_name}
-          </h2>
-          <p className="text-muted-foreground">
-            Kandidatenprofil · ID: {params.id}
-          </p>
-        </div>
-        <Button>
-          <Send className="size-4" />
-          Match anfragen
-        </Button>
+        <p className="text-muted-foreground">Kandidat nicht gefunden.</p>
       </div>
+    );
+  }
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Persönliche Informationen</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-6">
-                <Avatar size="lg" className="size-20">
-                  <AvatarFallback className="text-xl">
-                    {candidate.first_name[0]}
-                    {candidate.last_name[0]}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 gap-4 sm:grid-cols-2">
-                  <InfoRow
-                    icon={<GraduationCap className="size-4" />}
-                    label="Ausbildung"
-                    value={candidate.education_level}
-                  />
-                  <InfoRow
-                    icon={<Briefcase className="size-4" />}
-                    label="Berufserfahrung"
-                    value={`${candidate.work_experience_years} Jahre`}
-                  />
-                  <InfoRow
-                    icon={<Globe className="size-4" />}
-                    label="Nationalität"
-                    value={candidate.nationality}
-                  />
-                  <InfoRow
-                    icon={<Calendar className="size-4" />}
-                    label="Geburtsdatum"
-                    value={new Date(candidate.date_of_birth).toLocaleDateString("de-DE")}
-                  />
-                </div>
-              </div>
+  const currentStep = candidate.currentStepIndex;
 
-              <Separator className="my-4" />
-
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary">
-                  {specializationLabels[candidate.specialization]}
-                </Badge>
-                <Badge variant="default">Deutsch {candidate.german_level}</Badge>
-                <Badge variant="outline">
-                  Verfügbar ab {new Date(candidate.availability_date).toLocaleDateString("de-DE")}
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Video className="size-5" />
-                Video-Vorstellung
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {candidate.video_intro_url ? (
-                <div className="aspect-video rounded-lg bg-muted flex items-center justify-center">
-                  <div className="text-center text-muted-foreground">
-                    <Video className="mx-auto size-12 mb-2 opacity-50" />
-                    <p className="text-sm">Video-Vorstellung verfügbar</p>
-                    <Button variant="outline" size="sm" className="mt-3">
-                      Video abspielen
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Keine Video-Vorstellung vorhanden.
-                </p>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="size-5" />
-                Dokumente
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {candidate.documents && candidate.documents.length > 0 ? (
-                candidate.documents.map((doc: CandidateDocument) => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center justify-between rounded-md border p-3"
-                  >
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-medium">
-                        {documentTypeLabels[doc.document_type] ?? doc.document_type}
-                      </p>
-                      <p className="text-xs text-muted-foreground">{doc.file_name}</p>
-                    </div>
-                    <Badge variant={doc.verified_by_admin ? "default" : "outline"}>
-                      {doc.verified_by_admin ? "Verifiziert" : "Ausstehend"}
-                    </Badge>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-muted-foreground">Keine Dokumente vorhanden.</p>
-              )}
-            </CardContent>
-          </Card>
-
-          {candidate.school && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Partnerschule</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <p className="font-medium">{candidate.school.name}</p>
-                <p className="text-muted-foreground">Region: {candidate.school.region}</p>
-                <p className="text-muted-foreground">
-                  Kontakt: {candidate.school.contact_person}
-                </p>
-                {candidate.school.verified && (
-                  <Badge variant="default">Verifiziert</Badge>
-                )}
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function InfoRow({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
   return (
-    <div className="flex items-start gap-2">
-      <span className="mt-0.5 text-muted-foreground">{icon}</span>
-      <div>
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-sm font-medium">{value}</p>
+    <div className="mx-auto max-w-3xl">
+      {/* Header: Zurück + Kandidat */}
+      <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-0">
+        <Button variant="ghost" size="icon" className="shrink-0" asChild>
+          <Link href="/dashboard/employer" aria-label="Zurück">
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+        </Button>
+        <div className="flex min-w-0 flex-1 items-center gap-3">
+          <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-muted">
+            <Image
+              src={candidate.image}
+              alt={candidate.name}
+              fill
+              className="object-cover"
+              sizes="36px"
+            />
+          </div>
+          <div className="min-w-0">
+            <h1 className="truncate text-lg font-semibold tracking-tight">
+              {candidate.name}
+            </h1>
+            <p className="truncate text-xs text-muted-foreground">
+              {candidate.age} Jahre · {candidate.role}
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <div className="space-y-8 pt-6">
+      {/* Status: mehrere Steps zum Nachverfolgen */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Status – Nachverfolgung</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Aktueller Schritt: {STATUS_STEPS[currentStep].label}
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-start gap-0">
+            {STATUS_STEPS.map((step, index) => {
+              const isDone = index < currentStep;
+              const isCurrent = index === currentStep;
+              const isLast = index === STATUS_STEPS.length - 1;
+              return (
+                <div
+                  key={step.key}
+                  className={cn("flex flex-1 flex-col items-center", !isLast && "flex-1")}
+                >
+                  <div className="flex w-full items-center">
+                    <div
+                      className={cn(
+                        "z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-sm font-medium",
+                        isDone && "border-[oklch(0.38_0.12_255)] bg-[oklch(0.38_0.12_255)] text-white",
+                        isCurrent && "border-[oklch(0.38_0.12_255)] bg-[oklch(0.38_0.12_255/0.2)] text-[oklch(0.38_0.12_255)]",
+                        !isDone && !isCurrent && "border-muted-foreground/30 bg-muted/50 text-muted-foreground"
+                      )}
+                    >
+                      {isDone ? <Check className="h-4 w-4" /> : index + 1}
+                    </div>
+                    {!isLast && (
+                      <div
+                        className={cn(
+                          "h-0.5 flex-1",
+                          isDone ? "bg-[oklch(0.38_0.12_255)]" : "bg-muted"
+                        )}
+                      />
+                    )}
+                  </div>
+                  <span
+                    className={cn(
+                      "mt-2 text-center text-xs font-medium sm:text-sm",
+                      isCurrent && "text-foreground",
+                      isDone && "text-muted-foreground",
+                      !isDone && !isCurrent && "text-muted-foreground/80"
+                    )}
+                  >
+                    {step.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Lebenslauf */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <FileText className="h-4 w-4" />
+            Lebenslauf
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground leading-relaxed">{candidate.cv}</p>
+        </CardContent>
+      </Card>
+
+      {/* Video-Vorstellung */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Play className="h-4 w-4" />
+            Video-Vorstellung
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex aspect-video items-center justify-center rounded-lg bg-muted text-muted-foreground">
+            <Play className="h-12 w-12" />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Papiere / Dokumente */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <FileCheck className="h-4 w-4" />
+            Papiere & Dokumente
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2">
+            {candidate.papiere.map((doc) => (
+              <li
+                key={doc.name}
+                className="flex items-center justify-between rounded-md border border-border bg-muted/30 px-3 py-2 text-sm"
+              >
+                <span className="font-medium text-foreground">{doc.name}</span>
+                <span className="text-xs text-muted-foreground">{doc.status}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
       </div>
     </div>
   );

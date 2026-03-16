@@ -70,6 +70,11 @@ const faqCategories: FaqCategory[] = [
         answer:
           "Ja, die Plattform unterstützt die Koordination von Video-Interviews. Sie können direkt über das Dashboard Interview-Termine mit Kandidaten vereinbaren.",
       },
+      {
+        question: "Arbeitet GeVin mit Arbeitnehmerüberlassung?",
+        answer:
+          "Nein. Wir arbeiten im Vermittlungsmodell ohne Arbeitnehmerüberlassung. Die Kandidaten werden direkt bei Ihrem Unternehmen angestellt – wir vermitteln und begleiten den Prozess, überlassen aber keine Arbeitnehmer.",
+      },
     ],
   },
   {

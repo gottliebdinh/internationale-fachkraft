@@ -12,6 +12,9 @@ import {
   Euro,
   Languages,
   CheckCircle2,
+  Search,
+  Users,
+  Heart,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,58 +22,86 @@ import { Button } from "@/components/ui/button";
 const steps = [
   {
     step: "01",
-    icon: UserPlus,
-    image: "/funktioniert/anmelden.png",
-    title: "Registrierung & Profilerstellung",
+    icon: Users,
+    image: "/funktioniert/matching.png",
+    title: "Strukturierte Rekrutierung in Vietnam",
     description:
-      "Arbeitgeber erstellen ein Firmenprofil mit detaillierten Stellenangeboten. Vietnamesische Partnerschulen laden die Profile ihrer qualifizierten Kandidaten hoch – inklusive Sprachzertifikaten, Qualifikationen und Lebensläufen.",
+      "Mehrstufige Auswahl nach definierten Kriterien. Qualifizierte Kandidaten mit Sprachzertifikaten und fachlicher Vorbereitung – über unsere Infrastruktur vor Ort.",
     details: [
-      "Firmenprofil mit Standort und Branche",
-      "Detaillierte Stellenbeschreibungen",
+      "Mehrstufige Auswahlverfahren",
+      "Definierte Rekrutierungskriterien",
       "Kandidatenprofile mit Dokumenten",
-      "Sprachzertifikate (B1/B2) hinterlegen",
+      "Sprachzertifikate (B1/B2)",
     ],
   },
   {
     step: "02",
     icon: Brain,
-    image: "/funktioniert/matching.png",
-    title: "Intelligentes Matching",
+    image: "/funktioniert/dokumentenprozess.png",
+    title: "Sprach- und Integrationsvorbereitung",
     description:
-      "Unser Algorithmus analysiert Anforderungen und Qualifikationen und erstellt optimale Matches. Arbeitgeber erhalten kuratierte Vorschläge und können Kandidaten direkt über die Plattform kontaktieren.",
+      "Sprachtraining in mehreren Sprachzentren mit deutschsprachigen Lehrkräften, interkulturelle Vorbereitung und Dokumentenvorbereitung gemäß deutscher Anforderungen.",
     details: [
-      "KI-gestützter Matching-Algorithmus",
-      "Filterung nach Qualifikation und Sprache",
-      "Direkte Kommunikation auf der Plattform",
-      "Video-Interview-Koordination",
+      "Sprachtraining vor Ausreise",
+      "Interkulturelle Vorbereitung",
+      "Dokumentenvorbereitung (deutsche Anforderungen)",
+      "Minimierung von Integrationsrisiken",
     ],
   },
   {
     step: "03",
-    icon: FileCheck,
-    image: "/funktioniert/dokumentenprozess.png",
-    title: "IHK-konformer Dokumentenprozess",
+    icon: Search,
+    image: "/funktioniert/anmelden.png",
+    title: "Analyse des Personalbedarfs",
     description:
-      "Nach der Auswahl generiert die Plattform automatisch alle benötigten IHK-Dokumente: Berufsausbildungsvertrag, Erklärung zum Beschäftigungsverhältnis, Ausbildungsplan und weitere Pflichtdokumente.",
+      "Konkreter Bedarf Ihres Unternehmens – strukturiert erfasst und abgestimmt. Wir erfassen Stellen, Qualifikationen und Rahmenbedingungen für Planungssicherheit.",
     details: [
-      "Automatische Vertragsgenerierung (PDF)",
-      "IHK-Dokumentenvorlagen",
-      "Digitale Unterschrift und Freigabe",
-      "Statusverfolgung aller Dokumente",
+      "Strukturierte Bedarfsanalyse",
+      "Abstimmung mit Ihrem Unternehmen",
+      "Klare Definition von Anforderungen",
+      "Firmenprofil und Stellenangebote",
     ],
   },
   {
     step: "04",
+    icon: FileCheck,
+    image: "/funktioniert/dokumentenprozess.png",
+    title: "Vertrags- und Behördenkoordination",
+    description:
+      "Koordination mit IHK, HWK und ZAV. Automatisierte Erstellung aller IHK-Dokumente – Berufsausbildungsvertrag, Erklärung zum Beschäftigungsverhältnis, Ausbildungsplan – und strukturierte Vertragsgestaltung.",
+    details: [
+      "Koordination IHK, HWK, ZAV",
+      "Automatische IHK-Dokumente (PDF)",
+      "Strukturierte Vertragsgestaltung",
+      "Digitale Unterschrift und Statusverfolgung",
+    ],
+  },
+  {
+    step: "05",
     icon: Plane,
     image: "/funktioniert/visumAnkunft.png",
-    title: "Visum & Ankunft",
+    title: "Visa & Einreise",
     description:
-      "Wir begleiten den gesamten Visa-Prozess und koordinieren die Anreise. Von der Zusammenstellung der Visumsunterlagen bis zur Unterstützung bei der Ankunft in Deutschland – alles aus einer Hand.",
+      "Begleitung im Anerkennungs- und Visa-Prozess, Zusammenstellung der Unterlagen und Koordination der Anreise. Alles aus einer Hand bis zur Ankunft in Deutschland.",
     details: [
-      "Checkliste für Visumsunterlagen",
-      "Fortschrittsverfolgung des Antrags",
+      "Begleitung im Visa-Prozess",
+      "Checkliste Visumsunterlagen",
       "Koordination der Anreise",
+      "Unterstützung bei der Ankunft",
+    ],
+  },
+  {
+    step: "06",
+    icon: Heart,
+    image: "/funktioniert/visumAnkunft.png",
+    title: "Integrations- und Stabilisierungsphase",
+    description:
+      "Integrationsmanagement nach Ankunft – für langfristige Stabilität. Optionale Onboarding-Unterstützung, Behördengänge, Wohnungssuche und interkulturelle Begleitung.",
+    details: [
+      "Integrationsmanagement nach Ankunft",
       "Onboarding-Unterstützung",
+      "Behördengänge & Wohnungssuche",
+      "Interkulturelle Begleitung",
     ],
   },
 ];
@@ -119,9 +150,7 @@ export default function HowItWorksPage() {
               So funktioniert <span className="text-accent">GeVin</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              In vier klar definierten Schritten von der Registrierung zur
-              erfolgreichen Fachkräfteplatzierung – transparent, effizient und
-              rechtssicher.
+              Sechs klar definierte Schritte – von der Rekrutierung in Vietnam bis zur Integration. Jeder Schritt dokumentiert, transparent und mit Planungssicherheit.
             </p>
           </div>
         </div>

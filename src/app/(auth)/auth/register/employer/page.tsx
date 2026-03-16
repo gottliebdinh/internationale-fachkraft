@@ -6,14 +6,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   Loader2,
-  ArrowLeft,
+  ChevronLeft,
   Building2,
   Lock,
   Briefcase,
   Mail,
   ShieldCheck,
+  User,
+  Calendar,
+  Users,
+  Play,
+  FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -24,6 +30,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
@@ -31,6 +43,9 @@ const STEPS = [
   { id: "company", icon: Building2, label: "Firmenname" },
   { id: "account", icon: Lock, label: "Benutzer erstellen" },
   { id: "verification", icon: ShieldCheck, label: "Verifizierung" },
+  { id: "positions", icon: Users, label: "Arbeitskräfte" },
+  { id: "startDate", icon: Calendar, label: "Ab wann" },
+  { id: "candidates", icon: User, label: "Kandidaten" },
 ] as const;
 
 const STEP_FIELDS: Record<string, (keyof RegisterEmployerFormData)[]> = {
@@ -38,6 +53,9 @@ const STEP_FIELDS: Record<string, (keyof RegisterEmployerFormData)[]> = {
   company: ["companyName"],
   account: ["email", "password", "confirmPassword"],
   verification: ["verificationCode"],
+  positions: [],
+  startDate: [],
+  candidates: [],
 };
 
 const INDUSTRY_OPTIONS = [
@@ -51,7 +69,41 @@ const STEP_QUESTIONS: Record<number, string> = {
   1: "Wie heißt Ihr Unternehmen?",
   2: "Benutzerkonto erstellen",
   3: "E-Mail-Verifizierung",
+  4: "Nach welchen Arbeitskräften suchen Sie?",
+  5: "Ab wann und wie viele Stellen?",
+  6: "Passende Kandidaten für Sie",
 };
+
+// Optionen pro Branche (Mehrfachauswahl + Freitext)
+const POSITION_OPTIONS_BY_INDUSTRY: Record<string, { value: string; label: string }[]> = {
+  hospitality: [
+    { value: "chef", label: "Koch / Köchin" },
+    { value: "service", label: "Servicekraft" },
+    { value: "hotel", label: "Hotelfachkraft" },
+    { value: "trainee_h", label: "Auszubildende/r" },
+  ],
+  hairdressing: [
+    { value: "hairdresser", label: "Friseur/in" },
+    { value: "trainee_f", label: "Auszubildende/r" },
+    { value: "salon", label: "Salon-Assistent/in" },
+  ],
+  nursing: [
+    { value: "nurse", label: "Pflegefachkraft" },
+    { value: "assistant", label: "Pflegehelfer/in" },
+    { value: "trainee_n", label: "Auszubildende/r Pflege" },
+  ],
+  other: [
+    { value: "specialist", label: "Fachkraft" },
+    { value: "trainee", label: "Auszubildende/r" },
+  ],
+};
+
+// Dummy-Kandidaten pro Stelle (3 pro Position) – Profilbilder aus public/profilbilder
+const MOCK_CANDIDATES = [
+  { id: "1", name: "Mai Nguyen", age: 24, role: "Koch", image: "/profilbilder/mai.png", cv: "Ausbildung Hotelfach, 2 Jahre Erfahrung in Restaurant. B2 Deutsch.", videoLabel: "Video-Vorstellung" },
+  { id: "2", name: "Linh Tran", age: 22, role: "Service", image: "/profilbilder/linh.png", cv: "Berufserfahrung in Gastronomie, B1 Deutsch. Motiviert für Ausbildung.", videoLabel: "Video-Vorstellung" },
+  { id: "3", name: "Hoang Le", age: 26, role: "Koch", image: "/profilbilder/hoang.png", cv: "Koch-Ausbildung Vietnam, 3 Jahre Küche. B2 Deutsch.", videoLabel: "Video-Vorstellung" },
+];
 
 export default function RegisterEmployerPage() {
   const t = useTranslations("auth");
@@ -61,6 +113,11 @@ export default function RegisterEmployerPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
   const [pendingAdvance, setPendingAdvance] = useState(false);
+  const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
+  const [customPositionText, setCustomPositionText] = useState("");
+  const [startDateValue, setStartDateValue] = useState("");
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [selectedCandidate, setSelectedCandidate] = useState<typeof MOCK_CANDIDATES[0] | null>(null);
 
   const {
     register,
@@ -72,7 +129,13 @@ export default function RegisterEmployerPage() {
   } = useForm<RegisterEmployerFormData>({
     resolver: zodResolver(registerEmployerSchema),
     mode: "onTouched",
-    defaultValues: { lookingFor: "", verificationCode: "" },
+    defaultValues: {
+      lookingFor: "",
+      verificationCode: "",
+      positionTypes: [],
+      positionCustom: "",
+      startDate: "",
+    },
   });
 
   const selectedIndustry = watch("industry");
@@ -109,8 +172,12 @@ export default function RegisterEmployerPage() {
   }, [selectedIndustry, step, trigger]);
 
   async function goNext() {
+    if (step === 4 || step === 5) {
+      setStep((s) => s + 1);
+      return;
+    }
     const fieldsToValidate = STEP_FIELDS[STEPS[step].id];
-    const valid = await trigger(fieldsToValidate);
+    const valid = fieldsToValidate.length ? await trigger(fieldsToValidate) : true;
     if (valid) setStep((s) => Math.min(s + 1, STEPS.length - 1));
   }
 
@@ -121,14 +188,16 @@ export default function RegisterEmployerPage() {
   const onSubmit = async (data: RegisterEmployerFormData) => {
     setIsLoading(true);
     try {
-      // Nur Frontend: Daten z.B. lokal speichern oder nur anzeigen
       const payload = {
+        ...data,
         companyName: data.companyName,
         industry: data.industry,
         industryOther: data.industryOther,
-        lookingFor: data.lookingFor,
         email: data.email,
         verificationCode: data.verificationCode,
+        positionTypes: selectedPositions,
+        positionCustom: customPositionText,
+        startDate: startDateValue,
       };
       if (typeof window !== "undefined") {
         window.localStorage.setItem("register_employer_draft", JSON.stringify(payload));
@@ -140,29 +209,48 @@ export default function RegisterEmployerPage() {
     }
   };
 
+  function handleFinish() {
+    handleSubmit(onSubmit)();
+  }
+
   // Strahl reagiert sofort bei Auswahl; nur der Wechsel zur nächsten Seite ist verzögert
   const progressPercent = pendingAdvance
     ? ((step + 2) / STEPS.length) * 100
     : ((step + 1) / STEPS.length) * 100;
 
   return (
-    <div className="auth-card-enter w-full flex flex-col items-stretch min-h-screen">
+    <div className="auth-card-enter flex h-full min-h-0 w-full flex-col items-stretch overflow-hidden">
       {/* Strahl ganz oben, komplette Breite, rund (unten abgerundet) */}
       <div className="w-full rounded-b-2xl overflow-hidden shrink-0">
         <div className="h-2 w-full overflow-hidden bg-muted/80">
           <div
-            className="h-full rounded-full bg-[oklch(0.50_0.11_195)] transition-all duration-500 ease-out"
+            className="h-full rounded-full bg-[oklch(0.38_0.12_255)] transition-all duration-500 ease-out"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
       </div>
+      {/* Pfeil drunter: Zurück als Icon (nur bei step > 0) */}
+      <div className="flex w-full shrink-0 items-center px-4 py-2">
+        {step > 0 ? (
+          <button
+            type="button"
+            onClick={goBack}
+            className="flex h-9 w-9 items-center justify-center rounded-md text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-[oklch(0.38_0.12_255)] focus:ring-offset-2"
+            aria-label="Zurück"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+        ) : (
+          <span className="h-9 w-9" />
+        )}
+      </div>
 
       {/* Fragen-Bereich: vertikal zentriert, links bei 1/4 der Seite */}
       <div className="flex-1 min-h-0 w-full flex flex-col justify-center py-8">
-        <div className="w-full max-w-5xl pl-[28vw] pr-12">
+        <div className="w-full max-w-6xl pl-[28vw] pr-8">
       <Link
         href="/"
-        className="mb-6 block text-left focus:outline-none focus:ring-2 focus:ring-[oklch(0.50_0.11_195)] focus:ring-offset-2 rounded-md"
+        className="mb-6 block text-left focus:outline-none focus:ring-2 focus:ring-[oklch(0.38_0.12_255)] focus:ring-offset-2 rounded-md"
       >
         <h1 className="font-[var(--font-display)] text-3xl font-semibold tracking-tight text-foreground">
           Ge<span className="text-[oklch(0.50_0.11_195)]">Vin</span>
@@ -174,7 +262,7 @@ export default function RegisterEmployerPage() {
         key={step}
         className="mb-6 flex items-start gap-3 text-left animate-in slide-in-from-top-4 fade-in-0 duration-300"
       >
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-[oklch(0.50_0.11_195)] text-sm font-semibold text-white">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-[oklch(0.38_0.12_255)] text-sm font-semibold text-white">
           {step + 1}
         </span>
         <h2 className="font-[var(--font-display)] text-xl font-normal tracking-tight text-foreground sm:text-2xl">
@@ -214,7 +302,7 @@ export default function RegisterEmployerPage() {
                           className={cn(
                             "flex w-full items-center gap-4 rounded-lg border px-5 py-2.5 text-left text-foreground transition-colors",
                             selected
-                              ? "border-2 border-[oklch(0.50_0.11_195)] bg-white"
+                              ? "border-2 border-[oklch(0.38_0.12_255)] bg-white"
                               : "border-border bg-muted/40 hover:border-muted-foreground/40"
                           )}
                         >
@@ -222,7 +310,7 @@ export default function RegisterEmployerPage() {
                             className={cn(
                               "flex h-8 w-8 shrink-0 items-center justify-center rounded border text-sm font-semibold",
                               selected
-                                ? "border-[oklch(0.50_0.11_195)] bg-[oklch(0.55_0.10_195)] text-white"
+                                ? "border-[oklch(0.38_0.12_255)] bg-[oklch(0.42_0.11_255)] text-white"
                                 : "border-muted-foreground/30 bg-muted/10 text-foreground"
                             )}
                           >
@@ -240,7 +328,7 @@ export default function RegisterEmployerPage() {
                       className={cn(
                         "mt-3 flex w-full items-center gap-4 rounded-lg border px-5 py-2.5 text-left text-foreground transition-colors",
                         field.value === "other"
-                          ? "border-2 border-[oklch(0.50_0.11_195)] bg-white"
+                          ? "border-2 border-[oklch(0.38_0.12_255)] bg-white"
                           : "border-border bg-muted/40 hover:border-muted-foreground/40"
                       )}
                     >
@@ -248,7 +336,7 @@ export default function RegisterEmployerPage() {
                         className={cn(
                           "flex h-8 w-8 shrink-0 items-center justify-center rounded border text-sm font-semibold",
                           field.value === "other"
-                            ? "border-[oklch(0.50_0.11_195)] bg-[oklch(0.55_0.10_195)] text-white"
+                            ? "border-[oklch(0.38_0.12_255)] bg-[oklch(0.42_0.11_255)] text-white"
                             : "border-muted-foreground/30 bg-muted/10 text-foreground"
                         )}
                       >
@@ -270,12 +358,12 @@ export default function RegisterEmployerPage() {
 
             {selectedIndustry === "other" && (
               <div className="mt-2 rounded-lg border border-border bg-muted/30 px-4 py-4">
-                <p className="mb-3 text-sm font-medium text-foreground">
-                  Geben Sie ein
-                </p>
+                <Label htmlFor="industryOther" className="text-sm font-medium text-foreground">
+                  Geben Sie Ihre Branche ein
+                </Label>
                 <Input
                   id="industryOther"
-                  className="h-12 text-base"
+                  className="mt-2 h-12 text-base"
                   placeholder="z.B. Bäckerei, Elektrotechnik, Logistik …"
                   {...register("industryOther")}
                   aria-invalid={!!errors.industryOther}
@@ -435,27 +523,215 @@ export default function RegisterEmployerPage() {
           </div>
         </div>
 
-        {/* Ok unten links, Zurück rechts wenn step > 0 */}
+        {/* Step 4: Nach welchen Arbeitskräften (Mehrfachauswahl + Freitext) */}
+        <div
+          className={cn(
+            "space-y-6 transition-opacity duration-200",
+            step !== 4 && "pointer-events-none absolute inset-0 opacity-0"
+          )}
+          aria-hidden={step !== 4}
+        >
+          <div className={cn(step === 4 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
+            <p className="mb-4 text-sm text-muted-foreground">
+              Sie können mehrere auswählen. Zusätzlich können Sie unten eigene Begriffe eingeben, die zu Ihrer Branche passen.
+            </p>
+            <div className="space-y-3">
+              {(POSITION_OPTIONS_BY_INDUSTRY[selectedIndustry || "other"] ?? POSITION_OPTIONS_BY_INDUSTRY.other).map((opt) => {
+                const checked = selectedPositions.includes(opt.value);
+                return (
+                  <label
+                    key={opt.value}
+                    className={cn(
+                      "flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition-colors",
+                      checked ? "border-2 border-[oklch(0.38_0.12_255)] bg-[oklch(0.38_0.12_255/0.08)]" : "border-border bg-muted/30 hover:border-muted-foreground/40"
+                    )}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => {
+                        setSelectedPositions((prev) =>
+                          prev.includes(opt.value) ? prev.filter((x) => x !== opt.value) : [...prev, opt.value]
+                        );
+                      }}
+                      className="h-4 w-4 rounded border-input"
+                    />
+                    <span className="text-sm font-medium">{opt.label}</span>
+                  </label>
+                );
+              })}
+            </div>
+            <div className="mt-6">
+              <Label htmlFor="positionCustom" className="text-sm text-foreground">
+                Nach Wörtern suchen / selbst eingeben (z. B. „Küchenhilfe“, „Teilzeit“)
+              </Label>
+              <Input
+                id="positionCustom"
+                className="mt-2 h-11"
+                placeholder="Eingabe, die zu Ihrer Branche passt …"
+                value={customPositionText}
+                onChange={(e) => setCustomPositionText(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Step 5: Ab wann + relevante Fragen */}
+        <div
+          className={cn(
+            "space-y-6 transition-opacity duration-200",
+            step !== 5 && "pointer-events-none absolute inset-0 opacity-0"
+          )}
+          aria-hidden={step !== 5}
+        >
+          <div className={cn(step === 5 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="startDate" className="text-base text-foreground">
+                  Ab wann wird die Stelle benötigt?
+                </Label>
+                <Input
+                  id="startDate"
+                  type="date"
+                  className="mt-2 h-12"
+                  value={startDateValue}
+                  onChange={(e) => setStartDateValue(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="slots" className="text-base text-foreground">
+                  Wie viele Stellen suchen Sie voraussichtlich?
+                </Label>
+                <Input
+                  id="slots"
+                  type="number"
+                  min={1}
+                  placeholder="z. B. 2"
+                  className="mt-2 h-12"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Step 6: Kandidaten-Vorschau (3 pro Stelle), Profil-Klick → CV/Video */}
+        <div
+          className={cn(
+            "space-y-6 transition-opacity duration-200",
+            step !== 6 && "pointer-events-none absolute inset-0 opacity-0"
+          )}
+          aria-hidden={step !== 6}
+        >
+          <div className={cn(step === 6 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
+            <p className="mb-6 text-sm text-muted-foreground">
+              Pro Stelle zeigen wir Ihnen passende Kandidaten. Klicken Sie auf „Profil“, um Lebenslauf und Video-Vorstellung zu sehen.
+            </p>
+            <div className="space-y-4">
+              <p className="text-sm font-medium text-foreground">Ihre Stelle(n)</p>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {MOCK_CANDIDATES.map((c) => (
+                  <div
+                    key={c.id}
+                    className="rounded-xl border border-border bg-card p-4 shadow-sm"
+                  >
+                    <div className="flex flex-col items-center text-center">
+                      <div className="relative h-16 w-16 overflow-hidden rounded-full bg-muted">
+                        <Image
+                          src={c.image}
+                          alt={c.name}
+                          fill
+                          className="object-cover"
+                          sizes="64px"
+                        />
+                      </div>
+                      <p className="mt-2 font-medium text-foreground">{c.name}</p>
+                      <p className="text-xs text-muted-foreground">{c.age} Jahre</p>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="mt-3 w-full"
+                        onClick={() => {
+                          setSelectedCandidate(c);
+                          setProfileOpen(true);
+                        }}
+                      >
+                        Profil
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-3">
+                {selectedCandidate && (
+                  <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted">
+                    <Image
+                      src={selectedCandidate.image}
+                      alt={selectedCandidate.name}
+                      fill
+                      className="object-cover"
+                      sizes="40px"
+                    />
+                  </div>
+                )}
+                {selectedCandidate?.name}
+              </DialogTitle>
+            </DialogHeader>
+            {selectedCandidate && (
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  {selectedCandidate.age} Jahre · {selectedCandidate.role}
+                </p>
+                <div>
+                  <p className="flex items-center gap-2 text-sm font-medium">
+                    <FileText className="h-4 w-4" />
+                    Lebenslauf
+                  </p>
+                  <p className="mt-2 text-sm text-muted-foreground">{selectedCandidate.cv}</p>
+                </div>
+                <div>
+                  <p className="flex items-center gap-2 text-sm font-medium">
+                    <Play className="h-4 w-4" />
+                    {selectedCandidate.videoLabel}
+                  </p>
+                  <div className="mt-2 flex aspect-video items-center justify-center rounded-lg bg-muted text-muted-foreground">
+                    <Play className="h-12 w-12" />
+                  </div>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Ok / Zum Dashboard */}
         <div className="mt-8 flex items-center gap-3">
           {step < STEPS.length - 1 ? (
             <Button
               type="button"
               onClick={goNext}
-              className="h-10 gap-1.5 px-4 text-lg font-semibold bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)]"
+              className="h-10 gap-1.5 px-4 text-lg font-semibold bg-[oklch(0.38_0.12_255)] text-white hover:bg-[oklch(0.30_0.11_255)]"
             >
               Ok
             </Button>
           ) : (
             <div className="flex flex-col items-start gap-2">
               <Button
-                type="submit"
+                type="button"
                 disabled={isLoading}
-                className="h-10 gap-1.5 px-4 text-lg font-semibold bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)]"
+                onClick={handleFinish}
+                className="h-10 gap-1.5 px-4 text-lg font-semibold bg-[oklch(0.38_0.12_255)] text-white hover:bg-[oklch(0.30_0.11_255)]"
               >
                 {isLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  "Registrierung abschließen"
+                  "Zum Dashboard"
                 )}
               </Button>
               <p className="text-xs text-muted-foreground">
@@ -465,19 +741,6 @@ export default function RegisterEmployerPage() {
           )}
 
           <div className="flex-1" />
-
-          {step > 0 && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={goBack}
-              className="h-10 gap-1.5 px-4 border-border text-foreground hover:bg-muted"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Zurück
-            </Button>
-          )}
         </div>
       </form>
 
@@ -486,7 +749,7 @@ export default function RegisterEmployerPage() {
           {t("hasAccount")}{" "}
           <Link
             href="/auth/login"
-            className="font-medium text-[oklch(0.50_0.11_195)] transition-colors hover:text-[oklch(0.44_0.11_195)]"
+            className="font-medium text-[oklch(0.38_0.12_255)] transition-colors hover:text-[oklch(0.30_0.11_255)]"
           >
             {t("loginTitle")}
           </Link>

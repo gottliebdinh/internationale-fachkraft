@@ -14,7 +14,7 @@ export function AuthLayoutRoot({
     <div
       className={
         isEmployerRegister
-          ? "relative flex min-h-screen flex-col items-center justify-start overflow-x-hidden bg-white"
+          ? "relative flex h-screen max-h-screen flex-col items-center justify-start overflow-hidden bg-white"
           : "relative flex min-h-screen flex-col items-center justify-center overflow-x-hidden bg-white"
       }
     >

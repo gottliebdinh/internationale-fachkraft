@@ -8,6 +8,11 @@ import {
   Milestone,
   Target,
   Users,
+  Building2,
+  Leaf,
+  Eye,
+  Zap,
+  Shield,
 } from "lucide-react";
 
 const values = [
@@ -52,9 +57,10 @@ export default function AboutPage() {
               Über <span className="text-accent">GeVin</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              GeVin verbindet deutsche Arbeitgeber mit qualifizierten
-              vietnamesischen Fachkräften und Auszubildenden – digital,
-              compliant und menschlich.
+              Wir sind ein strukturierter, international integrierter Partner für nachhaltige Fachkräfte- und Ausbildungsgewinnung zwischen Vietnam und Deutschland – kein klassischer Vermittler, sondern Systemanbieter mit eigener Infrastruktur und klarer Verantwortungsstruktur.
+            </p>
+            <p className="mt-4 text-base font-medium text-foreground">
+              Wenn Sie über uns rekrutieren: <span className="text-accent">völlige Transparenz</span>, <span className="text-accent">Schnelligkeit</span> und <span className="text-accent">Sicherheit</span> – von der Bedarfsanalyse bis zur Integration.
             </p>
           </div>
         </div>
@@ -75,14 +81,14 @@ export default function AboutPage() {
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 GeVin schließt diese Lücke mit einer professionellen digitalen
-                Plattform, die den gesamten Vermittlungsprozess abdeckt – von
-                der Kandidatensuche über die IHK-konforme Dokumentenerstellung
-                bis hin zur Visa-Beantragung und Ankunft in Deutschland.
+                Plattform und einer klaren unternehmerischen Architektur: eigene
+                Infrastruktur in Vietnam, klare Verantwortung in Deutschland.
+                Von der Kandidatensuche über IHK-konforme Dokumente bis zur
+                Visa-Beantragung und Integration – strukturiert und mit Planungssicherheit.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Unser Ziel ist es, den Prozess der internationalen
-                Fachkräftegewinnung transparent, effizient und rechtssicher zu
-                gestalten – für alle Beteiligten.
+                Unser Ziel: Langfristige Partnerschaft statt Einmalvermittlung.
+                Transparent, rechtssicher und mit Fokus auf Stabilität für alle Beteiligten.
               </p>
             </div>
             <Card className="border-0 bg-muted/30">
@@ -109,8 +115,131 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values */}
+      {/* Transparenz, Schnelligkeit, Sicherheit – Warum über uns */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-center mb-2">
+            Warum über uns?
+          </h2>
+          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Wenn Sie Ihre Fachkräftegewinnung über GeVin abwickeln, profitieren Sie von drei zentralen Vorteilen.
+          </p>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <Card className="border-0 shadow-sm bg-card text-center">
+              <CardContent className="pt-8 pb-8">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent/15 mb-4">
+                  <Eye className="h-7 w-7 text-accent" />
+                </div>
+                <h3 className="font-semibold text-lg mb-2">Völlige Transparenz</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Jeder Schritt ist nachvollziehbar und dokumentiert – von der Rekrutierung bis zur Integration. Sie sehen jederzeit den Status, die Unterlagen und die nächsten Schritte.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-sm bg-card text-center">
+              <CardContent className="pt-8 pb-8">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent/15 mb-4">
+                  <Zap className="h-7 w-7 text-accent" />
+                </div>
+                <h3 className="font-semibold text-lg mb-2">Schnelligkeit</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Klare Prozesse, digitale Plattform und erfahrene Koordination mit Behörden und Partnern – damit Ihr Personalbedarf zügig und planbar gedeckt wird.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-sm bg-card text-center">
+              <CardContent className="pt-8 pb-8">
+                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent/15 mb-4">
+                  <Shield className="h-7 w-7 text-accent" />
+                </div>
+                <h3 className="font-semibold text-lg mb-2">Sicherheit</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Rechtssichere Verträge, IHK-/HWK-/ZAV-Konformität, DSGVO-konforme Datenverarbeitung und klare Verantwortung – Sie sind auf der sicheren Seite.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Zwei-Säulen-Modell – Green Germany / Lotus & Eagle Alliance */}
       <section className="py-20 bg-muted/20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Unser integriertes System
+          </h2>
+          <p className="text-center text-muted-foreground mb-4 max-w-2xl mx-auto">
+            Klare Zuständigkeitsstruktur für Planungssicherheit – in Vietnam und in Deutschland.
+          </p>
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mt-12">
+            <Card className="border-0 shadow-sm bg-card overflow-hidden">
+              <div className="h-1.5 w-full bg-[oklch(0.55_0.10_195)]" />
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[oklch(0.55_0.10_195/0.2)]">
+                    <Leaf className="h-6 w-6 text-[oklch(0.50_0.11_195)]" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">Green Germany GmbH – Vietnam</h3>
+                    <p className="text-xs text-muted-foreground">seit 2018</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Operative Grundlage unseres internationalen Modells: strukturierte Rekrutierung, mehrstufige Auswahl, Sprachtraining in mehreren Sprachzentren mit deutschsprachigen Lehrkräften, interkulturelle Vorbereitung und Dokumentenvorbereitung gemäß deutscher Anforderungen. Ziel: Integrationsrisiken, Fehlbesetzungen und Ausbildungsabbrüche minimieren.
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.50_0.11_195)]" />
+                    Strukturierte Rekrutierung nach definierten Kriterien
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.50_0.11_195)]" />
+                    Sprachtraining & interkulturelle Vorbereitung
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.50_0.11_195)]" />
+                    Dokumentenvorbereitung gemäß deutscher Anforderungen
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-sm bg-card overflow-hidden">
+              <div className="h-1.5 w-full bg-[oklch(0.28_0.06_255)]" />
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[oklch(0.28_0.06_255/0.2)]">
+                    <Building2 className="h-6 w-6 text-[oklch(0.28_0.06_255)]" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">Lotus & Eagle Alliance – Deutschland</h3>
+                    <p className="text-xs text-muted-foreground">Verantwortung gegenüber Partnerunternehmen</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Übernimmt die unternehmerische Verantwortung gegenüber deutschen Partnerunternehmen: Analyse des konkreten Personalbedarfs, strukturierte Vertragsgestaltung, Koordination mit IHK, HWK und ZAV, Begleitung im Anerkennungs- und Visa-Prozess sowie Integrationsmanagement nach Ankunft.
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.28_0.06_255)]" />
+                    Analyse des Personalbedarfs & Vertragsgestaltung
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.28_0.06_255)]" />
+                    Koordination IHK, HWK, ZAV & Visa
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.28_0.06_255)]" />
+                    Integrationsmanagement nach Ankunft
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="py-20 bg-muted/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-4">
             Unsere Werte
@@ -136,7 +265,7 @@ export default function AboutPage() {
       </section>
 
       {/* Timeline */}
-      <section className="py-20">
+      <section className="py-20 bg-muted/20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-4">
             Unsere Geschichte

@@ -89,9 +89,6 @@ export function DashboardSidebar({ role, onSignOut }: DashboardSidebarProps) {
     <Sidebar>
       <SidebarHeader className="p-4">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground font-bold text-sm">
-            G
-          </div>
           <span className="text-lg font-bold text-sidebar-foreground">
             GeVin
           </span>

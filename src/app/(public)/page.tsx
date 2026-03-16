@@ -3,13 +3,15 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
-  ShieldCheck,
-  FileCheck,
-  Scale,
   Users,
   Building2,
   GraduationCap,
   CheckCircle2,
+  Scale,
+  Clock,
+  Languages,
+  Globe,
+  ShieldCheck,
 } from "lucide-react";
 import type { Metadata } from "next";
 
@@ -83,14 +85,10 @@ export default function HomePage() {
             >
               Internationale Fachkräfte
               <br />
-              <span className="text-[oklch(0.50_0.11_195)]">für Deutschland</span>
+              <span className="text-[oklch(0.50_0.11_195)]">für Ihr Unternehmen</span>
             </h1>
             <p className="home-reveal home-reveal-delay-3 mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Rechtssicher Fachkräfte und Auszubildende finden – IHK-konform,
-              von der Anerkennung bis zur Platzierung. Hotellerie, Friseurhandwerk, Pflege.
-            </p>
-            <p className="home-reveal home-reveal-delay-3 mt-2 text-sm text-muted-foreground">
-              Kostenlos registrieren, unverbindlich Kandidaten entdecken.
+              Wir sind kein klassischer Vermittler, sondern ein Systemanbieter mit eigener Infrastruktur in Vietnam und klarer Verantwortung in Deutschland – für nachhaltige Fachkräfte- und Ausbildungsgewinnung mit Planungssicherheit.
             </p>
             <div className="home-reveal home-reveal-delay-4 mt-12 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <Button
@@ -110,7 +108,7 @@ export default function HomePage() {
                 So funktioniert’s</Link>
             </div>
           </div>
-            {/* Rechte Spalte: Bild nutzt gesamte Höhe und Breite */}
+            {/* Rechte Spalte: Bild nutzt gesamte Höhe und Breite mit leichtem Fade links/rechts */}
             <div className="relative min-h-[320px] overflow-hidden lg:min-h-0 lg:h-full">
               <Image
                 src="/bilder/home2verticaladjust.png"
@@ -120,6 +118,10 @@ export default function HomePage() {
                 priority
                 sizes="50vw"
               />
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[oklch(0.98_0.008_260)] to-transparent" />
+                <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[oklch(0.98_0.008_260)] to-transparent" />
+              </div>
             </div>
           </div>
           </div>
@@ -137,12 +139,12 @@ export default function HomePage() {
                 <span className="text-[oklch(0.50_0.11_195)]">DSGVO-sichere Plattform</span>
               </p>
               <p className="mt-1 max-w-lg text-sm text-muted-foreground">
-                Rechtssicher von der Anerkennung bis zur Platzierung.
+                Rechtssicher von der Anerkennung bis zur Platzierung. Über uns: völlige Transparenz, Schnelligkeit und Sicherheit.
               </p>
             </div>
             <div className="flex flex-col gap-2 text-right sm:shrink-0 sm:items-end">
-              <span className="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                Zusammenarbeit mit
+              <span className="text-[0.7rem] font-medium uppercase tracking-tight text-muted-foreground">
+                In Zusammenarbeit mit
               </span>
               <div className="flex items-center justify-end gap-5">
                 <Image
@@ -153,7 +155,14 @@ export default function HomePage() {
                   className="h-7 w-auto opacity-90"
                 />
                 <Image
-                  src="/ihk/id0U3VE7ma_1773417223568.png"
+                  src="/hwk/id7oEa_zCN_logos.png"
+                  alt="HWK"
+                  width={120}
+                  height={32}
+                  className="h-7 w-auto opacity-90"
+                />
+                <Image
+                  src="/ihk/ihk.jpeg"
                   alt="IHK"
                   width={140}
                   height={32}
@@ -165,39 +174,35 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Trust: drei Karten – gleiche helle Optik, klare Kartenhierarchie */}
-      <section className="border-t border-border bg-[oklch(0.98_0.008_260)] py-16 sm:py-20" aria-labelledby="trust-cards-heading">
+      {/* Risikominimierung – Stabilität und Planungssicherheit */}
+      <section className="border-t border-border bg-[oklch(0.97_0.008_260)] py-16 sm:py-20" aria-labelledby="risk-heading">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 id="trust-cards-heading" className="sr-only">
-            Unsere Standards im Detail
+          <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-[oklch(0.50_0.11_195)]">
+            Ihr Vorteil
+          </p>
+          <h2 id="risk-heading" className="mt-3 text-center font-[var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            Risikominimierung durch Struktur
           </h2>
-          <div className="grid gap-6 md:grid-cols-3">
+          <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-muted-foreground">
+            Internationale Personalgewinnung birgt rechtliche, organisatorische und kulturelle Herausforderungen. Unser Modell reduziert gezielt Risiken – für Stabilität und wirtschaftliche Planungssicherheit.
+          </p>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {[
-              {
-                icon: FileCheck,
-                title: "IHK-konformer Prozess",
-                desc: "Automatisierte Erstellung aller IHK-Dokumente – vom Berufsausbildungsvertrag bis zur Erklärung zum Beschäftigungsverhältnis.",
-              },
-              {
-                icon: ShieldCheck,
-                title: "DSGVO-zertifiziert",
-                desc: "Verschlüsselte Dokumentenspeicherung, Audit-Logs und fein granulierte Zugriffskontrollen.",
-              },
-              {
-                icon: Scale,
-                title: "Fachkräfteeinwanderungsgesetz",
-                desc: "Vollständige Abdeckung des FEG-Workflows – von der Anerkennung bis zum Visumsantrag.",
-              },
+              { icon: Scale, title: "Rechtliche Unsicherheiten", desc: "Klare Vertragsgestaltung, IHK-/HWK-/ZAV-Koordination." },
+              { icon: Clock, title: "Verzögerungen im Behördenprozess", desc: "Strukturierte Begleitung im Anerkennungs- und Visa-Prozess." },
+              { icon: Languages, title: "Sprachliche Defizite", desc: "Sprachtraining und deutschsprachige Vorbereitung in Vietnam." },
+              { icon: Globe, title: "Kulturelle Integrationsprobleme", desc: "Interkulturelle Vorbereitung und Integrationsmanagement nach Ankunft." },
+              { icon: ShieldCheck, title: "Hohe Fluktuation", desc: "Nachhaltige Vorbereitung und Stabilisierungsphase – keine Einmalvermittlung." },
             ].map((item) => (
               <div
                 key={item.title}
-                className="home-card-hover rounded-2xl border border-border bg-card p-6 shadow-sm"
+                className="rounded-2xl border border-border/80 bg-card p-5 shadow-sm"
               >
-                <item.icon className="mb-4 h-9 w-9 text-[oklch(0.50_0.11_195)]" />
-                <h3 className="font-[var(--font-display)] text-lg font-semibold text-foreground">
+                <item.icon className="mb-3 h-8 w-8 text-[oklch(0.50_0.11_195)]" />
+                <h3 className="font-[var(--font-display)] text-sm font-semibold text-foreground">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                   {item.desc}
                 </p>
               </div>
@@ -251,30 +256,16 @@ export default function HomePage() {
             So funktioniert GeVin
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-muted-foreground">
-            Ihr Weg in vier klaren Schritten – von der Registrierung zur erfolgreichen Platzierung.
+            Jeder Schritt ist klar definiert und dokumentiert – Planungssicherheit von der Rekrutierung bis zur Integration.
           </p>
-          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              {
-                step: "01",
-                title: "Profil erstellen",
-                desc: "Arbeitgeber erstellen ihr Firmenprofil und Stellenangebote. Schulen laden Kandidatenprofile hoch.",
-              },
-              {
-                step: "02",
-                title: "Matching & Auswahl",
-                desc: "Unser intelligentes Matching verbindet passende Kandidaten mit den richtigen Stellen.",
-              },
-              {
-                step: "03",
-                title: "IHK-Prozess",
-                desc: "Automatisierte Erstellung aller IHK-Dokumente und Begleitung durch den gesamten Prozess.",
-              },
-              {
-                step: "04",
-                title: "Erfolgreiche Platzierung",
-                desc: "Vom Visumsantrag bis zur Ankunft – wir begleiten jeden Schritt.",
-              },
+              { step: "01", title: "Strukturierte Rekrutierung in Vietnam", desc: "Mehrstufige Auswahl, definierte Kriterien und qualifizierte Kandidaten." },
+              { step: "02", title: "Sprach- und Integrationsvorbereitung", desc: "Sprachtraining, interkulturelle Vorbereitung und Dokumenten-Vorbereitung gemäß deutscher Anforderungen." },
+              { step: "03", title: "Analyse des Personalbedarfs", desc: "Konkreter Bedarf Ihres Unternehmens – strukturiert erfasst und abgestimmt." },
+              { step: "04", title: "Vertrags- und Behördenkoordination", desc: "Koordination mit IHK, HWK und ZAV. Automatisierte IHK-Dokumente, strukturierte Vertragsgestaltung." },
+              { step: "05", title: "Visa & Einreise", desc: "Begleitung im Visa-Prozess und Koordination der Anreise." },
+              { step: "06", title: "Integrations- und Stabilisierungsphase", desc: "Integrationsmanagement nach Ankunft – für langfristige Stabilität." },
             ].map((item) => (
               <div key={item.step} className="relative pl-12">
                 <span
@@ -304,22 +295,25 @@ export default function HomePage() {
           <h2 id="industries-heading" className="mt-3 text-center font-[var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
             Unsere Schwerpunkte
           </h2>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
             {[
               {
                 title: "Hotellerie & Gastronomie",
                 roles: ["Koch/Köchin", "Restaurantfachkraft", "Hotelfachkraft"],
                 desc: "Qualifizierte Fachkräfte und Auszubildende für Hotels und Restaurants.",
+                image: "/schwerpunkt/köchin.png",
               },
               {
                 title: "Friseurhandwerk",
                 roles: ["Friseur/in", "Salon-Management"],
                 desc: "Ausgebildete Friseure mit deutschem Sprachzertifikat und handwerklichem Können.",
+                image: "/schwerpunkt/friseur.png",
               },
               {
                 title: "Pflege",
                 roles: ["Pflegefachkraft", "Altenpfleger/in", "Krankenpfleger/in"],
                 desc: "Dringend benötigte Pflegekräfte mit anerkannter Qualifikation.",
+                image: "/schwerpunkt/pflege.png",
               },
             ].map((industry) => (
               <div
@@ -327,6 +321,18 @@ export default function HomePage() {
                 className="home-card-hover overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm"
               >
                 <div className="h-1.5 w-full bg-[oklch(0.55_0.10_195)]" />
+                {industry.image && (
+                  <div className="relative h-64 w-full overflow-hidden">
+                    <Image
+                      src={industry.image}
+                      alt={industry.title}
+                      fill
+                      className="object-cover object-center"
+                      sizes="400px"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-card to-transparent" />
+                  </div>
+                )}
                 <div className="p-6">
                   <h3 className="font-[var(--font-display)] text-lg font-semibold text-foreground">
                     {industry.title}

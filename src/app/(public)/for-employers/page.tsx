@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   CheckCircle2,
@@ -15,6 +16,7 @@ import {
   UserPlus,
   Search,
   FileSignature,
+  GraduationCap,
 } from "lucide-react";
 
 const benefits = [
@@ -67,18 +69,21 @@ const industries = [
     title: "Hotellerie & Gastronomie",
     desc: "Köche, Restaurantfachkräfte und Hotelfachkräfte für Ihr Unternehmen. Unsere Kandidaten bringen Leidenschaft und Fachwissen mit.",
     roles: ["Koch/Köchin", "Restaurantfachkraft", "Hotelfachkraft", "Bäcker/in"],
+    image: "/schwerpunkt/köchin.png",
   },
   {
     icon: Scissors,
     title: "Friseurhandwerk",
     desc: "Ausgebildete Friseurinnen und Friseure mit deutschen Sprachkenntnissen und handwerklichem Geschick.",
     roles: ["Friseur/in", "Salon-Assistent/in", "Auszubildende/r"],
+    image: "/schwerpunkt/friseur.png",
   },
   {
     icon: HeartPulse,
     title: "Pflege",
     desc: "Dringend benötigte Pflegekräfte mit anerkannter Qualifikation für Krankenhäuser und Pflegeeinrichtungen.",
     roles: ["Pflegefachkraft", "Altenpfleger/in", "Krankenpfleger/in"],
+    image: "/schwerpunkt/pflege.png",
   },
 ];
 
@@ -94,9 +99,11 @@ export default function ForEmployersPage() {
               <span className="text-accent">die passen</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              GeVin verbindet Ihr Unternehmen mit qualifizierten
-              vietnamesischen Fachkräften – effizient, rechtssicher und mit
-              minimalem Aufwand.
+              Nachhaltige Fachkräfte- und Ausbildungsgewinnung mit Planungssicherheit – 
+              kein klassischer Vermittler, sondern strukturierter Partner mit eigener Infrastruktur in Vietnam und klarer Verantwortung in Deutschland.
+            </p>
+            <p className="mt-3 text-base font-medium text-foreground">
+              Über uns: <span className="text-accent">völlige Transparenz</span>, <span className="text-accent">Schnelligkeit</span> und <span className="text-accent">Sicherheit</span> – von der Bedarfsanalyse bis zur Integration.
             </p>
             <div className="mt-10">
               <Button
@@ -121,7 +128,7 @@ export default function ForEmployersPage() {
             Ihre Vorteile mit GeVin
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Warum führende Unternehmen auf GeVin setzen.
+            Stabilität, Struktur und wirtschaftliche Planungssicherheit – kein reines Preisargument.
           </p>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             {benefits.map((benefit) => (
@@ -141,8 +148,42 @@ export default function ForEmployersPage() {
         </div>
       </section>
 
-      {/* How to get started */}
+      {/* Leistungsbereiche: Ausbildung + Fachkräfte */}
       <section className="py-20 bg-muted/20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Leistungsbereiche
+          </h2>
+          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Zwei klare Wege: Auszubildende mit nachhaltiger Vorbereitung oder qualifizierte Fachkräfte mit Anerkennungs- und Integrationsbegleitung.
+          </p>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <Card className="border-0 shadow-sm overflow-hidden">
+              <div className="h-2 bg-[oklch(0.50_0.11_195)]" />
+              <CardContent className="pt-6">
+                <GraduationCap className="h-10 w-10 text-[oklch(0.50_0.11_195)] mb-4" />
+                <h3 className="font-semibold text-lg mb-2">Ausbildung</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Strukturierte Gewinnung internationaler Auszubildender mit nachhaltiger Vorbereitung und klarer Integrationsbegleitung. Von der Rekrutierung über Sprachtraining und interkulturelle Vorbereitung bis zur Ankunft und Stabilisierung in Deutschland.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-sm overflow-hidden">
+              <div className="h-2 bg-[oklch(0.28_0.06_255)]" />
+              <CardContent className="pt-6">
+                <Users className="h-10 w-10 text-[oklch(0.28_0.06_255)] mb-4" />
+                <h3 className="font-semibold text-lg mb-2">Fachkräfte</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Direktvermittlung qualifizierter Fachkräfte mit Anerkennungsbegleitung, behördlicher Koordination und strukturierter Integrationsphase. IHK-/HWK-/ZAV-Koordination und Begleitung im Visa-Prozess inklusive.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* How to get started */}
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-4">
             In drei Schritten starten
@@ -178,31 +219,45 @@ export default function ForEmployersPage() {
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
             Spezialisiert auf die Bereiche mit dem größten Fachkräftebedarf.
           </p>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
             {industries.map((industry) => (
-              <Card key={industry.title} className="overflow-hidden">
-                <div className="h-2 bg-accent" />
-                <CardContent className="pt-6">
-                  <industry.icon className="h-10 w-10 text-accent mb-4" />
-                  <h3 className="font-semibold text-lg mb-2">
+              <div
+                key={industry.title}
+                className="home-card-hover overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm"
+              >
+                <div className="h-1.5 w-full bg-[oklch(0.55_0.10_195)]" />
+                {industry.image && (
+                  <div className="relative h-64 w-full overflow-hidden">
+                    <Image
+                      src={industry.image}
+                      alt={industry.title}
+                      fill
+                      className="object-cover object-center"
+                      sizes="400px"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-card to-transparent" />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="font-[var(--font-display)] text-lg font-semibold text-foreground">
                     {industry.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
+                  <p className="mt-2 text-sm text-muted-foreground">
                     {industry.desc}
                   </p>
-                  <ul className="space-y-1.5">
+                  <ul className="mt-4 space-y-2">
                     {industry.roles.map((role) => (
                       <li
                         key={role}
-                        className="flex items-center gap-2 text-sm"
+                        className="flex items-center gap-2 text-sm text-foreground"
                       >
-                        <CheckCircle2 className="h-3.5 w-3.5 text-accent shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 shrink-0 text-[oklch(0.50_0.11_195)]" />
                         {role}
                       </li>
                     ))}
                   </ul>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -216,7 +271,7 @@ export default function ForEmployersPage() {
             <p className="text-muted-foreground mb-8">
               Unsere Preise richten sich nach der Anzahl der Platzierungen und
               Ihren individuellen Anforderungen. Die Registrierung und
-              Kandidatensuche sind kostenlos.
+              Kandidatensuche sind kostenlos. Wir arbeiten im Vermittlungsmodell ohne Arbeitnehmerüberlassung.
             </p>
             <Card className="border-0 shadow-sm">
               <CardContent className="py-12">
