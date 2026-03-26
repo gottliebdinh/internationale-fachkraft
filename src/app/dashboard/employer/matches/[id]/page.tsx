@@ -1,5 +1,6 @@
 "use client";
 
+import { use as reactUse } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -172,7 +173,9 @@ function StatusTimeline({ currentStatus }: { currentStatus: MatchStatus }) {
 }
 
 export default function MatchDetailPage() {
-  const params = useParams();
+  const params = reactUse(
+    Promise.resolve(useParams())
+  ) as { id?: string | string[] | undefined };
   const match = mockMatch;
 
   const isEarlyStage =

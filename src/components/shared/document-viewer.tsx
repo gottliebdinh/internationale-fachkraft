@@ -39,6 +39,10 @@ const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
   diploma: "Abschlusszeugnis",
   health_certificate: "Gesundheitszeugnis",
   video: "Video-Vorstellung",
+  cover_letter: "Anschreiben",
+  school_records: "Schulzeugnis",
+  photo: "Foto",
+  application_bundle: "Bewerbungsunterlagen",
   other: "Sonstiges",
 };
 

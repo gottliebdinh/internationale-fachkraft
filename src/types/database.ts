@@ -34,7 +34,18 @@ export type DocumentType =
   | "diploma"
   | "health_certificate"
   | "video"
+  | "cover_letter"
+  | "school_records"
+  | "photo"
+  | "application_bundle"
   | "other";
+
+export type ExtractionStatus =
+  | "pending"
+  | "processing"
+  | "completed"
+  | "failed"
+  | "skipped";
 export type MatchDocumentType =
   | "berufsausbildungsvertrag"
   | "erklaerung_beschaeftigung"
@@ -120,6 +131,9 @@ export interface Candidate {
   video_intro_url: string | null;
   profile_photo_url: string | null;
   status: CandidateStatus;
+  position_type: string | null;
+  desired_position: string | null;
+  desired_field: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -132,6 +146,26 @@ export interface CandidateDocument {
   file_name: string;
   verified_by_admin: boolean;
   uploaded_at: string;
+  extracted_data: Record<string, unknown> | null;
+  extraction_status: ExtractionStatus;
+  extraction_model: string | null;
+  extraction_error: string | null;
+  original_file_name: string | null;
+  file_size_bytes: number | null;
+  mime_type: string | null;
+  storage_path: string | null;
+}
+
+export interface CandidateExtraction {
+  id: string;
+  candidate_id: string;
+  source_document_id: string | null;
+  field_name: string;
+  extracted_value: string | null;
+  confidence: number | null;
+  verified_by: string | null;
+  verified_at: string | null;
+  created_at: string;
 }
 
 export interface JobPosition {

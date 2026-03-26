@@ -5,6 +5,15 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "nmsawotkcrhahahyulci.supabase.co",
+        pathname: "/storage/v1/**",
+      },
+    ],
+  },
 };
 
 export default withNextIntl(nextConfig);

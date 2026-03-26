@@ -41,7 +41,26 @@ export async function signIn(formData: FormData) {
     return { error: error.message };
   }
 
-  redirect("/dashboard");
+  // Direkt auf das passende Rollen-Dashboard, damit kein `/dashboard`-Redirect-Flash entsteht.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Fallback nur für den Fall, dass Profil/Rolle kurzfristig nicht lesbar sind.
+  let role: "employer" | "school" | "admin" = "employer";
+  if (user) {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.role) {
+      role = profile.role;
+    }
+  }
+
+  redirect(`/dashboard/${role}`);
 }
 
 export async function signUp(

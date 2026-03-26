@@ -1,5 +1,6 @@
 "use client";
 
+import { use as reactUse } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -69,7 +70,9 @@ const CANDIDATES_DATA: Record<
 };
 
 export default function CandidateDetailPage() {
-  const params = useParams();
+  const params = reactUse(
+    Promise.resolve(useParams())
+  ) as { id?: string | string[] | undefined };
   const id = typeof params.id === "string" ? params.id : null;
   const candidate = id ? CANDIDATES_DATA[id] : null;
 

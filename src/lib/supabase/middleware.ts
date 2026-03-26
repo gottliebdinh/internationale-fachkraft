@@ -47,9 +47,10 @@ export async function updateSession(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith(route + "/")
   );
 
-  // Ohne Backend: Dashboard auch ohne Supabase-Session erlauben (Login/Registrierung führen per Frontend hierher)
+  // Ohne Backend: Dashboard und Admin-Preview auch ohne Supabase-Session erlauben.
   const isDashboard = pathname.startsWith("/dashboard");
-  if (!user && !isPublicRoute && !isDashboard) {
+  const isAdminPreview = pathname.startsWith("/admin");
+  if (!user && !isPublicRoute && !isDashboard && !isAdminPreview) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     url.searchParams.set("redirect", pathname);

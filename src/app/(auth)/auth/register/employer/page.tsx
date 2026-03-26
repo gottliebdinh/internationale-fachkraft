@@ -6,20 +6,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import {
   Loader2,
   ChevronLeft,
   Building2,
   Lock,
   Briefcase,
-  Mail,
   ShieldCheck,
-  User,
   Calendar,
   Users,
-  Play,
-  FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -30,22 +25,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { scheduleEmployerMatchIntroAfterRegister } from "@/lib/employer-dashboard-intro";
 
 const STEPS = [
   { id: "industry", icon: Briefcase, label: "Branche" },
   { id: "company", icon: Building2, label: "Firmenname" },
-  { id: "account", icon: Lock, label: "Benutzer erstellen" },
-  { id: "verification", icon: ShieldCheck, label: "Verifizierung" },
   { id: "positions", icon: Users, label: "Arbeitskräfte" },
   { id: "startDate", icon: Calendar, label: "Ab wann" },
-  { id: "candidates", icon: User, label: "Kandidaten" },
+  { id: "account", icon: Lock, label: "Benutzer erstellen" },
+  { id: "verification", icon: ShieldCheck, label: "Verifizierung" },
 ] as const;
 
 const STEP_FIELDS: Record<string, (keyof RegisterEmployerFormData)[]> = {
@@ -55,7 +44,6 @@ const STEP_FIELDS: Record<string, (keyof RegisterEmployerFormData)[]> = {
   verification: ["verificationCode"],
   positions: [],
   startDate: [],
-  candidates: [],
 };
 
 const INDUSTRY_OPTIONS = [
@@ -67,11 +55,10 @@ const INDUSTRY_OPTIONS = [
 const STEP_QUESTIONS: Record<number, string> = {
   0: "Aus welcher Branche kommen Sie?",
   1: "Wie heißt Ihr Unternehmen?",
-  2: "Benutzerkonto erstellen",
-  3: "E-Mail-Verifizierung",
-  4: "Nach welchen Arbeitskräften suchen Sie?",
-  5: "Ab wann und wie viele Stellen?",
-  6: "Passende Kandidaten für Sie",
+  2: "Nach welchen Arbeitskräften suchen Sie?",
+  3: "Ab wann und wie viele Stellen?",
+  4: "Benutzerkonto erstellen",
+  5: "E-Mail-Verifizierung",
 };
 
 // Optionen pro Branche (Mehrfachauswahl + Freitext)
@@ -98,13 +85,6 @@ const POSITION_OPTIONS_BY_INDUSTRY: Record<string, { value: string; label: strin
   ],
 };
 
-// Dummy-Kandidaten pro Stelle (3 pro Position) – Profilbilder aus public/profilbilder
-const MOCK_CANDIDATES = [
-  { id: "1", name: "Mai Nguyen", age: 24, role: "Koch", image: "/profilbilder/mai.png", cv: "Ausbildung Hotelfach, 2 Jahre Erfahrung in Restaurant. B2 Deutsch.", videoLabel: "Video-Vorstellung" },
-  { id: "2", name: "Linh Tran", age: 22, role: "Service", image: "/profilbilder/linh.png", cv: "Berufserfahrung in Gastronomie, B1 Deutsch. Motiviert für Ausbildung.", videoLabel: "Video-Vorstellung" },
-  { id: "3", name: "Hoang Le", age: 26, role: "Koch", image: "/profilbilder/hoang.png", cv: "Koch-Ausbildung Vietnam, 3 Jahre Küche. B2 Deutsch.", videoLabel: "Video-Vorstellung" },
-];
-
 export default function RegisterEmployerPage() {
   const t = useTranslations("auth");
   const tEmployer = useTranslations("employer");
@@ -116,8 +96,8 @@ export default function RegisterEmployerPage() {
   const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
   const [customPositionText, setCustomPositionText] = useState("");
   const [startDateValue, setStartDateValue] = useState("");
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [selectedCandidate, setSelectedCandidate] = useState<typeof MOCK_CANDIDATES[0] | null>(null);
+  const [chooseSpecificStartDate, setChooseSpecificStartDate] = useState(false);
+  const [slotsValue, setSlotsValue] = useState("1");
 
   const {
     register,
@@ -172,7 +152,7 @@ export default function RegisterEmployerPage() {
   }, [selectedIndustry, step, trigger]);
 
   async function goNext() {
-    if (step === 4 || step === 5) {
+    if (step === 2 || step === 3) {
       setStep((s) => s + 1);
       return;
     }
@@ -197,10 +177,13 @@ export default function RegisterEmployerPage() {
         verificationCode: data.verificationCode,
         positionTypes: selectedPositions,
         positionCustom: customPositionText,
-        startDate: startDateValue,
+        startDate: startDateValue.trim() ? startDateValue : "Ab sofort",
+        slots: Math.max(1, parseInt(slotsValue, 10) || 1),
       };
       if (typeof window !== "undefined") {
         window.localStorage.setItem("register_employer_draft", JSON.stringify(payload));
+        // Damit nach dem Redirect kurz die Intro-Animation im Employer-Dashboard läuft.
+        scheduleEmployerMatchIntroAfterRegister();
       }
       toast.success("Registrierung abgeschlossen.");
       router.replace("/dashboard/employer");
@@ -408,7 +391,7 @@ export default function RegisterEmployerPage() {
           </div>
         </div>
 
-        {/* Step 2: Benutzer erstellen */}
+        {/* Step 2: Nach welchen Arbeitskräften (Mehrfachauswahl + Freitext) */}
         <div
           className={cn(
             "space-y-6 transition-opacity duration-200",
@@ -417,121 +400,6 @@ export default function RegisterEmployerPage() {
           aria-hidden={step !== 2}
         >
           <div className={cn(step === 2 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
-          <div className="space-y-3">
-            <Label htmlFor="email" className="text-base text-foreground">
-              {t("email")}
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              className="h-12 text-base"
-              placeholder="name@firma.de"
-              {...register("email")}
-              aria-invalid={!!errors.email}
-            />
-            {errors.email && (
-              <p className="text-xs text-destructive">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-3">
-            <Label htmlFor="password" className="text-base text-foreground">
-              {t("password")}
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              className="h-12 text-base"
-              placeholder="Mindestens 8 Zeichen"
-              {...register("password")}
-              aria-invalid={!!errors.password}
-            />
-            {errors.password && (
-              <p className="text-xs text-destructive">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-3">
-            <Label htmlFor="confirmPassword" className="text-base text-foreground">
-              {t("confirmPassword")}
-            </Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              className="h-12 text-base"
-              placeholder="Passwort wiederholen"
-              {...register("confirmPassword")}
-              aria-invalid={!!errors.confirmPassword}
-            />
-            {errors.confirmPassword && (
-              <p className="text-xs text-destructive">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
-          </div>
-        </div>
-
-        {/* Step 3: 6-stellige Verifizierung (wie an E-Mail gesendet) */}
-        <div
-          className={cn(
-            "space-y-6 transition-opacity duration-200",
-            step !== 3 && "pointer-events-none absolute inset-0 opacity-0"
-          )}
-          aria-hidden={step !== 3}
-        >
-          <div className={cn(step === 3 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Wir haben einen 6-stelligen Code an Ihre E-Mail-Adresse gesendet. Bitte geben Sie ihn hier ein.
-          </p>
-          <div className="space-y-3">
-            <Label htmlFor="verificationCode" className="text-base text-foreground">
-              Verifizierungscode
-            </Label>
-            <Controller
-              control={control}
-              name="verificationCode"
-              render={({ field }) => (
-                <Input
-                  id="verificationCode"
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  className="h-12 text-base font-mono tracking-[0.4em] text-center"
-                  placeholder="000000"
-                  maxLength={6}
-                  value={field.value}
-                  onChange={(e) => {
-                    const digits = (e.target.value || "").replace(/\D/g, "").slice(0, 6);
-                    field.onChange(digits);
-                  }}
-                  aria-invalid={!!errors.verificationCode}
-                  autoFocus={step === 3}
-                />
-              )}
-            />
-            {errors.verificationCode && (
-              <p className="text-xs text-destructive">
-                {errors.verificationCode.message}
-              </p>
-            )}
-          </div>
-          </div>
-        </div>
-
-        {/* Step 4: Nach welchen Arbeitskräften (Mehrfachauswahl + Freitext) */}
-        <div
-          className={cn(
-            "space-y-6 transition-opacity duration-200",
-            step !== 4 && "pointer-events-none absolute inset-0 opacity-0"
-          )}
-          aria-hidden={step !== 4}
-        >
-          <div className={cn(step === 4 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
             <p className="mb-4 text-sm text-muted-foreground">
               Sie können mehrere auswählen. Zusätzlich können Sie unten eigene Begriffe eingeben, die zu Ihrer Branche passen.
             </p>
@@ -576,27 +444,59 @@ export default function RegisterEmployerPage() {
           </div>
         </div>
 
-        {/* Step 5: Ab wann + relevante Fragen */}
+        {/* Step 3: Ab wann + relevante Fragen */}
         <div
           className={cn(
             "space-y-6 transition-opacity duration-200",
-            step !== 5 && "pointer-events-none absolute inset-0 opacity-0"
+            step !== 3 && "pointer-events-none absolute inset-0 opacity-0"
           )}
-          aria-hidden={step !== 5}
+          aria-hidden={step !== 3}
         >
-          <div className={cn(step === 5 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
+          <div className={cn(step === 3 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="startDate" className="text-base text-foreground">
+                <Label htmlFor={chooseSpecificStartDate ? "startDate" : undefined} className="text-base text-foreground">
                   Ab wann wird die Stelle benötigt?
                 </Label>
-                <Input
-                  id="startDate"
-                  type="date"
-                  className="mt-2 h-12"
-                  value={startDateValue}
-                  onChange={(e) => setStartDateValue(e.target.value)}
-                />
+                {!chooseSpecificStartDate ? (
+                  <div className="mt-2 flex h-12 w-full items-center justify-between gap-3 rounded-md border border-input bg-background px-3 shadow-sm">
+                    <span id="start-date-display" className="text-base text-foreground">
+                      Ab sofort
+                    </span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="shrink-0 text-[oklch(0.38_0.12_255)] hover:text-[oklch(0.30_0.11_255)]"
+                      onClick={() => setChooseSpecificStartDate(true)}
+                    >
+                      Ändern
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
+                    <Input
+                      id="startDate"
+                      type="date"
+                      className="h-12 sm:min-w-0 sm:flex-1"
+                      value={startDateValue}
+                      onChange={(e) => setStartDateValue(e.target.value)}
+                      autoFocus
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-12 shrink-0 sm:h-12"
+                      onClick={() => {
+                        setStartDateValue("");
+                        setChooseSpecificStartDate(false);
+                      }}
+                    >
+                      Ab sofort
+                    </Button>
+                  </div>
+                )}
               </div>
               <div>
                 <Label htmlFor="slots" className="text-base text-foreground">
@@ -606,111 +506,133 @@ export default function RegisterEmployerPage() {
                   id="slots"
                   type="number"
                   min={1}
-                  placeholder="z. B. 2"
+                  placeholder="1"
                   className="mt-2 h-12"
+                  value={slotsValue}
+                  onChange={(e) => setSlotsValue(e.target.value)}
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Step 6: Kandidaten-Vorschau (3 pro Stelle), Profil-Klick → CV/Video */}
+        {/* Step 4: Benutzer erstellen */}
         <div
           className={cn(
             "space-y-6 transition-opacity duration-200",
-            step !== 6 && "pointer-events-none absolute inset-0 opacity-0"
+            step !== 4 && "pointer-events-none absolute inset-0 opacity-0"
           )}
-          aria-hidden={step !== 6}
+          aria-hidden={step !== 4}
         >
-          <div className={cn(step === 6 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
-            <p className="mb-6 text-sm text-muted-foreground">
-              Pro Stelle zeigen wir Ihnen passende Kandidaten. Klicken Sie auf „Profil“, um Lebenslauf und Video-Vorstellung zu sehen.
-            </p>
-            <div className="space-y-4">
-              <p className="text-sm font-medium text-foreground">Ihre Stelle(n)</p>
-              <div className="grid gap-4 sm:grid-cols-3">
-                {MOCK_CANDIDATES.map((c) => (
-                  <div
-                    key={c.id}
-                    className="rounded-xl border border-border bg-card p-4 shadow-sm"
-                  >
-                    <div className="flex flex-col items-center text-center">
-                      <div className="relative h-16 w-16 overflow-hidden rounded-full bg-muted">
-                        <Image
-                          src={c.image}
-                          alt={c.name}
-                          fill
-                          className="object-cover"
-                          sizes="64px"
-                        />
-                      </div>
-                      <p className="mt-2 font-medium text-foreground">{c.name}</p>
-                      <p className="text-xs text-muted-foreground">{c.age} Jahre</p>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="mt-3 w-full"
-                        onClick={() => {
-                          setSelectedCandidate(c);
-                          setProfileOpen(true);
-                        }}
-                      >
-                        Profil
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div className={cn(step === 4 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
+            <div className="space-y-3">
+              <Label htmlFor="email" className="text-base text-foreground">
+                {t("email")}
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                className="h-12 text-base"
+                placeholder="name@firma.de"
+                {...register("email")}
+                aria-invalid={!!errors.email}
+                autoFocus={step === 4}
+              />
+              {errors.email && (
+                <p className="text-xs text-destructive">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="password" className="text-base text-foreground">
+                {t("password")}
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                className="h-12 text-base"
+                placeholder="Mindestens 8 Zeichen"
+                {...register("password")}
+                aria-invalid={!!errors.password}
+              />
+              {errors.password && (
+                <p className="text-xs text-destructive">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-3">
+              <Label htmlFor="confirmPassword" className="text-base text-foreground">
+                {t("confirmPassword")}
+              </Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                className="h-12 text-base"
+                placeholder="Passwort wiederholen"
+                {...register("confirmPassword")}
+                aria-invalid={!!errors.confirmPassword}
+              />
+              {errors.confirmPassword && (
+                <p className="text-xs text-destructive">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </div>
           </div>
         </div>
 
-        <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-3">
-                {selectedCandidate && (
-                  <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted">
-                    <Image
-                      src={selectedCandidate.image}
-                      alt={selectedCandidate.name}
-                      fill
-                      className="object-cover"
-                      sizes="40px"
-                    />
-                  </div>
+        {/* Step 5: 6-stellige Verifizierung (wie an E-Mail gesendet) – letzter Schritt, danach Dashboard */}
+        <div
+          className={cn(
+            "space-y-6 transition-opacity duration-200",
+            step !== 5 && "pointer-events-none absolute inset-0 opacity-0"
+          )}
+          aria-hidden={step !== 5}
+        >
+          <div className={cn(step === 5 && "animate-in slide-in-from-top-4 fade-in-0 duration-300")}>
+            <p className="mb-4 text-sm text-muted-foreground">
+              Wir haben einen 6-stelligen Code an Ihre E-Mail-Adresse gesendet. Bitte geben Sie ihn hier ein.
+            </p>
+            <div className="space-y-3">
+              <Label htmlFor="verificationCode" className="text-base text-foreground">
+                Verifizierungscode
+              </Label>
+              <Controller
+                control={control}
+                name="verificationCode"
+                render={({ field }) => (
+                  <Input
+                    id="verificationCode"
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    className="h-12 text-base font-mono tracking-[0.4em] text-center"
+                    placeholder="000000"
+                    maxLength={6}
+                    value={field.value}
+                    onChange={(e) => {
+                      const digits = (e.target.value || "").replace(/\D/g, "").slice(0, 6);
+                      field.onChange(digits);
+                    }}
+                    aria-invalid={!!errors.verificationCode}
+                    autoFocus={step === 5}
+                  />
                 )}
-                {selectedCandidate?.name}
-              </DialogTitle>
-            </DialogHeader>
-            {selectedCandidate && (
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  {selectedCandidate.age} Jahre · {selectedCandidate.role}
+              />
+              {errors.verificationCode && (
+                <p className="text-xs text-destructive">
+                  {errors.verificationCode.message}
                 </p>
-                <div>
-                  <p className="flex items-center gap-2 text-sm font-medium">
-                    <FileText className="h-4 w-4" />
-                    Lebenslauf
-                  </p>
-                  <p className="mt-2 text-sm text-muted-foreground">{selectedCandidate.cv}</p>
-                </div>
-                <div>
-                  <p className="flex items-center gap-2 text-sm font-medium">
-                    <Play className="h-4 w-4" />
-                    {selectedCandidate.videoLabel}
-                  </p>
-                  <div className="mt-2 flex aspect-video items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                    <Play className="h-12 w-12" />
-                  </div>
-                </div>
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
+              )}
+            </div>
+          </div>
+        </div>
 
-        {/* Ok / Zum Dashboard */}
+        {/* Ok / Kandidaten finden */}
         <div className="mt-8 flex items-center gap-3">
           {step < STEPS.length - 1 ? (
             <Button
@@ -731,7 +653,7 @@ export default function RegisterEmployerPage() {
                 {isLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  "Zum Dashboard"
+                  "Kandidaten finden"
                 )}
               </Button>
               <p className="text-xs text-muted-foreground">

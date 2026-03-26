@@ -18,7 +18,9 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const redirectTo = searchParams.get("redirect") ?? "/dashboard/employer";
+  // Default auf `/dashboard`, damit die Rolle serverseitig korrekt bestimmt wird
+  // (statt immer kurz `/dashboard/employer` anzuzeigen).
+  const redirectTo = searchParams.get("redirect") ?? "/dashboard";
 
   const {
     register,
@@ -33,7 +35,7 @@ export default function LoginPage() {
     try {
       // Ohne Backend: Jede gültige Eingabe (E-Mail-Format, Passwort min. 8 Zeichen) führt ins Dashboard
       toast.success("Anmeldung erfolgreich.");
-      router.replace(redirectTo.startsWith("/") ? redirectTo : `/dashboard/employer`);
+      router.replace(redirectTo.startsWith("/") ? redirectTo : "/dashboard");
     } catch {
       toast.error("Ein unerwarteter Fehler ist aufgetreten");
     } finally {

@@ -1,5 +1,6 @@
 "use client";
 
+import { use as reactUse } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -72,7 +73,9 @@ const statusLabels: Record<string, string> = {
 };
 
 export default function SchoolMatchDetailPage() {
-  const params = useParams();
+  const params = reactUse(
+    Promise.resolve(useParams())
+  ) as { id?: string | string[] | undefined };
   const matchId = params.id as string;
 
   return (

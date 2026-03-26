@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use as reactUse } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,7 +44,22 @@ const docTypeLabels: Record<DocumentType, string> = {
   diploma: "Diplom / Zeugnis",
   health_certificate: "Gesundheitszeugnis",
   video: "Video-Vorstellung",
+  cover_letter: "Anschreiben",
+  school_records: "Schulzeugnis",
+  photo: "Foto",
+  application_bundle: "Bewerbungsunterlagen",
   other: "Sonstiges",
+};
+
+const DOC_DEFAULTS = {
+  extracted_data: null,
+  extraction_status: "pending" as const,
+  extraction_model: null,
+  extraction_error: null,
+  original_file_name: null,
+  file_size_bytes: null,
+  mime_type: null,
+  storage_path: null,
 };
 
 const existingDocuments: CandidateDocument[] = [
@@ -56,6 +71,7 @@ const existingDocuments: CandidateDocument[] = [
     file_name: "reisepass_nguyen.pdf",
     verified_by_admin: true,
     uploaded_at: "2026-01-20T10:00:00Z",
+    ...DOC_DEFAULTS,
   },
   {
     id: "d2",
@@ -65,6 +81,7 @@ const existingDocuments: CandidateDocument[] = [
     file_name: "b1_zertifikat_nguyen.pdf",
     verified_by_admin: false,
     uploaded_at: "2026-02-01T14:00:00Z",
+    ...DOC_DEFAULTS,
   },
   {
     id: "d3",
@@ -74,11 +91,14 @@ const existingDocuments: CandidateDocument[] = [
     file_name: "lebenslauf_nguyen.pdf",
     verified_by_admin: false,
     uploaded_at: "2026-02-10T09:00:00Z",
+    ...DOC_DEFAULTS,
   },
 ];
 
 export default function EditCandidatePage() {
-  const params = useParams();
+  const params = reactUse(
+    Promise.resolve(useParams())
+  ) as { id?: string | string[] | undefined };
   const router = useRouter();
   const candidateId = params.id as string;
   const [currentStatus, setCurrentStatus] = useState<CandidateStatus>("active");
