@@ -8,29 +8,17 @@ export const loginSchema = z.object({
 export const registerEmployerSchema = z
   .object({
     email: z.string().email("Ungültige E-Mail-Adresse"),
-    password: z
-      .string()
-      .min(8, "Passwort muss mindestens 8 Zeichen lang sein"),
-    confirmPassword: z.string(),
     companyName: z.string().min(2, "Firmenname ist erforderlich"),
     industry: z.enum(["hospitality", "hairdressing", "nursing", "other"]),
     industryOther: z.string().optional(),
-    lookingFor: z.string().optional(),
-    positionTypes: z.array(z.string()).optional(),
-    positionCustom: z.string().optional(),
-    startDate: z.string().optional(),
-    address: z.string().optional(),
-    city: z.string().optional(),
-    plz: z.string().optional(),
-    contactPerson: z.string().optional(),
-    phone: z.string().optional(),
-    verificationCode: z
+    contactPerson: z.string().min(2, "Kontaktperson ist erforderlich"),
+    address: z.string().min(2, "Adresse ist erforderlich"),
+    city: z.string().min(2, "Stadt ist erforderlich"),
+    plz: z.string().min(4, "PLZ ist erforderlich"),
+    phone: z
       .string()
-      .regex(/^\d{6}$/, "Bitte geben Sie den 6-stelligen Code ein."),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwörter stimmen nicht überein",
-    path: ["confirmPassword"],
+      .min(6, "Bitte geben Sie eine gültige Telefonnummer ein.")
+      .max(40),
   })
   .refine(
     (data) =>

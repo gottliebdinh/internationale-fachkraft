@@ -57,19 +57,18 @@ export function generateErklaerungBeschaeftigungData(
     { label: "Anschrift", value: `${employer.address}, ${employer.plz} ${employer.city}`, x: 50, y: 150 },
     { label: "Branche", value: position.specialization, x: 50, y: 180 },
     { label: "Gewerbeanmeldung/HRB", value: employer.trade_license_number || "", x: 50, y: 210 },
-    { label: "Tarifgebunden", value: employer.union_compliant ? "Ja" : "Nein", x: 50, y: 240 },
-    { label: "Arbeitnehmer/in – Name", value: `${candidate.first_name} ${candidate.last_name}`, x: 50, y: 300 },
-    { label: "Geburtsdatum", value: formatDate(candidate.date_of_birth), x: 50, y: 330 },
-    { label: "Staatsangehörigkeit", value: candidate.nationality, x: 50, y: 360 },
-    { label: "Tätigkeit", value: position.title, x: 50, y: 420 },
-    { label: "Beginn des Arbeitsverhältnisses", value: formatDate(position.start_date), x: 50, y: 450 },
+    { label: "Arbeitnehmer/in – Name", value: `${candidate.first_name} ${candidate.last_name}`, x: 50, y: 270 },
+    { label: "Geburtsdatum", value: formatDate(candidate.date_of_birth), x: 50, y: 300 },
+    { label: "Staatsangehörigkeit", value: candidate.nationality, x: 50, y: 330 },
+    { label: "Tätigkeit", value: position.title, x: 50, y: 390 },
+    { label: "Beginn des Arbeitsverhältnisses", value: formatDate(position.start_date), x: 50, y: 420 },
     {
       label: "Bruttomonatsentgelt",
       value: position.salary_range ? `${position.salary_range.min} - ${position.salary_range.max} EUR` : "Nach Tarif",
       x: 50,
-      y: 480,
+      y: 450,
     },
-    { label: "Arbeitszeit (Stunden/Woche)", value: "40", x: 50, y: 510 },
+    { label: "Arbeitszeit (Stunden/Woche)", value: "40", x: 50, y: 480 },
     {
       label: "Unterkunft",
       value:
@@ -79,7 +78,7 @@ export function generateErklaerungBeschaeftigungData(
           ? "Mietunterstützung"
           : "Eigenverantwortlich",
       x: 50,
-      y: 540,
+      y: 510,
     },
   ];
 }

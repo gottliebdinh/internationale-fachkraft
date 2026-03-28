@@ -18,10 +18,7 @@ Wenn ein Feld nicht lesbar ist, setze null. Antworte NUR mit validem JSON.`,
 Extrahiere folgende Felder als JSON:
 {
   "german_level": "A1 | A2 | B1 | B2 | C1",
-  "exam_date": "YYYY-MM-DD",
-  "institution": "Ausstellende Institution",
-  "passed": true/false,
-  "score": "Punktzahl oder Note falls vorhanden"
+  "exam_date": "YYYY-MM-DD"
 }
 Wenn ein Feld nicht lesbar ist, setze null. Antworte NUR mit validem JSON.`,
 
@@ -29,7 +26,6 @@ Wenn ein Feld nicht lesbar ist, setze null. Antworte NUR mit validem JSON.`,
 Extrahiere folgende Felder als JSON:
 {
   "education": [{"institution": "", "degree": "", "field": "", "start_date": "YYYY-MM", "end_date": "YYYY-MM"}],
-  "work_experience": [{"company": "", "role": "", "start_date": "YYYY-MM", "end_date": "YYYY-MM", "description": ""}],
   "skills": ["Skill1", "Skill2"],
   "languages": [{"language": "Deutsch", "level": "B1"}]
 }
@@ -40,9 +36,7 @@ Extrahiere folgende Felder als JSON:
 {
   "school_name": "Name der Schule/Universität",
   "graduation_date": "YYYY-MM-DD",
-  "degree": "Art des Abschlusses (z.B. Abitur, Bachelor)",
-  "gpa_or_grade": "Durchschnittsnote falls vorhanden",
-  "country": "Ausstellungsland"
+  "degree": "Art des Abschlusses (z.B. Abitur, Bachelor)"
 }
 Wenn ein Feld nicht lesbar ist, setze null. Antworte NUR mit validem JSON.`,
 
@@ -74,9 +68,7 @@ Extrahiere folgende Felder als JSON:
 {
   "school_name": "Name der Schule",
   "student_name": "Name des Schülers",
-  "years_covered": "Zeitraum z.B. 2019-2022",
-  "average_grade": "Durchschnittsnote falls vorhanden",
-  "country": "Land"
+  "years_covered": "Zeitraum z.B. 2019-2022"
 }
 Wenn ein Feld nicht lesbar ist, setze null. Antworte NUR mit validem JSON.`,
 };

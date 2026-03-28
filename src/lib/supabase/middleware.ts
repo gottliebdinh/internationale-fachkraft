@@ -31,6 +31,30 @@ export async function updateSession(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
+  const mustSetPassword =
+    user?.user_metadata &&
+    typeof user.user_metadata === "object" &&
+    (user.user_metadata as { must_set_password?: boolean }).must_set_password ===
+      true;
+
+  // Alle „Passwort noch setzen“-Fälle: nicht zwischen Register/Dashboard/Login hin- und her redirecten.
+  if (mustSetPassword) {
+    const allowed =
+      pathname === "/auth/employer/set-password" ||
+      pathname.startsWith("/auth/callback");
+    if (
+      !allowed &&
+      (pathname.startsWith("/dashboard") ||
+        pathname.startsWith("/admin") ||
+        pathname.startsWith("/auth"))
+    ) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/auth/employer/set-password";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Public routes that don't need auth
   const publicRoutes = [
     "/",
@@ -49,8 +73,19 @@ export async function updateSession(request: NextRequest) {
 
   // Ohne Backend: Dashboard und Admin-Preview auch ohne Supabase-Session erlauben.
   const isDashboard = pathname.startsWith("/dashboard");
+  const isMuster = pathname.startsWith("/muster");
   const isAdminPreview = pathname.startsWith("/admin");
-  if (!user && !isPublicRoute && !isDashboard && !isAdminPreview) {
+  const isAdminApiPreview = pathname.startsWith("/api/admin/");
+  const isPublicApi = pathname.startsWith("/api/register/");
+  if (
+    !user &&
+    !isPublicRoute &&
+    !isDashboard &&
+    !isMuster &&
+    !isAdminPreview &&
+    !isAdminApiPreview &&
+    !isPublicApi
+  ) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     url.searchParams.set("redirect", pathname);
@@ -58,9 +93,14 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (user && pathname.startsWith("/auth/")) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+    const allowedAuthWithSession =
+      pathname === "/auth/employer/set-password" ||
+      pathname.startsWith("/auth/callback");
+    if (!allowedAuthWithSession) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
   }
 
   // Role-based access control for dashboard routes

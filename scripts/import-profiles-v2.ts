@@ -13,10 +13,15 @@
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
+import {
+  matchesBestPhotoFile,
+  pickBestPhotoStoragePathFallback,
+} from "../src/lib/candidate-import-pipeline";
 import path from "node:path";
 import fs from "node:fs/promises";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
+import sharp from "sharp";
 
 // ---------------------------------------------------------------------------
 // Config
@@ -26,10 +31,9 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 const BUCKET = "candidate-docs";
-const PROFILES_DIR = path.resolve(
-  __dirname,
-  "../Beispielprofile für die Demo - Vertriebsleitung"
-);
+const PROFILES_DIR = process.env.PROFILE_IMPORT_DIR?.trim()
+  ? path.resolve(process.env.PROFILE_IMPORT_DIR.trim())
+  : path.resolve(__dirname, "../Beispielprofile für die Demo - Vertriebsleitung");
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { autoRefreshToken: false, persistSession: false },
@@ -40,6 +44,8 @@ const MODEL = "gpt-4o";
 const PHASE1_CONCURRENCY = 5;
 const PROFILE_CONCURRENCY = 2;
 const UPLOAD_CONCURRENCY = 5;
+const IMAGE_MAX_DIMENSION = 1600;
+const IMAGE_WEBP_QUALITY = 72;
 const SKIP_EXTENSIONS = new Set([".docx", ".ds_store"]);
 const SUPPORTED_EXTENSIONS = new Set([
   ".pdf",
@@ -121,11 +127,11 @@ Antworte NUR als JSON mit genau diesem Schema:
     <Extrahiere ALLE lesbaren Informationen als key-value Paare.
      Verwende sinnvolle Feldnamen auf Deutsch oder Englisch, z.B.:
      - Bei Reisepass: full_name, date_of_birth, nationality, passport_number, passport_expiry, gender, place_of_birth
-     - Bei Sprachzertifikat: name, german_level (A1-C2), exam_date, institution, passed, score
-     - Bei Lebenslauf: education (Array), work_experience (Array), skills, languages
+     - Bei Sprachzertifikat: name, german_level (A1-C2), exam_date
+     - Bei Lebenslauf: education (Array), skills, languages
      - Bei Anschreiben: position_type, desired_position, desired_field, target_company, target_city, motivation_summary (MAX 2-3 kurze Sätze! Nur der Kern: warum dieser Beruf, welche Erfahrung, was ist das Ziel. KEIN Nacherzählen des ganzen Briefs!)
-     - Bei Zeugnis: school_name, graduation_date, degree, grade, country
-     - Bei Schulzeugnis: school_name, student_name, years_covered, average_grade, country
+     - Bei Zeugnis: school_name, graduation_date, degree
+     - Bei Schulzeugnis: school_name, student_name, years_covered
      - Bei Foto: nur has_face und face_quality relevant
      - Bei allem anderen: alle lesbaren Texte und Daten>
   }
@@ -237,8 +243,6 @@ Erstelle daraus EIN sauberes, strukturiertes Kandidatenprofil als JSON:
   "place_of_birth": "...",
   "german_level": "A1-C2",
   "b1_exam_date": "YYYY-MM-DD",
-  "b1_institution": "...",
-  "b1_score": "...",
   "education_level": "z.B. Abitur, Bachelor",
   "school_name": "...",
   "graduation_date": "YYYY-MM-DD",
@@ -256,7 +260,7 @@ Regeln:
 - Reisepass hat Vorrang für Name, Geburtsdatum, Nationalität, Geschlecht
 - Bei Konflikten: das zuverlässigere Dokument bevorzugen (Pass > CV > Anschreiben)
 - Nationalität IMMER als lesbares Wort schreiben (z.B. "Vietnamesisch" statt "VNM")
-- Namen NICHT in Großbuchstaben, sondern normal: "Nguyen Thi Ngoc Anh" statt "NGUYEN THI NGOC ANH"
+- KEINE Großbuchstaben-Wörter! Immer normale Schreibweise: "Nguyen Thi Ngoc Anh" statt "NGUYEN THI NGOC ANH", "Fachkraft Gastronomie" statt "FACHKRAFT GASTRONOMIE", "Ausbildungsplatz" statt "AUSBILDUNGSPLATZ"
 - best_photo_file: wähle das Bild mit has_face=true UND dem höchsten face_quality Score. NUR Bilddateien (.jpg, .png, .webp), KEINE PDFs!
 - motivation_summary: Fasse die Motivation des Bewerbers in 2-3 kurzen Sätzen zusammen. Nur das Wesentliche: Warum dieser Beruf? Welche Erfahrung bringt die Person mit? Was ist das Ziel?
 - Felder ohne Daten = null
@@ -333,18 +337,51 @@ async function uploadFile(
   filePath: string,
   filename: string,
   index: number
-): Promise<string> {
+): Promise<{ storagePath: string; fileSize: number; mimeType: string }> {
   const ext = path.extname(filename).toLowerCase();
-  const storagePath = `${candidateId}/${docType}/${index}${ext}`;
-  const buf = await fs.readFile(filePath);
-  const mime = mimeType(filePath);
+  const original = await fs.readFile(filePath);
+  const originalMime = mimeType(filePath);
 
-  const { error } = await supabase.storage
-    .from(BUCKET)
-    .upload(storagePath, buf, { contentType: mime, upsert: true });
+  let uploadBuffer: Uint8Array = original;
+  let uploadExt = ext;
+  let uploadMime = originalMime;
+
+  // Keep source docs untouched for extraction quality; only storage gets optimized.
+  if (originalMime.startsWith("image/")) {
+    try {
+      uploadBuffer = await sharp(original)
+        .rotate()
+        .resize({
+          width: IMAGE_MAX_DIMENSION,
+          height: IMAGE_MAX_DIMENSION,
+          fit: "inside",
+          withoutEnlargement: true,
+        })
+        .webp({ quality: IMAGE_WEBP_QUALITY })
+        .toBuffer();
+      uploadExt = ".webp";
+      uploadMime = "image/webp";
+    } catch {
+      // Fallback to original image if transformation fails.
+      uploadBuffer = original;
+      uploadExt = ext;
+      uploadMime = originalMime;
+    }
+  }
+
+  const storagePath = `${candidateId}/${docType}/${index}${uploadExt}`;
+  const { error } = await supabase.storage.from(BUCKET).upload(
+    storagePath,
+    uploadBuffer,
+    { contentType: uploadMime, upsert: true }
+  );
 
   if (error) throw new Error(`Upload failed: ${error.message}`);
-  return storagePath;
+  return {
+    storagePath,
+    fileSize: uploadBuffer.byteLength,
+    mimeType: uploadMime,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -504,7 +541,10 @@ async function processProfile(folder: string, schoolId: string) {
 
       let storagePath: string;
       try {
-        storagePath = await uploadFile(candidateId, docType, r.filePath, r.file, i);
+        const upload = await uploadFile(candidateId, docType, r.filePath, r.file, i);
+        storagePath = upload.storagePath;
+        r.fileSize = upload.fileSize;
+        r.mime = upload.mimeType;
       } catch (err) {
         console.error(`  ✗ Upload ${r.file}: ${err instanceof Error ? err.message : err}`);
         return;
@@ -531,12 +571,19 @@ async function processProfile(folder: string, schoolId: string) {
         extraction_error: r.error,
       });
 
-      if (profile.best_photo_file && r.file === profile.best_photo_file) {
+      if (matchesBestPhotoFile(r.file, profile.best_photo_file)) {
         bestPhotoPath = storagePath;
       }
     },
     UPLOAD_CONCURRENCY
   );
+
+  if (!bestPhotoPath) {
+    bestPhotoPath = pickBestPhotoStoragePathFallback(
+      phase1Results,
+      phase1Results.map((r) => r.storagePath)
+    );
+  }
 
   if (bestPhotoPath) {
     await supabase

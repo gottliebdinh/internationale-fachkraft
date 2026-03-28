@@ -92,12 +92,15 @@ export interface Employer {
   user_id: string;
   company_name: string;
   industry: Industry;
+  industry_other: string | null;
   address: string;
   city: string;
   plz: string;
   contact_person: string;
   phone: string;
-  trade_license_number: string;
+  /** Kontakt-E-Mail des Unternehmens */
+  email: string | null;
+  trade_license_number: string | null;
   union_compliant: boolean;
   accommodation_type: AccommodationType;
   accommodation_details: {

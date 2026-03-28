@@ -10,7 +10,6 @@ export const employerProfileSchema = z.object({
   contact_person: z.string().min(2, "Ansprechpartner ist erforderlich"),
   phone: z.string().min(6, "Telefonnummer ist erforderlich"),
   trade_license_number: z.string().optional(),
-  union_compliant: z.boolean(),
   accommodation_type: z.enum(["company_housing", "rental_support", "none"]),
   accommodation_details: z
     .object({

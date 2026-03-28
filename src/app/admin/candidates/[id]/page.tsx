@@ -5,12 +5,15 @@ import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ProfilePhotoEditor } from "@/components/admin/profile-photo-editor";
+import { CandidateDeleteSection } from "@/components/admin/candidate-delete-section";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { MatchPipelineEditor } from "@/components/admin/match-pipeline-editor";
 import {
   ArrowLeft,
   FileText,
@@ -73,6 +76,18 @@ const DOC_TYPE_META: Record<
   video: { label: "Video", icon: Film },
   other: { label: "Sonstige", icon: FileQuestion },
 };
+
+/** Anzeigename nach Dokumentart, bei mehreren gleichen Typen nummeriert. */
+function getDocumentDisplayTitle(
+  documentType: string,
+  occurrenceByType: Map<string, number>
+): string {
+  const meta = DOC_TYPE_META[documentType] ?? DOC_TYPE_META.other;
+  const base = meta.label;
+  const n = (occurrenceByType.get(documentType) ?? 0) + 1;
+  occurrenceByType.set(documentType, n);
+  return n === 1 ? base : `${base} (${n})`;
+}
 
 const STATUS_META: Record<
   string,
@@ -154,6 +169,21 @@ export default async function CandidateDetailPage({
     })
   );
 
+  const { data: matchRow } = await supabase
+    .from("matches")
+    .select("id, status, job_position_id, job_positions!inner(id, title, employer_id, employers!inner(id, company_name))")
+    .eq("candidate_id", id)
+    .limit(1)
+    .maybeSingle();
+
+  const matchedEmployer = matchRow
+    ? {
+        id: (matchRow.job_positions as any).employers.id as string,
+        company_name: (matchRow.job_positions as any).employers.company_name as string,
+        position_title: (matchRow.job_positions as any).title as string,
+      }
+    : null;
+
   const initials = (c.first_name?.[0] ?? "") + (c.last_name?.[0] ?? "");
 
   // Group extracted data by source
@@ -165,16 +195,8 @@ export default async function CandidateDetailPage({
     (d) => d.document_type === "cover_letter" && d.extracted_data
   )?.extracted_data as Record<string, unknown> | undefined;
 
-  const b1Data = docs.find(
-    (d) => d.document_type === "b1_certificate" && d.extracted_data
-  )?.extracted_data as Record<string, unknown> | undefined;
-
   const diplomaData = docs.find(
     (d) => d.document_type === "diploma" && d.extracted_data
-  )?.extracted_data as Record<string, unknown> | undefined;
-
-  const cvData = docs.find(
-    (d) => d.document_type === "cv" && d.extracted_data
   )?.extracted_data as Record<string, unknown> | undefined;
 
   async function updateCandidateAction(formData: FormData) {
@@ -306,20 +328,23 @@ export default async function CandidateDetailPage({
 
       {/* Header */}
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-        <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-2xl bg-muted sm:h-40 sm:w-40">
-          {photoUrl ? (
-            <Image
-              src={photoUrl}
-              alt={`${c.first_name} ${c.last_name}`}
-              fill
-              className="object-cover"
-              sizes="160px"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center text-4xl font-semibold text-muted-foreground/40">
-              {initials || "?"}
-            </div>
-          )}
+        <div className="w-full shrink-0 space-y-3 sm:w-40">
+          <div className="relative h-32 w-32 overflow-hidden rounded-2xl bg-muted sm:h-40 sm:w-40">
+            {photoUrl ? (
+              <Image
+                src={photoUrl}
+                alt={`${c.first_name} ${c.last_name}`}
+                fill
+                className="object-cover"
+                sizes="160px"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-4xl font-semibold text-muted-foreground/40">
+                {initials || "?"}
+              </div>
+            )}
+          </div>
+          {isEditMode && <ProfilePhotoEditor candidateId={id} />}
         </div>
 
         <div className="space-y-2">
@@ -356,6 +381,16 @@ export default async function CandidateDetailPage({
           </div>
         </div>
       </div>
+
+      {/* Match & Pipeline */}
+      {matchRow && matchedEmployer && (
+        <MatchPipelineEditor
+          matchId={matchRow.id}
+          employerId={matchedEmployer.id}
+          currentStatus={matchRow.status}
+          employer={matchedEmployer}
+        />
+      )}
 
       {/* Info cards */}
       <div className="grid gap-4 sm:grid-cols-2">
@@ -417,18 +452,6 @@ export default async function CandidateDetailPage({
             <dl className="space-y-2 text-sm">
               <InfoRow label="Deutschniveau" value={c.german_level} />
               <InfoRow label="Prüfungsdatum" value={formatDate(c.b1_certificate_date)} />
-              <InfoRow label="Institution" value={str(b1Data?.institution)} />
-              <InfoRow
-                label="Bestanden"
-                value={
-                  b1Data?.passed === true
-                    ? "Ja"
-                    : b1Data?.passed === false
-                      ? "Nein"
-                      : null
-                }
-              />
-              <InfoRow label="Punktzahl" value={str(b1Data?.score)} />
             </dl>
           </CardContent>
         </Card>
@@ -446,51 +469,10 @@ export default async function CandidateDetailPage({
               <InfoRow label="Abschluss" value={c.education_level} />
               <InfoRow label="Schule" value={str(diplomaData?.school_name)} />
               <InfoRow label="Datum" value={formatDate(str(diplomaData?.graduation_date))} />
-              <InfoRow label="Note" value={str(diplomaData?.gpa_or_grade)} />
-              <InfoRow label="Land" value={str(diplomaData?.country)} />
             </dl>
           </CardContent>
         </Card>
       </div>
-
-      {/* Work experience from CV */}
-      {cvData &&
-        Array.isArray(cvData.work_experience) &&
-        cvData.work_experience.length > 0 && (
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-sm">
-                <Briefcase className="h-4 w-4 text-muted-foreground" />
-                Berufserfahrung
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {(cvData.work_experience as Array<Record<string, unknown>>).map(
-                  (exp, i) => (
-                    <div
-                      key={i}
-                      className="rounded-lg border border-border/60 bg-muted/30 px-3 py-2.5 text-sm"
-                    >
-                      <p className="font-medium">{str(exp.role) || "Position"}</p>
-                      <p className="text-muted-foreground">
-                        {str(exp.company)}
-                        {exp.start_date || exp.end_date
-                          ? ` · ${str(exp.start_date) || "?"} – ${str(exp.end_date) || "aktuell"}`
-                          : ""}
-                      </p>
-                      {str(exp.description) && (
-                        <p className="mt-1 text-foreground/80">
-                          {str(exp.description)}
-                        </p>
-                      )}
-                    </div>
-                  )
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
       {/* Documents */}
       <Card>
@@ -502,12 +484,19 @@ export default async function CandidateDetailPage({
         </CardHeader>
         <CardContent>
           <div className="divide-y divide-border/60">
-            {docsWithUrls.map((doc) => {
+            {(() => {
+              const occurrenceByType = new Map<string, number>();
+              return docsWithUrls.map((doc) => {
               const meta = DOC_TYPE_META[doc.document_type] ?? DOC_TYPE_META.other;
               const Icon = meta.icon;
               const statusMeta =
                 STATUS_META[doc.extraction_status] ?? STATUS_META.pending;
               const StatusIcon = statusMeta.icon;
+              const displayTitle = getDocumentDisplayTitle(
+                doc.document_type,
+                occurrenceByType
+              );
+              const originalName = doc.original_file_name || doc.file_name || "";
 
               return (
                 <div
@@ -524,23 +513,33 @@ export default async function CandidateDetailPage({
                         href={doc.downloadUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        title={
+                          originalName
+                            ? `Originaldatei: ${originalName}`
+                            : undefined
+                        }
                         className="truncate text-sm font-medium text-foreground underline-offset-2 hover:underline"
                       >
-                        {doc.original_file_name || doc.file_name}
+                        {displayTitle}
                       </a>
                     ) : (
-                      <p className="truncate text-sm font-medium">
-                        {doc.original_file_name || doc.file_name}
+                      <p
+                        className="truncate text-sm font-medium"
+                        title={
+                          originalName
+                            ? `Originaldatei: ${originalName}`
+                            : undefined
+                        }
+                      >
+                        {displayTitle}
                       </p>
                     )}
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span>{meta.label}</span>
-                      <span className="text-border">·</span>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
                       <span className={`flex items-center gap-1 ${statusMeta.className}`}>
                         <StatusIcon className="h-3 w-3" />
                         {statusMeta.label}
                       </span>
-                      {doc.file_size_bytes && (
+                      {doc.file_size_bytes != null && doc.file_size_bytes > 0 && (
                         <>
                           <span className="text-border">·</span>
                           <span>{formatBytes(doc.file_size_bytes)}</span>
@@ -563,7 +562,8 @@ export default async function CandidateDetailPage({
                   )}
                 </div>
               );
-            })}
+            });
+            })()}
           </div>
 
           {docsWithUrls.length === 0 && (
@@ -573,6 +573,13 @@ export default async function CandidateDetailPage({
           )}
         </CardContent>
       </Card>
+
+      {!isEditMode && (
+        <CandidateDeleteSection
+          candidateId={id}
+          displayName={`${c.first_name ?? ""} ${c.last_name ?? ""}`.trim() || "Kandidat"}
+        />
+      )}
     </div>
   );
 }

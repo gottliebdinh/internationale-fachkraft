@@ -1,284 +1,310 @@
-"use client";
-
-import { useState, useEffect, useCallback } from "react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { Badge } from "@/components/ui/badge";
+import { formatJobStartLine } from "@/lib/format-job-start";
+import { Button } from "@/components/ui/button";
 import { EmployerCandidateGrid9 } from "@/components/dashboard/employer-candidate-grid-9";
-import { EMPLOYER_POSITIONS_KEY, type StoredPosition } from "./employer-positions";
-import { Loader2, Search } from "lucide-react";
-import {
-  EMPLOYER_MATCH_INTRO_AFTER_REGISTER_KEY,
-  EMPLOYER_MATCH_INTRO_SEEN_KEY,
-} from "@/lib/employer-dashboard-intro";
+import { fetchTeaserGridCandidates } from "@/lib/employer-teaser-candidates";
+import { Building2, Calendar } from "lucide-react";
 
-function matchCountLabel(n: number): string {
-  if (n <= 0) return "";
-  if (n === 1) return "1 passender Kandidat gefunden";
-  if (n < 15) return `${n} passende Kandidaten gefunden`;
-  return "15+ passende Kandidaten gefunden";
+function capitalize(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-/** Nur die Zahl wechselt – kein Remount, kein Blinkeffekt. */
-function MatchIntroCountLine({ n }: { n: number }) {
-  if (n <= 0) return null;
-  if (n === 1) {
-    return <span className="tabular-nums">1 passender Kandidat gefunden</span>;
-  }
-  if (n < 15) {
-    return (
-      <span className="tabular-nums">
-        <span className="inline-block min-w-[1.5em] text-right">{n}</span>
-        {" passende Kandidaten gefunden"}
-      </span>
-    );
-  }
-  return <span className="tabular-nums">15+ passende Kandidaten gefunden</span>;
-}
-
-const POSITION_LABELS: Record<string, string> = {
-  chef: "Koch / Köchin",
-  service: "Servicekraft",
-  hotel: "Hotelfachkraft",
-  trainee_h: "Auszubildende/r",
-  hairdresser: "Friseur/in",
-  trainee_f: "Auszubildende/r",
-  salon: "Salon-Assistent/in",
-  nurse: "Pflegefachkraft",
-  assistant: "Pflegehelfer/in",
-  trainee_n: "Auszubildende/r Pflege",
-  specialist: "Fachkraft",
-  trainee: "Auszubildende/r",
+export const metadata: Metadata = {
+  title: "Dashboard | GeVin",
+  description: "Ihr Arbeitgeber-Dashboard mit Stellen und Kandidaten.",
 };
 
-function getPositions(): StoredPosition[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(EMPLOYER_POSITIONS_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    }
-    const draft = window.localStorage.getItem("register_employer_draft");
-    if (draft) {
-      const data = JSON.parse(draft);
-      const custom = data.positionCustom as string | undefined;
-      const types = data.positionTypes as string[] | undefined;
-      const title =
-        custom?.trim() ||
-        (types?.length ? POSITION_LABELS[types[0]] ?? types[0] : "Stelle") ||
-        "Koch / Köchin";
-      return [{ id: "initial", title, startDate: data.startDate, slots: data.slots }];
-    }
-  } catch {
-    // ignore
-  }
-  return [{ id: "initial", title: "Koch / Köchin" }];
+const STATUS_LABELS: Record<string, { label: string; cls: string }> = {
+  employer_accepted: {
+    label: "AG akzeptiert",
+    cls: "border-sky-200 bg-sky-50 text-sky-800 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200",
+  },
+  both_accepted: {
+    label: "Beide akzeptiert",
+    cls: "border-indigo-200 bg-indigo-50 text-indigo-800 dark:border-indigo-800 dark:bg-indigo-950 dark:text-indigo-200",
+  },
+  ihk_submitted: {
+    label: "IHK eingereicht",
+    cls: "border-purple-200 bg-purple-50 text-purple-800 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-200",
+  },
+  visa_applied: {
+    label: "Visum beantragt",
+    cls: "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200",
+  },
+  visa_granted: {
+    label: "Visum erteilt",
+    cls: "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-200",
+  },
+  arrived: {
+    label: "Angekommen",
+    cls: "border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200",
+  },
+};
+
+function getAge(dob: string | null): number | null {
+  if (!dob) return null;
+  const b = new Date(dob);
+  if (isNaN(b.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - b.getFullYear();
+  if (
+    now.getMonth() < b.getMonth() ||
+    (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())
+  )
+    age--;
+  return age;
 }
 
-const CANDIDATES = [
-  {
-    id: "1",
-    name: "Mai Nguyen",
-    age: 24,
-    role: "Koch / Köchin",
-    image: "/profilbilder/mai.png",
-    cv: "Ausbildung Hotelfach, 2 Jahre Erfahrung in Restaurant. B2 Deutsch.",
-    status: "Vorgeschlagen",
-    statusDetail: "Profil wurde Ihnen passend zu Ihrer Stelle vorgeschlagen.",
-    papiere: [
-      { name: "Lebenslauf", status: "Vorhanden" },
-      { name: "Sprachzertifikat B2", status: "Vorhanden" },
-      { name: "Ausbildungsnachweis", status: "Vorhanden" },
-    ],
-  },
-  {
-    id: "2",
-    name: "Linh Tran",
-    age: 22,
-    role: "Servicekraft",
-    image: "/profilbilder/linh.png",
-    cv: "Berufserfahrung in Gastronomie, B1 Deutsch. Motiviert für Ausbildung.",
-    status: "Vorgeschlagen",
-    statusDetail: "Profil wurde Ihnen passend zu Ihrer Stelle vorgeschlagen.",
-    papiere: [
-      { name: "Lebenslauf", status: "Vorhanden" },
-      { name: "Sprachzertifikat B1", status: "Vorhanden" },
-    ],
-  },
-  {
-    id: "3",
-    name: "Hoang Le",
-    age: 26,
-    role: "Koch / Köchin",
-    image: "/profilbilder/hoang.png",
-    cv: "Koch-Ausbildung Vietnam, 3 Jahre Küche. B2 Deutsch.",
-    status: "Vorgeschlagen",
-    statusDetail: "Profil wurde Ihnen passend zu Ihrer Stelle vorgeschlagen.",
-    papiere: [
-      { name: "Lebenslauf", status: "Vorhanden" },
-      { name: "Sprachzertifikat B2", status: "Vorhanden" },
-      { name: "Berufsabschluss", status: "Vorhanden" },
-    ],
-  },
-];
+export default async function EmployerDashboardPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/auth/login");
 
-const GRID_CANDIDATES = CANDIDATES.map((c) => ({
-  id: c.id,
-  name: c.name,
-  age: c.age,
-  image: c.image,
-}));
+  const admin = createAdminClient();
 
-export default function EmployerDashboardPage() {
-  const [positions, setPositions] = useState<StoredPosition[]>([]);
-  const [showMatchIntro, setShowMatchIntro] = useState(false);
-  const [introPhase, setIntroPhase] = useState<"search" | "count" | "grid">("search");
-  const [matchCount, setMatchCount] = useState(0);
+  const { data: employer } = await admin
+    .from("employers")
+    .select("id, company_name, industry, industry_other, city, contact_person, phone")
+    .eq("user_id", user.id)
+    .maybeSingle();
 
-  const finishMatchIntro = useCallback(() => {
-    try {
-      sessionStorage.setItem(EMPLOYER_MATCH_INTRO_SEEN_KEY, "1");
-    } catch {
-      // ignore
-    }
-    setShowMatchIntro(false);
-  }, []);
+  if (!employer) redirect("/auth/login");
 
-  useEffect(() => {
-    setPositions(getPositions());
-  }, []);
+  const { data: jobPositions } = await admin
+    .from("job_positions")
+    .select("id, title, position_type, slots_total, start_date")
+    .eq("employer_id", employer.id)
+    .order("created_at", { ascending: true });
 
-  // Intro nur direkt nach Registrierung erzwingen
-  useEffect(() => {
-    try {
-      const afterRegister = sessionStorage.getItem(
-        EMPLOYER_MATCH_INTRO_AFTER_REGISTER_KEY
-      );
-      if (afterRegister === "1") {
-        sessionStorage.removeItem(EMPLOYER_MATCH_INTRO_AFTER_REGISTER_KEY);
-        setShowMatchIntro(true);
-        setIntroPhase("search");
-        setMatchCount(0);
+  const jpIds = (jobPositions ?? []).map((jp) => jp.id);
+  let matchRows: any[] = [];
+
+  if (jpIds.length > 0) {
+    const { data } = await admin
+      .from("matches")
+      .select(
+        "id, status, candidate_id, job_position_id, candidates(id, first_name, last_name, date_of_birth, german_level, desired_position, desired_field, position_type, profile_photo_url)"
+      )
+      .in("job_position_id", jpIds)
+      .order("created_at", { ascending: false });
+
+    matchRows = data ?? [];
+  }
+
+  const matchesWithPhotos = await Promise.all(
+    matchRows.map(async (m: any) => {
+      const c = m.candidates;
+      let photoUrl: string | null = null;
+      if (c?.profile_photo_url) {
+        const { data: signed } = await admin.storage
+          .from("candidate-docs")
+          .createSignedUrl(c.profile_photo_url, 3600);
+        photoUrl = signed?.signedUrl ?? null;
       }
-    } catch {
-      // ignore
-    }
-  }, []);
+      return { ...m, photoUrl };
+    })
+  );
 
-  useEffect(() => {
-    if (!showMatchIntro || introPhase !== "search") return;
-    const t = window.setTimeout(() => setIntroPhase("count"), 1400);
-    return () => window.clearTimeout(t);
-  }, [showMatchIntro, introPhase]);
+  const matchesByJpId = new Map<string, typeof matchesWithPhotos>();
+  for (const m of matchesWithPhotos) {
+    const list = matchesByJpId.get(m.job_position_id) ?? [];
+    list.push(m);
+    matchesByJpId.set(m.job_position_id, list);
+  }
 
-  useEffect(() => {
-    if (!showMatchIntro || introPhase !== "count") return;
+  const positions = (jobPositions ?? []).map((jp) => ({
+    ...jp,
+    slots_total: jp.slots_total ?? 0,
+    matches: matchesByJpId.get(jp.id) ?? [],
+  }));
 
-    setMatchCount(0);
-    let cancelled = false;
-    let n = 0;
+  const totalMatches = matchesWithPhotos.length;
+  const teaserCandidates =
+    totalMatches === 0 ? await fetchTeaserGridCandidates(admin) : [];
 
-    const step = () => {
-      if (cancelled) return;
-      n += 1;
-      setMatchCount(n);
-      if (n < 15) {
-        window.setTimeout(step, 70);
-      } else {
-        window.setTimeout(() => {
-          if (!cancelled) setIntroPhase("grid");
-        }, 200);
-      }
-    };
-
-    const t0 = window.setTimeout(step, 250);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(t0);
-    };
-  }, [showMatchIntro, introPhase]);
-
-  useEffect(() => {
-    if (!showMatchIntro || introPhase !== "grid") return;
-    const t = window.setTimeout(() => finishMatchIntro(), 1200);
-    return () => window.clearTimeout(t);
-  }, [showMatchIntro, introPhase, finishMatchIntro]);
-
-  return (
-    <div className="relative mx-auto flex h-full max-h-full min-h-0 w-full max-w-5xl flex-col gap-1 overflow-hidden sm:gap-1.5">
-      {showMatchIntro && (
-        <div
-          className="absolute inset-0 z-[80] flex flex-col items-center justify-center overflow-y-auto bg-background/92 p-4 backdrop-blur-md animate-in fade-in duration-300 sm:p-5"
-          aria-live="polite"
-          aria-busy={introPhase !== "grid"}
-        >
-          <div className="flex w-full max-w-lg flex-col items-center text-center animate-in zoom-in-95 duration-500">
-            <div className="relative mb-5 flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-[oklch(0.38_0.12_255/0.12)]">
-              <Search className="h-11 w-11 text-[oklch(0.38_0.12_255)] motion-safe:animate-pulse" />
-              <Loader2 className="absolute -bottom-1 -right-1 h-9 w-9 text-[oklch(0.38_0.12_255)] motion-safe:animate-spin" />
-            </div>
-
-            {introPhase === "search" && (
-              <>
-                <p className="font-[var(--font-display)] text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
-                  Passende Kandidaten werden gesucht …
-                </p>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Wir gleichen Ihre Stelle mit unserem Kandidatenpool ab.
-                </p>
-              </>
-            )}
-
-            {introPhase === "count" && (
-              <div className="flex w-full flex-col items-center">
-                <p className="min-h-[3.5rem] font-[var(--font-display)] text-2xl font-semibold leading-snug tracking-tight text-foreground sm:min-h-[4rem] sm:text-3xl">
-                  <MatchIntroCountLine n={matchCount} />
-                </p>
-                <div className="mt-6 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-muted sm:max-w-sm">
-                  <div
-                    className="h-full rounded-full bg-[oklch(0.38_0.12_255)] transition-[width] duration-150 ease-out"
-                    style={{ width: `${Math.min(100, (matchCount / 15) * 100)}%` }}
-                  />
-                </div>
-              </div>
-            )}
-
-            {introPhase === "grid" && (
-              <div className="w-full animate-in fade-in zoom-in-95 duration-500">
-                <p className="mb-3 text-center font-[var(--font-display)] text-base font-semibold text-foreground sm:text-lg">
-                  {matchCountLabel(15)}
-                </p>
-                <EmployerCandidateGrid9
-                  candidates={GRID_CANDIDATES}
-                />
-              </div>
-            )}
+  if (totalMatches === 0) {
+    return (
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 pb-8">
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-muted">
+            <Building2 className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <div>
+            <h1 className="font-[var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+              Willkommen, {employer.company_name}
+            </h1>
+            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Ihre Stellen und zugeordnete Kandidaten im Überblick
+            </p>
           </div>
         </div>
+
+        {positions.length === 0 && (
+          <p className="text-center text-sm text-muted-foreground">
+            Noch keine Stellen angelegt.
+          </p>
+        )}
+
+        {teaserCandidates.length > 0 && (
+          <div className="flex min-h-[28rem] flex-1 flex-col">
+            <div className="mb-3 shrink-0 space-y-0.5 sm:space-y-1">
+              <h2 className="font-[var(--font-display)] text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+                Ihre Kandidaten
+              </h2>
+              <p className="text-sm text-muted-foreground sm:text-base">
+                Passende Vorschläge zu Ihrer ausgeschriebenen Stelle
+              </p>
+            </div>
+            <EmployerCandidateGrid9
+              candidates={teaserCandidates}
+              contactPersonName={employer.contact_person?.trim() || null}
+              initialSubmittedPhone={employer.phone?.trim() || null}
+              className="min-h-0 flex-1"
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 pb-8">
+      <div className="flex items-center gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-muted">
+          <Building2 className="h-6 w-6 text-muted-foreground" />
+        </div>
+        <div>
+          <h1 className="font-[var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            Willkommen, {employer.company_name}
+          </h1>
+          <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+            Ihre Stellen und zugeordnete Kandidaten im Überblick
+          </p>
+        </div>
+      </div>
+
+      {positions.length === 0 && (
+        <p className="py-12 text-center text-sm text-muted-foreground">
+          Noch keine Stellen angelegt.
+        </p>
       )}
 
-      <div className="shrink-0 space-y-0.5 sm:space-y-1">
-        <h2 className="font-[var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
-          Ihre Kandidaten
-        </h2>
-        <p className="text-sm leading-relaxed text-muted-foreground sm:text-base lg:text-lg">
-          Passende Vorschläge zu Ihrer ausgeschriebenen Stelle
-        </p>
-      </div>
+      {positions.map((pos) => {
+        const filled = pos.matches.length;
+        const full = filled >= pos.slots_total && pos.slots_total > 0;
 
-      <div className="flex min-h-0 flex-1 flex-col justify-start overflow-hidden pt-0.5">
-        {!showMatchIntro &&
-          positions.map((pos) => (
-            <div
-              key={pos.id}
-              className="flex min-h-0 flex-1 items-start justify-center overflow-hidden pt-0 sm:pt-1"
-            >
-              <EmployerCandidateGrid9
-                candidates={GRID_CANDIDATES}
-                className="max-h-full min-h-0"
-              />
+        return (
+          <section key={pos.id}>
+            <div className="mb-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h2 className="font-[var(--font-display)] text-lg font-semibold tracking-tight text-foreground">
+                {capitalize(pos.title)}
+              </h2>
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <Calendar className="h-3 w-3" />
+                {formatJobStartLine(pos.start_date)}
+              </span>
+              <span
+                className={`ml-auto text-xs font-medium ${
+                  full
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {filled}/{pos.slots_total} besetzt
+              </span>
             </div>
-          ))}
-      </div>
 
+            {pos.matches.length === 0 ? (
+              <p className="py-8 text-center text-sm text-muted-foreground">
+                Noch keine Kandidaten zugeordnet.
+              </p>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {pos.matches.map((m: any) => {
+                  const c = m.candidates;
+                  if (!c) return null;
+                  const age = getAge(c.date_of_birth);
+                  const st = STATUS_LABELS[m.status];
+                  const initials =
+                    (c.first_name?.[0] ?? "") + (c.last_name?.[0] ?? "");
+
+                  return (
+                    <Link
+                      key={m.id}
+                      href={`/dashboard/employer/candidates/${c.id}`}
+                      className="group overflow-hidden rounded-xl border border-border bg-card ring-1 ring-transparent transition-all hover:border-border/80 hover:shadow-md hover:ring-foreground/5"
+                    >
+                      <div className="relative h-[19rem] w-full bg-muted sm:h-[22rem]">
+                        {m.photoUrl ? (
+                          <Image
+                            src={m.photoUrl}
+                            alt={`${c.first_name} ${c.last_name}`}
+                            fill
+                            className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center bg-muted text-3xl font-semibold text-muted-foreground/40">
+                            {initials || "?"}
+                          </div>
+                        )}
+
+                        {st && (
+                          <div className="absolute right-2 top-2">
+                            <Badge
+                              variant="outline"
+                              className={`bg-card/90 text-xs font-medium backdrop-blur-sm ${st.cls}`}
+                            >
+                              {st.label}
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="space-y-2.5 px-4 py-3.5">
+                        <div>
+                          <p className="text-base font-semibold leading-snug text-foreground">
+                            {c.first_name} {c.last_name}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {age !== null ? `${age} Jahre` : "Alter unbekannt"}
+                          </p>
+                        </div>
+
+                        {c.desired_position && (
+                          <p className="text-sm leading-snug text-foreground/80">
+                            {capitalize(c.desired_position)}
+                          </p>
+                        )}
+
+                        <div className="flex flex-wrap gap-1.5">
+                          {c.desired_field && (
+                            <Badge variant="secondary">{c.desired_field}</Badge>
+                          )}
+                          {c.german_level && (
+                            <Badge variant="outline">Deutsch {c.german_level}</Badge>
+                          )}
+                          {c.position_type && (
+                            <Badge variant="outline">{c.position_type}</Badge>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+        );
+      })}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = "GeVin <noreply@gevin.de>";
+const FROM = "GeVin <noreply@gdinh.de>";
 
 function baseLayout(content: string): string {
   return `<!DOCTYPE html>

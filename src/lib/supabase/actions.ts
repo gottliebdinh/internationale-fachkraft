@@ -41,12 +41,29 @@ export async function signIn(formData: FormData) {
     return { error: error.message };
   }
 
-  // Direkt auf das passende Rollen-Dashboard, damit kein `/dashboard`-Redirect-Flash entsteht.
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Fallback nur für den Fall, dass Profil/Rolle kurzfristig nicht lesbar sind.
+  const mustSet =
+    user?.user_metadata &&
+    typeof user.user_metadata === "object" &&
+    (user.user_metadata as { must_set_password?: boolean }).must_set_password ===
+      true;
+  if (mustSet) {
+    redirect("/auth/employer/set-password");
+  }
+
+  const redirectParam = formData.get("redirect");
+  if (
+    typeof redirectParam === "string" &&
+    redirectParam.startsWith("/") &&
+    !redirectParam.startsWith("//") &&
+    redirectParam !== "/dashboard"
+  ) {
+    redirect(redirectParam);
+  }
+
   let role: "employer" | "school" | "admin" = "employer";
   if (user) {
     const { data: profile } = await supabase

@@ -7,15 +7,15 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { loginSchema, type LoginFormData } from "@/lib/validators/auth";
+import { signIn } from "@/lib/supabase/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
   const t = useTranslations("auth");
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   // Default auf `/dashboard`, damit die Rolle serverseitig korrekt bestimmt wird
@@ -30,12 +30,23 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (_data: LoginFormData) => {
+  const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      // Ohne Backend: Jede gültige Eingabe (E-Mail-Format, Passwort min. 8 Zeichen) führt ins Dashboard
-      toast.success("Anmeldung erfolgreich.");
-      router.replace(redirectTo.startsWith("/") ? redirectTo : "/dashboard");
+      const formData = new FormData();
+      formData.append("email", data.email.trim().toLowerCase());
+      formData.append("password", data.password);
+      if (
+        redirectTo.startsWith("/") &&
+        redirectTo !== "/dashboard" &&
+        !redirectTo.startsWith("//")
+      ) {
+        formData.append("redirect", redirectTo);
+      }
+      const result = await signIn(formData);
+      if (result && "error" in result && result.error) {
+        toast.error(result.error);
+      }
     } catch {
       toast.error("Ein unerwarteter Fehler ist aufgetreten");
     } finally {
@@ -100,7 +111,7 @@ export default function LoginPage() {
 
         <Button
           type="submit"
-          className="h-12 w-full text-base font-semibold bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)] transition-transform hover:scale-[1.01] active:scale-[0.99]"
+          className="h-12 w-full text-base font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-transform hover:scale-[1.01] active:scale-[0.99]"
           size="lg"
           disabled={isLoading}
         >
@@ -116,25 +127,12 @@ export default function LoginPage() {
       </form>
 
       <div className="mt-8 border-t border-border pt-6 text-center">
-        <p className="text-sm text-muted-foreground">{t("noAccount")}</p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Kostenlos registrieren – in 2 Minuten passende Kandidaten entdecken.
-        </p>
-        <p className="mt-2 text-[11px] text-muted-foreground">
-          Über 85 Unternehmen nutzen bereits GeVin
-        </p>
-        <div className="mt-3 flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <Link
             href="/auth/register/employer"
-            className="text-sm font-semibold text-[oklch(0.50_0.11_195)] transition-colors hover:text-[oklch(0.44_0.11_195)]"
+            className="text-sm font-semibold text-primary transition-colors hover:text-primary/80"
           >
             Jetzt kostenlos registrieren →
-          </Link>
-          <Link
-            href="/auth/register/school"
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            {t("registerAsSchool")}
           </Link>
         </div>
       </div>

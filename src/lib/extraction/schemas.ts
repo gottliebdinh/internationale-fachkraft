@@ -20,9 +20,6 @@ export type PassportExtraction = z.infer<typeof passportSchema>;
 export const b1CertificateSchema = z.object({
   german_level: z.string().nullable(),
   exam_date: z.string().nullable(),
-  institution: z.string().nullable(),
-  passed: z.boolean().nullable(),
-  score: z.string().nullable(),
 });
 export type B1CertificateExtraction = z.infer<typeof b1CertificateSchema>;
 
@@ -38,17 +35,6 @@ export const cvSchema = z.object({
         field: z.string().nullable(),
         start_date: z.string().nullable(),
         end_date: z.string().nullable(),
-      })
-    )
-    .nullable(),
-  work_experience: z
-    .array(
-      z.object({
-        company: z.string().nullable(),
-        role: z.string().nullable(),
-        start_date: z.string().nullable(),
-        end_date: z.string().nullable(),
-        description: z.string().nullable(),
       })
     )
     .nullable(),
@@ -71,13 +57,11 @@ export const diplomaSchema = z.object({
   school_name: z.string().nullable(),
   graduation_date: z.string().nullable(),
   degree: z.string().nullable(),
-  gpa_or_grade: z.string().nullable(),
-  country: z.string().nullable(),
 });
 export type DiplomaExtraction = z.infer<typeof diplomaSchema>;
 
 // ---------------------------------------------------------------------------
-// Cover Letter / Anschreiben  (zentral fuer Positionsart + Beruf + Branche)
+// Cover Letter / Anschreiben  (zentral für Positionsart + Beruf + Branche)
 // ---------------------------------------------------------------------------
 export const coverLetterSchema = z.object({
   position_type: z.string().nullable(),
@@ -109,8 +93,6 @@ export const schoolRecordsSchema = z.object({
   school_name: z.string().nullable(),
   student_name: z.string().nullable(),
   years_covered: z.string().nullable(),
-  average_grade: z.string().nullable(),
-  country: z.string().nullable(),
 });
 export type SchoolRecordsExtraction = z.infer<typeof schoolRecordsSchema>;
 

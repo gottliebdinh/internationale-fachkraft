@@ -45,7 +45,6 @@ export default function EmployerSettingsPage() {
       contact_person: "Max Mustermann",
       phone: "+49 89 1234567",
       trade_license_number: "HRB 12345",
-      union_compliant: true,
       accommodation_type: "company_housing",
       accommodation_details: {
         address: "Wohnheim Str. 10, 80333 München",
@@ -225,15 +224,6 @@ export default function EmployerSettingsPage() {
               />
             </div>
 
-            <div className="flex items-center gap-3">
-              <input
-                id="union_compliant"
-                type="checkbox"
-                className="size-4 rounded border-input accent-primary"
-                {...register("union_compliant")}
-              />
-              <Label htmlFor="union_compliant">Tarifvertragsbindung</Label>
-            </div>
           </CardContent>
         </Card>
 
