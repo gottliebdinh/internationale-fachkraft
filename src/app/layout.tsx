@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthRecoveryRedirect } from "@/components/auth/auth-recovery-redirect";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -89,6 +90,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <TooltipProvider>
+            <AuthRecoveryRedirect />
             {children}
             <Toaster />
           </TooltipProvider>

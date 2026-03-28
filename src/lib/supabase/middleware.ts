@@ -38,6 +38,9 @@ export async function updateSession(request: NextRequest) {
       true;
 
   // Alle „Passwort noch setzen“-Fälle: nicht zwischen Register/Dashboard/Login hin- und her redirecten.
+  const isAdminLogin =
+    pathname === "/admin/login" || pathname.startsWith("/admin/login/");
+
   if (mustSetPassword) {
     const allowed =
       pathname === "/auth/employer/set-password" ||
@@ -45,7 +48,7 @@ export async function updateSession(request: NextRequest) {
     if (
       !allowed &&
       (pathname.startsWith("/dashboard") ||
-        pathname.startsWith("/admin") ||
+        (pathname.startsWith("/admin") && !isAdminLogin) ||
         pathname.startsWith("/auth"))
     ) {
       const url = request.nextUrl.clone();
@@ -71,34 +74,97 @@ export async function updateSession(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith(route + "/")
   );
 
-  // Ohne Backend: Dashboard und Admin-Preview auch ohne Supabase-Session erlauben.
   const isDashboard = pathname.startsWith("/dashboard");
-  const isMuster = pathname.startsWith("/muster");
-  const isAdminPreview = pathname.startsWith("/admin");
-  const isAdminApiPreview = pathname.startsWith("/api/admin/");
   const isPublicApi = pathname.startsWith("/api/register/");
+
   if (
     !user &&
     !isPublicRoute &&
     !isDashboard &&
-    !isMuster &&
-    !isAdminPreview &&
-    !isAdminApiPreview &&
+    !isAdminLogin &&
     !isPublicApi
   ) {
+    if (pathname.startsWith("/api/admin/")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (pathname.startsWith("/admin")) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin/login";
+      url.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(url);
+    }
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }
 
+  if (user && isAdminLogin) {
+    const { data: adminProfile } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (adminProfile?.role === "admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+    const away = request.nextUrl.clone();
+    away.pathname = "/dashboard";
+    away.search = "";
+    return NextResponse.redirect(away);
+  }
+
+  if (user && pathname.startsWith("/admin") && !isAdminLogin) {
+    const { data: adminCheck } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (adminCheck?.role !== "admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  if (user && pathname.startsWith("/api/admin/")) {
+    const { data: apiAdmin } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (apiAdmin?.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+  }
+
   if (user && pathname.startsWith("/auth/")) {
     const allowedAuthWithSession =
       pathname === "/auth/employer/set-password" ||
+      pathname === "/auth/forgot-password" ||
+      pathname === "/auth/reset-password" ||
       pathname.startsWith("/auth/callback");
     if (!allowedAuthWithSession) {
       const url = request.nextUrl.clone();
       url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  // Altes Platzhalter-Admin unter /dashboard/admin → echtes GeVin-Admin
+  if (user && pathname.startsWith("/dashboard/admin")) {
+    const { data: dashAdmin } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (dashAdmin?.role === "admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin";
+      url.search = "";
       return NextResponse.redirect(url);
     }
   }

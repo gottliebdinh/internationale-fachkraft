@@ -18,10 +18,26 @@ export default function AuthCallbackPage() {
     if (handled.current) return;
     handled.current = true;
 
-    const next = searchParams.get("next") ?? "/dashboard/employer";
-    const dest = next.startsWith("/") ? next : `/${next}`;
-
     const supabase = createClient();
+
+    function resolveDest(hash: string): string {
+      const nextParam = searchParams.get("next");
+      if (nextParam) {
+        const n = nextParam.startsWith("/") ? nextParam : `/${nextParam}`;
+        return n;
+      }
+      if (searchParams.get("type") === "recovery") {
+        return "/auth/reset-password";
+      }
+      const hp = new URLSearchParams(hash.replace(/^#/, ""));
+      if (hp.get("type") === "recovery") {
+        return "/auth/reset-password";
+      }
+      return "/dashboard/employer";
+    }
+
+    const initialHash = typeof window !== "undefined" ? window.location.hash : "";
+    let dest = resolveDest(initialHash);
 
     async function handlePKCE(code: string) {
       const { error } = await supabase.auth.exchangeCodeForSession(code);
@@ -29,11 +45,14 @@ export default function AuthCallbackPage() {
         router.replace(`/auth/login?error=auth_callback&reason=${encodeURIComponent(error.message)}`);
         return;
       }
+      const h = typeof window !== "undefined" ? window.location.hash : "";
+      dest = resolveDest(h);
       router.replace(dest);
     }
 
     async function handleHashOrSession() {
       const hash = window.location.hash;
+      dest = resolveDest(hash);
       if (hash && hash.includes("access_token")) {
         const params = new URLSearchParams(hash.replace("#", ""));
         const accessToken = params.get("access_token");

@@ -5,6 +5,12 @@ export const loginSchema = z.object({
   password: z.string().min(8, "Passwort muss mindestens 8 Zeichen lang sein"),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Ungültige E-Mail-Adresse"),
+});
+
+export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+
 export const registerEmployerSchema = z
   .object({
     email: z.string().email("Ungültige E-Mail-Adresse"),

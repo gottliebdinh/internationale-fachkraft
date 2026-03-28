@@ -9,7 +9,8 @@
     "lint": "eslint",
     "import-profiles": "npx tsx scripts/import-profiles.ts",
     "import-profiles-v2": "npx tsx scripts/import-profiles-v2.ts",
-    "reimport-from-storage": "npx tsx scripts/reimport-from-storage.ts"
+    "reimport-from-storage": "npx tsx scripts/reimport-from-storage.ts",
+    "ensure-admin": "npx tsx scripts/ensure-admin-user.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",

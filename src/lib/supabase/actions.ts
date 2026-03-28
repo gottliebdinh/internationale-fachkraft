@@ -61,6 +61,21 @@ export async function signIn(formData: FormData) {
     !redirectParam.startsWith("//") &&
     redirectParam !== "/dashboard"
   ) {
+    if (redirectParam.startsWith("/admin")) {
+      const { data: profile } = await supabase
+        .from("users")
+        .select("role")
+        .eq("id", user!.id)
+        .single();
+      if (profile?.role === "admin") {
+        redirect(redirectParam);
+      }
+      await supabase.auth.signOut();
+      return {
+        error:
+          "Kein Zugriff auf den Admin-Bereich. Bitte mit einem Admin-Konto anmelden.",
+      };
+    }
     redirect(redirectParam);
   }
 
@@ -77,7 +92,39 @@ export async function signIn(formData: FormData) {
     }
   }
 
+  if (role === "admin") {
+    redirect("/admin");
+  }
   redirect(`/dashboard/${role}`);
+}
+
+export async function signOutFromAdmin() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/admin/login");
+}
+
+/** Supabase sendet einen Link; Ziel nach Klick: /auth/callback → /auth/reset-password */
+export async function requestPasswordReset(formData: FormData) {
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  if (!email) {
+    return { error: "E-Mail fehlt." };
+  }
+
+  const supabase = await createClient();
+  const base =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
+    "http://localhost:3000";
+  const nextPath = "/auth/reset-password";
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${base}/auth/callback?next=${encodeURIComponent(nextPath)}`,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+  return { success: true as const };
 }
 
 export async function signUp(

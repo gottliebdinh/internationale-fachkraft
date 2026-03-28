@@ -24,9 +24,6 @@ import {
   Handshake,
   FileText,
   Settings,
-  ShieldCheck,
-  BarChart3,
-  ClipboardList,
   LogOut,
   GraduationCap,
 } from "lucide-react";
@@ -45,12 +42,7 @@ const navConfig: Record<
     {
       label: "Administration",
       items: [
-        { href: "/dashboard/admin", labelKey: "dashboard", icon: LayoutDashboard },
-        { href: "/dashboard/admin/users", labelKey: "users", icon: Users },
-        { href: "/dashboard/admin/verification", labelKey: "verification", icon: ShieldCheck },
-        { href: "/dashboard/admin/matches", labelKey: "matches", icon: Handshake },
-        { href: "/dashboard/admin/audit", labelKey: "audit", icon: ClipboardList },
-        { href: "/dashboard/admin/statistics", labelKey: "statistics", icon: BarChart3 },
+        { href: "/admin", labelKey: "adminConsole", icon: LayoutDashboard },
       ],
     },
   ],
