@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Building2, Loader2, Plus, Save, X } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmployerJobStartField } from "@/components/admin/employer-job-start-field";
@@ -117,6 +118,7 @@ export default function NewEmployerPage() {
       }
 
       const { id } = await res.json();
+      toast.success("Unternehmen wurde erfolgreich angelegt.");
       router.push(`/admin/employers/${id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unbekannter Fehler");

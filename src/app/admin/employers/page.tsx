@@ -1,5 +1,6 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { EmployersListAutoRefresh } from "@/components/admin/employers-list-auto-refresh";
 import { createAdminClient } from "@/lib/supabase/admin";
 import {
   fetchAuthUserForEmployer,
@@ -134,6 +135,7 @@ export default async function AdminEmployersPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-6">
+      <EmployersListAutoRefresh />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Building2 className="h-6 w-6 text-muted-foreground" />

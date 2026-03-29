@@ -1,6 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -61,7 +62,7 @@ export async function sendMatchProposalEmail({
     <p style="margin:0 0 20px;font-size:14px;color:#333;line-height:1.6">
       Bitte melden Sie sich an, um den Vorschlag zu prüfen und zu bestätigen.
     </p>
-    <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/matches/${matchId}" style="display:inline-block;padding:10px 24px;background:#1a1a2e;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:500">Match ansehen</a>
+    <a href="${getPublicSiteUrl()}/dashboard/matches/${matchId}" style="display:inline-block;padding:10px 24px;background:#1a1a2e;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:500">Match ansehen</a>
   `);
 
   return resend.emails.send({ from: FROM, to, subject: `Neuer Match-Vorschlag: ${candidateName} — ${positionTitle}`, html });
@@ -96,7 +97,7 @@ export async function sendStatusUpdateEmail({
       <tr><td style="padding:8px 16px;font-size:14px;color:#666">Vorheriger Status:</td><td style="padding:8px 16px;font-size:14px;color:#1a1a2e">${oldStatus}</td></tr>
       <tr><td style="padding:8px 16px;font-size:14px;color:#666">Neuer Status:</td><td style="padding:8px 16px;font-size:14px;font-weight:600;color:#1a1a2e">${newStatus}</td></tr>
     </table>
-    <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/matches/${matchId}" style="display:inline-block;padding:10px 24px;background:#1a1a2e;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:500">Details ansehen</a>
+    <a href="${getPublicSiteUrl()}/dashboard/matches/${matchId}" style="display:inline-block;padding:10px 24px;background:#1a1a2e;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:500">Details ansehen</a>
   `);
 
   return resend.emails.send({ from: FROM, to, subject: `Status-Update: ${candidateName} — ${newStatus}`, html });
@@ -110,7 +111,7 @@ interface WelcomeEmailParams {
 
 export async function sendWelcomeEmail({ to, name, role }: WelcomeEmailParams) {
   const roleLabel = role === "employer" ? "Arbeitgeber" : "Schule";
-  const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`;
+  const dashboardUrl = `${getPublicSiteUrl()}/dashboard`;
 
   const html = baseLayout(`
     <h2 style="margin:0 0 16px;font-size:18px;color:#1a1a2e">Willkommen bei GeVin!</h2>

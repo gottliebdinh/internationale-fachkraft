@@ -3,6 +3,7 @@
 import { timingSafeEqual } from "crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getPublicSiteUrl } from "@/lib/site-url";
 import { ensureAdminUser } from "@/lib/ensure-admin-user";
 import { createAdminClient } from "./admin";
 import { createClient } from "./server";
@@ -185,10 +186,7 @@ export async function requestPasswordReset(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const base =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
-    "http://localhost:3000";
+  const base = getPublicSiteUrl();
   const nextPath = "/auth/reset-password";
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${base}/auth/callback?next=${encodeURIComponent(nextPath)}`,

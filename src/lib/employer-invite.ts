@@ -1,28 +1,17 @@
 import { Resend } from "resend";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
 /** After invite link, user lands here via /auth/callback (PKCE). */
 export const EMPLOYER_SET_PASSWORD_PATH = "/auth/employer/set-password";
 
-/**
- * Basis-URL für Einladungs-Links (`redirect_to` an Supabase).
- * Setze in `.env.local` z. B. `NEXT_PUBLIC_SITE_URL=http://localhost:3001`, wenn du nicht auf Port 3000 entwickelst.
- * In Supabase: Authentication → URL Configuration → „Redirect URLs“ muss `${SITE}/auth/callback` enthalten.
- */
+/** @deprecated Nutze getPublicSiteUrl aus @/lib/site-url */
 export function getSiteUrl(): string {
-  const fromEnv =
-    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
-    process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (fromEnv) return fromEnv.replace(/\/$/, "");
-  const vercel = process.env.VERCEL_URL?.trim();
-  if (vercel) return `https://${vercel.replace(/^https?:\/\//, "")}`;
-  const port = process.env.PORT?.trim();
-  if (port) return `http://localhost:${port}`;
-  return "http://localhost:3000";
+  return getPublicSiteUrl();
 }
 
 export function buildInviteCallbackRedirectUrl(): string {
-  const site = getSiteUrl();
+  const site = getPublicSiteUrl();
   const next = encodeURIComponent(EMPLOYER_SET_PASSWORD_PATH);
   return `${site}/auth/callback?next=${next}`;
 }
@@ -83,7 +72,7 @@ export async function sendEmployerInviteEmail(opts: {
   const resend = new Resend(key);
   const company = opts.companyName?.trim() || "";
   const year = new Date().getFullYear();
-  const siteUrl = getSiteUrl();
+  const siteUrl = getPublicSiteUrl();
 
   const html = `<!DOCTYPE html>
 <html lang="de">

@@ -9,6 +9,7 @@ import { ArrowLeft, Building2, Eye, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmployerAccountAuthCard } from "@/components/admin/employer-account-auth-card";
 import { EmployerEditForm } from "@/components/admin/employer-edit-form";
 import { EmployerPositionsView, type PositionWithMatches } from "@/components/admin/employer-positions-view";
 import { EmployerDeleteSection } from "@/components/admin/employer-delete-section";
@@ -193,35 +194,7 @@ export default async function EmployerDetailPage({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">Arbeitgeber-Konto (Login)</CardTitle>
-          <p className="text-sm font-normal text-muted-foreground">
-            Status der Registrierung: E-Mail bestätigen und erstes Passwort setzen.
-          </p>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {accountAuth.lines.map((line) => (
-              <div
-                key={line.label}
-                className="flex flex-col gap-0.5 rounded-lg border bg-muted/30 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <span className="text-xs text-muted-foreground">{line.label}</span>
-                <span
-                  className={
-                    line.ok
-                      ? "text-sm font-medium text-emerald-700 dark:text-emerald-400"
-                      : "text-sm font-medium text-amber-800 dark:text-amber-200"
-                  }
-                >
-                  {line.value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <EmployerAccountAuthCard employerId={id} initial={accountAuth} />
 
       <Card>
         <CardHeader>

@@ -14,8 +14,9 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import type { Metadata } from "next";
+import { getPublicSiteUrl } from "@/lib/site-url";
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://gevin.de";
+const siteUrl = getPublicSiteUrl();
 
 export const metadata: Metadata = {
   title: "GeVin – Internationale Fachkräfte für Deutschland",
