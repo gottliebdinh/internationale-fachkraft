@@ -31,6 +31,10 @@ export async function updateSession(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
+  // #region agent log
+  if(pathname.startsWith('/auth/callback')||pathname==='/auth/employer/set-password'){const _mw={pathname,search:request.nextUrl.search,hasUser:!!user,userId:user?.id?.slice(0,8),mustSet:!!(user?.user_metadata as any)?.must_set_password};console.warn('[MW]',JSON.stringify(_mw));fetch('http://127.0.0.1:7248/ingest/9ef2793e-10d9-4ab2-a180-4e3f7610c727',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'middleware:32',message:'auth route hit',data:_mw,timestamp:Date.now()})}).catch(()=>{});}
+  // #endregion
+
   // Kurz-URL / falscher Supabase Site-URL → echte Login-Route (vermeidet 404 + Redirect-Schleifen)
   if (pathname === "/login") {
     const url = request.nextUrl.clone();

@@ -34,6 +34,12 @@ export default function AuthCallbackPage() {
   const pkceStarted = useRef(false);
 
   useEffect(() => {
+    // #region agent log
+    const _dl=(loc:string,msg:string,data?:any)=>{console.warn(`[CB] ${loc}: ${msg}`,data);fetch('http://127.0.0.1:7248/ingest/9ef2793e-10d9-4ab2-a180-4e3f7610c727',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:loc,message:msg,data,timestamp:Date.now()})}).catch(()=>{});};
+    // #endregion
+    // #region agent log
+    _dl('cb:start','useEffect',{path:window.location.pathname,search:window.location.search,hashLen:window.location.hash.length,hasHash:window.location.hash.includes('access_token'),hasCode:new URLSearchParams(window.location.search).has('code')});
+    // #endregion
     const supabase = createClient();
 
     function resolveDest(hash: string): string {
@@ -56,7 +62,13 @@ export default function AuthCallbackPage() {
     let dest = resolveDest(initialHash);
 
     async function handlePKCE(code: string) {
+      // #region agent log
+      _dl('cb:pkce','start',{codePrefix:code.slice(0,12)});
+      // #endregion
       const { data: existing } = await supabase.auth.getSession();
+      // #region agent log
+      _dl('cb:pkce','existSession',{hasSession:!!existing.session});
+      // #endregion
       if (existing.session) {
         const h = typeof window !== "undefined" ? window.location.hash : "";
         dest = resolveDest(h);
@@ -65,6 +77,9 @@ export default function AuthCallbackPage() {
       }
 
       const { error } = await supabase.auth.exchangeCodeForSession(code);
+      // #region agent log
+      _dl('cb:pkce','exchange',{ok:!error,err:error?.message?.slice(0,120)});
+      // #endregion
       if (error) {
         const { data: afterFail } = await supabase.auth.getSession();
         if (afterFail.session) {
@@ -86,6 +101,9 @@ export default function AuthCallbackPage() {
     async function handleHashOrSession() {
       const hash = window.location.hash;
       dest = resolveDest(hash);
+      // #region agent log
+      _dl('cb:hash','start',{hashLen:hash.length,hasAT:hash.includes('access_token'),dest});
+      // #endregion
       if (hash && hash.includes("access_token")) {
         const params = new URLSearchParams(hash.replace("#", ""));
         const accessToken = params.get("access_token");
@@ -96,8 +114,14 @@ export default function AuthCallbackPage() {
             access_token: accessToken,
             refresh_token: refreshToken,
           });
+          // #region agent log
+          _dl('cb:hash','setSession',{ok:!error,err:error?.message?.slice(0,120),dest});
+          // #endregion
           if (!error) {
             window.location.hash = "";
+            // #region agent log
+            _dl('cb:hash','REDIRECT',{dest});
+            // #endregion
             router.replace(dest);
             return;
           }
@@ -107,22 +131,40 @@ export default function AuthCallbackPage() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+      // #region agent log
+      _dl('cb:hash','session',{hasSession:!!session,dest});
+      // #endregion
       if (session) {
         router.replace(dest);
         return;
       }
 
+      // #region agent log
+      _dl('cb:hash','NO_SESSION->login',{});
+      // #endregion
       router.replace("/auth/login?error=auth_callback");
     }
 
     const code = searchParams.get("code");
-    if (code) {
-      if (pkceStarted.current) return;
-      pkceStarted.current = true;
-      void handlePKCE(code);
-    } else {
-      void handleHashOrSession();
+    // #region agent log
+    _dl('cb:decision','route',{hasCode:!!code,codePrefix:code?.slice(0,12),nextRaw:searchParams.get("next"),dest,hashLen:initialHash.length,pkceStarted:pkceStarted.current});
+    // #endregion
+
+    async function run() {
+      if (code) {
+        if (pkceStarted.current) return;
+        pkceStarted.current = true;
+        await handlePKCE(code);
+      } else {
+        await handleHashOrSession();
+      }
     }
+    run().catch((err) => {
+      // #region agent log
+      _dl('cb:FATAL','uncaught',{msg:String(err),stack:String(err?.stack).slice(0,300)});
+      // #endregion
+      router.replace("/auth/login?error=auth_callback");
+    });
   }, [router, searchParams]);
 
   return (
