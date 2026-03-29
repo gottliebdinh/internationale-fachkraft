@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Building2, Calendar, Phone, Search, User, X } from "lucide-react";
+import type { EmployerAccountAuthStatus } from "@/lib/employer-auth-account-status";
 
 type MatchSummary = { status: string; count: number };
 
@@ -25,6 +26,7 @@ type EmployerRow = {
   earliestStatus: string | null;
   earliestStartDate: string | null;
   earliestStartLabel: string | null;
+  accountAuth: EmployerAccountAuthStatus;
 };
 
 type Tab = "offen" | "zugewiesen" | "vermittelt";
@@ -45,6 +47,45 @@ const STATUS_LABELS: Record<string, string> = {
   visa_granted: "Visum erteilt",
   arrived: "Angekommen",
 };
+
+function AccountAuthBadge({ status }: { status: EmployerAccountAuthStatus }) {
+  const { shortLabel, emailConfirmed, needsPassword } = status;
+  if (shortLabel === "Kein Login") {
+    return (
+      <Badge variant="outline" className="text-muted-foreground">
+        {shortLabel}
+      </Badge>
+    );
+  }
+  if (!emailConfirmed) {
+    return (
+      <Badge
+        variant="outline"
+        className="border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200"
+      >
+        {shortLabel}
+      </Badge>
+    );
+  }
+  if (needsPassword) {
+    return (
+      <Badge
+        variant="outline"
+        className="border-orange-200 bg-orange-50 text-orange-900 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-200"
+      >
+        {shortLabel}
+      </Badge>
+    );
+  }
+  return (
+    <Badge
+      variant="outline"
+      className="border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-200"
+    >
+      {shortLabel}
+    </Badge>
+  );
+}
 
 const STATUS_COLORS: Record<string, string> = {
   employer_accepted: "bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
@@ -104,6 +145,7 @@ function buildSearchString(e: EmployerRow): string {
     e.totalMatches > 0 ? `${e.totalMatches} kandidaten` : "",
     e.earliestStartLabel,
     e.earliestStatus ? STATUS_LABELS[e.earliestStatus] : "",
+    e.accountAuth.shortLabel,
   ]
     .filter(Boolean)
     .join(" ");
@@ -237,14 +279,17 @@ export function EmployerGrid({ employers }: { employers: EmployerRow[] }) {
                     </p>
                   </div>
                 </div>
-                {e.verified && (
-                  <Badge
-                    variant="outline"
-                    className="shrink-0 border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400"
-                  >
-                    Verifiziert
-                  </Badge>
-                )}
+                <div className="flex shrink-0 flex-col items-end gap-1">
+                  {e.verified && (
+                    <Badge
+                      variant="outline"
+                      className="border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400"
+                    >
+                      Verifiziert
+                    </Badge>
+                  )}
+                  <AccountAuthBadge status={e.accountAuth} />
+                </div>
               </div>
 
               <div className="flex items-center gap-4 text-sm text-muted-foreground">

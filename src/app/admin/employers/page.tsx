@@ -1,6 +1,10 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  fetchAuthUserForEmployer,
+  getEmployerAccountAuthStatus,
+} from "@/lib/employer-auth-account-status";
 import { Building2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatJobStartLine } from "@/lib/format-job-start";
@@ -27,7 +31,9 @@ export default async function AdminEmployersPage() {
 
   const { data: employers, error } = await supabase
     .from("employers")
-    .select("id, company_name, industry, industry_other, city, contact_person, phone, verified, created_at")
+    .select(
+      "id, user_id, company_name, industry, industry_other, city, contact_person, phone, verified, created_at"
+    )
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -39,6 +45,10 @@ export default async function AdminEmployersPage() {
   }
 
   const employerIds = (employers ?? []).map((e) => e.id);
+
+  const authUsers = await Promise.all(
+    (employers ?? []).map((e) => fetchAuthUserForEmployer(supabase, e.user_id))
+  );
 
   let matchRows: { employer_id: string; status: string }[] = [];
   if (employerIds.length > 0) {
@@ -68,7 +78,7 @@ export default async function AdminEmployersPage() {
     }
   }
 
-  const employersWithMatches = (employers ?? []).map((e) => {
+  const employersWithMatches = (employers ?? []).map((e, idx) => {
     const myMatches = matchRows.filter((m) => m.employer_id === e.id);
     const statusCounts = new Map<string, number>();
     for (const m of myMatches) {
@@ -107,8 +117,11 @@ export default async function AdminEmployersPage() {
       earliestStartLabel = formatJobStartLine(earliestStartDate);
     }
 
+    const accountAuth = getEmployerAccountAuthStatus(authUsers[idx]);
+
     return {
       ...e,
+      accountAuth,
       matchSummary,
       totalMatches: myMatches.length,
       slotsTotal,

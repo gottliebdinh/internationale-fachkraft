@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  fetchAuthUserForEmployer,
+  getEmployerAccountAuthStatus,
+} from "@/lib/employer-auth-account-status";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Building2, Eye, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -110,6 +114,9 @@ export default async function EmployerDetailPage({
 
   const e = employer as Employer;
 
+  const authUser = await fetchAuthUserForEmployer(supabase, e.user_id);
+  const accountAuth = getEmployerAccountAuthStatus(authUser);
+
   return (
     <div className="mx-auto w-full max-w-4xl space-y-6">
       <div className="flex items-center justify-between">
@@ -183,6 +190,36 @@ export default async function EmployerDetailPage({
               />
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Arbeitgeber-Konto (Login)</CardTitle>
+          <p className="text-sm font-normal text-muted-foreground">
+            Status der Registrierung: E-Mail bestätigen und erstes Passwort setzen.
+          </p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {accountAuth.lines.map((line) => (
+              <div
+                key={line.label}
+                className="flex flex-col gap-0.5 rounded-lg border bg-muted/30 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <span className="text-xs text-muted-foreground">{line.label}</span>
+                <span
+                  className={
+                    line.ok
+                      ? "text-sm font-medium text-emerald-700 dark:text-emerald-400"
+                      : "text-sm font-medium text-amber-800 dark:text-amber-200"
+                  }
+                >
+                  {line.value}
+                </span>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
