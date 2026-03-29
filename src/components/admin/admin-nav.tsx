@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { cn } from "@/lib/utils";
 import { Users, Building2, LogOut } from "lucide-react";
 import { signOutFromAdmin } from "@/lib/supabase/actions";
@@ -14,6 +15,16 @@ const NAV_ITEMS = [
 
 export function AdminNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+
+  function handleSignOut() {
+    startTransition(async () => {
+      await signOutFromAdmin();
+      router.push("/admin/login");
+      router.refresh();
+    });
+  }
 
   return (
     <nav className="flex flex-1 items-center justify-between gap-4">
@@ -41,17 +52,17 @@ export function AdminNav() {
           );
         })}
       </div>
-      <form action={signOutFromAdmin}>
-        <Button
-          type="submit"
-          variant="ghost"
-          size="sm"
-          className="gap-1.5 text-muted-foreground"
-        >
-          <LogOut className="h-4 w-4" />
-          Abmelden
-        </Button>
-      </form>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        className="gap-1.5 text-muted-foreground"
+        disabled={pending}
+        onClick={handleSignOut}
+      >
+        <LogOut className="h-4 w-4" />
+        Abmelden
+      </Button>
     </nav>
   );
 }

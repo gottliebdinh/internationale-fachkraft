@@ -31,6 +31,13 @@ export async function updateSession(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
+  // Kurz-URL / falscher Supabase Site-URL → echte Login-Route (vermeidet 404 + Redirect-Schleifen)
+  if (pathname === "/login") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/login";
+    return NextResponse.redirect(url);
+  }
+
   const mustSetPassword =
     user?.user_metadata &&
     typeof user.user_metadata === "object" &&

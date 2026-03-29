@@ -1,7 +1,18 @@
 "use server";
 
-import { createClient } from "./server";
+import { timingSafeEqual } from "crypto";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { ensureAdminUser } from "@/lib/ensure-admin-user";
+import { createAdminClient } from "./admin";
+import { createClient } from "./server";
+
+function safeEqualPassword(a: string, b: string): boolean {
+  const bufA = Buffer.from(a, "utf8");
+  const bufB = Buffer.from(b, "utf8");
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
+}
 
 export async function getUser() {
   const supabase = await createClient();
@@ -29,16 +40,68 @@ export async function getUserProfile() {
 
 export async function signIn(formData: FormData) {
   const supabase = await createClient();
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
+  const password = String(formData.get("password") ?? "");
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const redirectParam = formData.get("redirect");
+  const isAdminLogin =
+    typeof redirectParam === "string" &&
+    redirectParam.startsWith("/admin") &&
+    !redirectParam.startsWith("//");
 
-  if (error) {
-    return { error: error.message };
+  const envAdminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const envAdminPassword = process.env.ADMIN_PASSWORD;
+
+  const useEnvAdmin =
+    isAdminLogin &&
+    Boolean(envAdminEmail) &&
+    Boolean(envAdminPassword && envAdminPassword.length > 0);
+
+  // Admin-Konto aus ENV gilt nur über /admin/login (ensureAdminUser + Session dort).
+  // Normale Anmeldung: keine Anmeldung mit derselben Admin-E-Mail, wenn ENV gesetzt ist.
+  if (
+    !isAdminLogin &&
+    Boolean(envAdminEmail) &&
+    Boolean(envAdminPassword && envAdminPassword.length > 0) &&
+    email === envAdminEmail
+  ) {
+    return { error: "Ungültige Anmeldedaten." };
+  }
+
+  if (useEnvAdmin) {
+    if (email !== envAdminEmail || !safeEqualPassword(password, envAdminPassword!)) {
+      return { error: "Ungültige Anmeldedaten." };
+    }
+    try {
+      await ensureAdminUser(createAdminClient());
+    } catch (e) {
+      console.error(
+        "[signIn] ensureAdminUser:",
+        e instanceof Error ? e.message : e
+      );
+      return {
+        error:
+          "Admin-Anmeldung ist nicht konfiguriert (SUPABASE_SERVICE_ROLE_KEY prüfen).",
+      };
+    }
+    const { error } = await supabase.auth.signInWithPassword({
+      email: envAdminEmail!,
+      password: envAdminPassword!,
+    });
+    if (error) {
+      return { error: error.message };
+    }
+  } else {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      return { error: error.message };
+    }
   }
 
   const {
@@ -54,21 +117,29 @@ export async function signIn(formData: FormData) {
     redirect("/auth/employer/set-password");
   }
 
-  const redirectParam = formData.get("redirect");
-  if (
+  const rawRedirect =
     typeof redirectParam === "string" &&
     redirectParam.startsWith("/") &&
-    !redirectParam.startsWith("//") &&
-    redirectParam !== "/dashboard"
-  ) {
-    if (redirectParam.startsWith("/admin")) {
+    !redirectParam.startsWith("//")
+      ? redirectParam
+      : null;
+  const postAuthRedirect =
+    rawRedirect &&
+    rawRedirect !== "/dashboard" &&
+    rawRedirect !== "/login" &&
+    !rawRedirect.startsWith("/login/")
+      ? rawRedirect
+      : null;
+
+  if (postAuthRedirect) {
+    if (postAuthRedirect.startsWith("/admin")) {
       const { data: profile } = await supabase
         .from("users")
         .select("role")
         .eq("id", user!.id)
         .single();
       if (profile?.role === "admin") {
-        redirect(redirectParam);
+        redirect(postAuthRedirect);
       }
       await supabase.auth.signOut();
       return {
@@ -76,7 +147,7 @@ export async function signIn(formData: FormData) {
           "Kein Zugriff auf den Admin-Bereich. Bitte mit einem Admin-Konto anmelden.",
       };
     }
-    redirect(redirectParam);
+    redirect(postAuthRedirect);
   }
 
   let role: "employer" | "school" | "admin" = "employer";
@@ -98,10 +169,12 @@ export async function signIn(formData: FormData) {
   redirect(`/dashboard/${role}`);
 }
 
+/** Kein `redirect()` hier – Form-Submit + Redirect in Server Actions löst in Next oft „Failed to fetch“ aus; Navigation macht der Client. */
 export async function signOutFromAdmin() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/admin/login");
+  revalidatePath("/admin", "layout");
+  return { success: true as const };
 }
 
 /** Supabase sendet einen Link; Ziel nach Klick: /auth/callback → /auth/reset-password */

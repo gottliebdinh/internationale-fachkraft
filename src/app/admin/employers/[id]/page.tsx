@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Building2, Pencil } from "lucide-react";
+import { ArrowLeft, Building2, Eye, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -124,12 +124,20 @@ export default async function EmployerDetailPage({
         </Button>
 
         {!isEditMode && (
-          <Button variant="outline" size="sm" asChild>
-            <Link href={`/admin/employers/${id}?edit=1`} className="gap-2">
-              <Pencil className="h-3.5 w-3.5" />
-              Bearbeiten
-            </Link>
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/admin/employers/${id}/preview`} className="gap-2">
+                <Eye className="h-3.5 w-3.5" />
+                Dashboard-Vorschau
+              </Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/admin/employers/${id}?edit=1`} className="gap-2">
+                <Pencil className="h-3.5 w-3.5" />
+                Bearbeiten
+              </Link>
+            </Button>
+          </div>
         )}
       </div>
 

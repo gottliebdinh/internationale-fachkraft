@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
+import { isRedirectError } from "@/lib/is-redirect-error";
 import { loginSchema, type LoginFormData } from "@/lib/validators/auth";
 import { signIn } from "@/lib/supabase/actions";
 import { Button } from "@/components/ui/button";
@@ -47,7 +48,8 @@ export default function LoginPage() {
       if (result && "error" in result && result.error) {
         toast.error(result.error);
       }
-    } catch {
+    } catch (e) {
+      if (isRedirectError(e)) throw e;
       toast.error("Ein unerwarteter Fehler ist aufgetreten");
     } finally {
       setIsLoading(false);
