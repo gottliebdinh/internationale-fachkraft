@@ -17,6 +17,23 @@ export function buildInviteCallbackRedirectUrl(): string {
 }
 
 /**
+ * Supabase setzt `redirect_to` oft auf die Dashboard-„Site URL“ (z. B. noch localhost).
+ * Wir setzen den Parameter nach der Erzeugung explizit auf unsere Callback-URL.
+ */
+function applyRedirectToActionLink(
+  actionLink: string,
+  redirectTo: string
+): string {
+  try {
+    const u = new URL(actionLink);
+    u.searchParams.set("redirect_to", redirectTo);
+    return u.toString();
+  } catch {
+    return actionLink;
+  }
+}
+
+/**
  * Supabase invite link (existing user, no password yet). Falls back to recovery.
  */
 export async function generateEmployerInviteActionLink(
@@ -32,7 +49,12 @@ export async function generateEmployerInviteActionLink(
   });
 
   if (!invite.error && invite.data?.properties?.action_link) {
-    return { actionLink: invite.data.properties.action_link };
+    return {
+      actionLink: applyRedirectToActionLink(
+        invite.data.properties.action_link,
+        redirectTo
+      ),
+    };
   }
 
   const recovery = await supabase.auth.admin.generateLink({
@@ -49,11 +71,11 @@ export async function generateEmployerInviteActionLink(
         "Einladungslink konnte nicht erzeugt werden.",
     };
   }
-  const actionLink = recovery.data?.properties?.action_link;
-  if (!actionLink) {
+  const raw = recovery.data?.properties?.action_link;
+  if (!raw) {
     return { error: "Kein Link von Supabase erhalten." };
   }
-  return { actionLink };
+  return { actionLink: applyRedirectToActionLink(raw, redirectTo) };
 }
 
 export async function sendEmployerInviteEmail(opts: {

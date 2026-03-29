@@ -1,15 +1,15 @@
 /**
  * Öffentliche Basis-URL (Auth-Links, E-Mails, redirect_to).
  *
- * Produktion: `NEXT_PUBLIC_SITE_URL=https://www.internationale-fachkraft.de`
- * (ohne Slash am Ende). Nicht `localhost` in Vercel-Env lassen – sonst landen
- * Supabase-Links (`verify`, `invite`) auf localhost.
- *
- * Reihenfolge: `NEXT_PUBLIC_SITE_URL` → `NEXT_PUBLIC_APP_URL` → auf Vercel
- * ohne sinnvolle URL die Vercel-Host-URL → lokal localhost.
+ * Produktion: `SITE_URL` oder `NEXT_PUBLIC_SITE_URL` =
+ * `https://www.internationale-fachkraft.de` (ohne Slash am Ende).
+ * `SITE_URL` ist nur serverseitig – ideal für Invite-Links ohne falsches
+ * Client-Bundle. In Supabase: dieselbe Domain unter Authentication → URL.
  */
 export function getPublicSiteUrl(): string {
-  const site = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  const site =
+    process.env.SITE_URL?.trim() ||
+    process.env.NEXT_PUBLIC_SITE_URL?.trim();
   const app = process.env.NEXT_PUBLIC_APP_URL?.trim();
   let candidate = (site || app || "").replace(/\/$/, "");
 
