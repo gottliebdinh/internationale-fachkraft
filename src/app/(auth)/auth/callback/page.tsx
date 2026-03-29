@@ -5,6 +5,24 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
+/** Supabase-Kette kann `next` mehrfach encodieren (%252F → %2F → /). */
+function normalizeNextPath(raw: string | null): string | null {
+  if (!raw) return null;
+  let s = raw.trim();
+  for (let i = 0; i < 4; i++) {
+    if (s.startsWith("/") && !s.includes("%")) break;
+    try {
+      const d = decodeURIComponent(s);
+      if (d === s) break;
+      s = d;
+    } catch {
+      break;
+    }
+  }
+  if (!s.startsWith("/")) s = `/${s}`;
+  return s;
+}
+
 /**
  * Handles both PKCE (`?code=`) and implicit-flow (`#access_token=`) redirects
  * from Supabase invite / recovery links.
@@ -12,19 +30,17 @@ import { createClient } from "@/lib/supabase/client";
 export default function AuthCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const handled = useRef(false);
+  /** Verhindert doppeltes exchangeCodeForSession mit demselben Code in einem Mount-Zyklus. */
+  const pkceStarted = useRef(false);
 
   useEffect(() => {
-    if (handled.current) return;
-    handled.current = true;
-
     const supabase = createClient();
 
     function resolveDest(hash: string): string {
-      const nextParam = searchParams.get("next");
-      if (nextParam) {
-        const n = nextParam.startsWith("/") ? nextParam : `/${nextParam}`;
-        return n;
+      const nextRaw = searchParams.get("next");
+      const nextPath = normalizeNextPath(nextRaw);
+      if (nextPath) {
+        return nextPath;
       }
       if (searchParams.get("type") === "recovery") {
         return "/auth/reset-password";
@@ -40,9 +56,26 @@ export default function AuthCallbackPage() {
     let dest = resolveDest(initialHash);
 
     async function handlePKCE(code: string) {
+      const { data: existing } = await supabase.auth.getSession();
+      if (existing.session) {
+        const h = typeof window !== "undefined" ? window.location.hash : "";
+        dest = resolveDest(h);
+        router.replace(dest);
+        return;
+      }
+
       const { error } = await supabase.auth.exchangeCodeForSession(code);
       if (error) {
-        router.replace(`/auth/login?error=auth_callback&reason=${encodeURIComponent(error.message)}`);
+        const { data: afterFail } = await supabase.auth.getSession();
+        if (afterFail.session) {
+          const h = typeof window !== "undefined" ? window.location.hash : "";
+          dest = resolveDest(h);
+          router.replace(dest);
+          return;
+        }
+        router.replace(
+          `/auth/login?error=auth_callback&reason=${encodeURIComponent(error.message)}`
+        );
         return;
       }
       const h = typeof window !== "undefined" ? window.location.hash : "";
@@ -71,7 +104,9 @@ export default function AuthCallbackPage() {
         }
       }
 
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session) {
         router.replace(dest);
         return;
@@ -82,9 +117,11 @@ export default function AuthCallbackPage() {
 
     const code = searchParams.get("code");
     if (code) {
-      handlePKCE(code);
+      if (pkceStarted.current) return;
+      pkceStarted.current = true;
+      void handlePKCE(code);
     } else {
-      handleHashOrSession();
+      void handleHashOrSession();
     }
   }, [router, searchParams]);
 
