@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-/** Supabase-Kette kann `next` mehrfach encodieren (%252F → %2F → /). */
 function normalizeNextPath(raw: string | null): string | null {
   if (!raw) return null;
   let s = raw.trim();
@@ -23,152 +22,132 @@ function normalizeNextPath(raw: string | null): string | null {
   return s;
 }
 
-/**
- * Handles both PKCE (`?code=`) and implicit-flow (`#access_token=`) redirects
- * from Supabase invite / recovery links.
- */
 export function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pkceStarted = useRef(false);
+  // #region agent log — visible debug state
+  const [dbg, setDbg] = useState<string[]>(["mount"]);
+  const log = (msg: string) => {
+    setDbg((p) => [...p, msg]);
+    console.warn("[CB]", msg);
+  };
+  // #endregion
 
   useEffect(() => {
-    // #region agent log
-    const _dl=(loc:string,msg:string,data?:any)=>{console.warn(`[CB] ${loc}: ${msg}`,data);fetch('http://127.0.0.1:7248/ingest/9ef2793e-10d9-4ab2-a180-4e3f7610c727',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:loc,message:msg,data,timestamp:Date.now()})}).catch(()=>{});};
-    // #endregion
-    // #region agent log
-    _dl('cb:start','useEffect',{path:window.location.pathname,search:window.location.search,hashLen:window.location.hash.length,hasHash:window.location.hash.includes('access_token'),hasCode:new URLSearchParams(window.location.search).has('code')});
-    // #endregion
     const supabase = createClient();
 
-    function resolveDest(hash: string): string {
-      const nextRaw = searchParams.get("next");
+    const hash = window.location.hash;
+    const search = window.location.search;
+    const code = new URLSearchParams(search).get("code");
+    const hasAccessToken = hash.includes("access_token");
+    const nextRaw = searchParams.get("next");
+
+    log(`url: hash=${hash.length}ch code=${!!code} AT=${hasAccessToken} next=${nextRaw}`);
+
+    function resolveDest(h: string): string {
       const nextPath = normalizeNextPath(nextRaw);
-      if (nextPath) {
-        return nextPath;
-      }
-      if (searchParams.get("type") === "recovery") {
-        return "/auth/reset-password";
-      }
-      const hp = new URLSearchParams(hash.replace(/^#/, ""));
-      if (hp.get("type") === "recovery") {
-        return "/auth/reset-password";
-      }
+      if (nextPath) return nextPath;
+      if (searchParams.get("type") === "recovery") return "/auth/reset-password";
+      const hp = new URLSearchParams(h.replace(/^#/, ""));
+      if (hp.get("type") === "recovery") return "/auth/reset-password";
       return "/dashboard/employer";
     }
 
-    const initialHash = typeof window !== "undefined" ? window.location.hash : "";
-    let dest = resolveDest(initialHash);
+    let dest = resolveDest(hash);
+    log(`dest=${dest}`);
 
-    async function handlePKCE(code: string) {
-      // #region agent log
-      _dl('cb:pkce','start',{codePrefix:code.slice(0,12)});
-      // #endregion
+    async function handlePKCE(c: string) {
+      log("pkce:start");
       const { data: existing } = await supabase.auth.getSession();
-      // #region agent log
-      _dl('cb:pkce','existSession',{hasSession:!!existing.session});
-      // #endregion
+      log(`pkce:existSession=${!!existing.session}`);
       if (existing.session) {
-        const h = typeof window !== "undefined" ? window.location.hash : "";
-        dest = resolveDest(h);
+        dest = resolveDest(window.location.hash);
+        log(`pkce:redirect-existing → ${dest}`);
         router.replace(dest);
         return;
       }
-
-      const { error } = await supabase.auth.exchangeCodeForSession(code);
-      // #region agent log
-      _dl('cb:pkce','exchange',{ok:!error,err:error?.message?.slice(0,120)});
-      // #endregion
+      const { error } = await supabase.auth.exchangeCodeForSession(c);
+      log(`pkce:exchange ok=${!error} err=${error?.message?.slice(0, 80)}`);
       if (error) {
         const { data: afterFail } = await supabase.auth.getSession();
         if (afterFail.session) {
-          const h = typeof window !== "undefined" ? window.location.hash : "";
-          dest = resolveDest(h);
+          dest = resolveDest(window.location.hash);
+          log(`pkce:fallback-session → ${dest}`);
           router.replace(dest);
           return;
         }
-        router.replace(
-          `/auth/login?error=auth_callback&reason=${encodeURIComponent(error.message)}`
-        );
+        log("pkce:FAIL → login");
+        router.replace(`/auth/login?error=auth_callback&reason=${encodeURIComponent(error.message)}`);
         return;
       }
-      const h = typeof window !== "undefined" ? window.location.hash : "";
-      dest = resolveDest(h);
+      dest = resolveDest(window.location.hash);
+      log(`pkce:ok → ${dest}`);
       router.replace(dest);
     }
 
     async function handleHashOrSession() {
-      const hash = window.location.hash;
-      dest = resolveDest(hash);
-      // #region agent log
-      _dl('cb:hash','start',{hashLen:hash.length,hasAT:hash.includes('access_token'),dest});
-      // #endregion
-      if (hash && hash.includes("access_token")) {
+      log(`hash:start hasAT=${hasAccessToken}`);
+      if (hash && hasAccessToken) {
         const params = new URLSearchParams(hash.replace("#", ""));
         const accessToken = params.get("access_token");
         const refreshToken = params.get("refresh_token");
 
         if (accessToken && refreshToken) {
+          log("hash:setSession...");
           const { error } = await supabase.auth.setSession({
             access_token: accessToken,
             refresh_token: refreshToken,
           });
-          // #region agent log
-          _dl('cb:hash','setSession',{ok:!error,err:error?.message?.slice(0,120),dest});
-          // #endregion
+          log(`hash:setSession ok=${!error} err=${error?.message?.slice(0, 80)}`);
           if (!error) {
             window.location.hash = "";
-            // #region agent log
-            _dl('cb:hash','REDIRECT',{dest});
-            // #endregion
+            log(`hash:REDIRECT → ${dest}`);
             router.replace(dest);
             return;
           }
         }
       }
 
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      // #region agent log
-      _dl('cb:hash','session',{hasSession:!!session,dest});
-      // #endregion
+      log("hash:getSession...");
+      const { data: { session } } = await supabase.auth.getSession();
+      log(`hash:session=${!!session}`);
       if (session) {
+        log(`hash:redirect → ${dest}`);
         router.replace(dest);
         return;
       }
 
-      // #region agent log
-      _dl('cb:hash','NO_SESSION->login',{});
-      // #endregion
+      log("hash:NO_SESSION → login");
       router.replace("/auth/login?error=auth_callback");
     }
 
-    const code = searchParams.get("code");
-    // #region agent log
-    _dl('cb:decision','route',{hasCode:!!code,codePrefix:code?.slice(0,12),nextRaw:searchParams.get("next"),dest,hashLen:initialHash.length,pkceStarted:pkceStarted.current});
-    // #endregion
+    const codeParam = searchParams.get("code");
+    log(`decision: code=${!!codeParam} pkceStarted=${pkceStarted.current}`);
 
     async function run() {
-      if (code) {
+      if (codeParam) {
         if (pkceStarted.current) return;
         pkceStarted.current = true;
-        await handlePKCE(code);
+        await handlePKCE(codeParam);
       } else {
         await handleHashOrSession();
       }
     }
     run().catch((err) => {
-      // #region agent log
-      _dl('cb:FATAL','uncaught',{msg:String(err),stack:String(err?.stack).slice(0,300)});
-      // #endregion
+      log(`FATAL: ${String(err)}`);
       router.replace("/auth/login?error=auth_callback");
     });
   }, [router, searchParams]);
 
   return (
-    <div className="flex h-full min-h-[40vh] w-full items-center justify-center">
+    <div className="flex h-full min-h-[40vh] w-full flex-col items-center justify-center gap-4">
       <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      {/* #region agent log — visible debug overlay */}
+      <pre className="mt-4 max-w-md overflow-auto rounded bg-gray-100 p-3 text-[10px] text-gray-600 leading-tight">
+        {dbg.join("\n")}
+      </pre>
+      {/* #endregion */}
     </div>
   );
 }
