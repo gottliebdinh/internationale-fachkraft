@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
+import { BRAND_WORDMARK } from "@/lib/brand-logo";
 
 const AdminNav = dynamic(
   () =>
@@ -24,7 +25,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             href="/admin/login"
             className="font-[var(--font-display)] text-xl font-semibold tracking-tight text-foreground"
           >
-            Ge<span className="text-[oklch(0.50_0.11_195)]">Vin</span>
+            {BRAND_WORDMARK}
             <span className="ml-2 text-sm font-normal text-muted-foreground">
               Admin
             </span>
@@ -42,7 +43,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           href="/admin/leads"
           className="font-[var(--font-display)] text-xl font-semibold tracking-tight text-foreground"
         >
-          Ge<span className="text-[oklch(0.50_0.11_195)]">Vin</span>
+          {BRAND_WORDMARK}
           <span className="ml-2 text-sm font-normal text-muted-foreground">
             Admin
           </span>
