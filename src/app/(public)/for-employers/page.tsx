@@ -100,7 +100,7 @@ export default function ForEmployersPage() {
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Nachhaltige Fachkräfte- und Ausbildungsgewinnung mit Planungssicherheit – 
-              kein klassischer Vermittler, sondern strukturierter Partner mit eigener Infrastruktur in Vietnam und klarer Verantwortung in Deutschland.
+              kein klassischer Vermittler, sondern strukturierter Partner mit vier eigenen Sprachschulen in Vietnam, professionellem Screening und klarer Verantwortung in Deutschland.
             </p>
             <p className="mt-3 text-base font-medium text-foreground">
               Über uns: <span className="text-accent">völlige Transparenz</span>, <span className="text-accent">Schnelligkeit</span> und <span className="text-accent">Sicherheit</span> – von der Bedarfsanalyse bis zur Integration.
@@ -125,7 +125,7 @@ export default function ForEmployersPage() {
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-4">
-            Ihre Vorteile mit GeVin
+            Ihre Vorteile mit Lotus&Eagle
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
             Stabilität, Struktur und wirtschaftliche Planungssicherheit – kein reines Preisargument.
@@ -309,7 +309,7 @@ export default function ForEmployersPage() {
         />
         <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
           <h2 id="cta-heading" className="font-[var(--font-display)] text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-            Starten Sie jetzt mit GeVin
+            Starten Sie jetzt mit Lotus&Eagle
           </h2>
           <p className="mt-3 text-base text-[oklch(0.88_0.01_260)]">
             Registrieren Sie sich kostenlos und erhalten Sie Zugang zu qualifizierten Fachkräften aus Vietnam.

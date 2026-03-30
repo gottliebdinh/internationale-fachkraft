@@ -83,10 +83,10 @@ Die Website dient als Vertriebsinstrument zur Stabilisierung von Erstkontakten u
 
 ---
 
-## Offene Punkte – Website-Anpassungen (Stand Abgleich mit GeVin-Codebase)
+## Offene Punkte – Website-Anpassungen (Stand Abgleich mit Lotus&Eagle-Codebase)
 
 ### Rechtliches / Impressum
-- [ ] **Impressum:** Firmenname von „GeVin GmbH“ auf **Lotus & Eagle Alliance UG (haftungsbeschränkt)** umstellen (oder GeVin als Marke, Betreiber: Lotus & Eagle Alliance).
+- [ ] **Impressum:** Firmenname von „Lotus&Eagle GmbH“ auf **Lotus & Eagle Alliance UG (haftungsbeschränkt)** umstellen (oder Lotus&Eagle als Marke, Betreiber: Lotus & Eagle Alliance).
 - [ ] Adresse, Geschäftsführer, Register, USt-ID etc. mit echten Daten der Lotus & Eagle Alliance UG pflegen.
 - [ ] Optional: **Green Germany GmbH** (Vietnam) im Impressum oder unter „Struktur“ erwähnen (operativer Partner Vietnam).
 

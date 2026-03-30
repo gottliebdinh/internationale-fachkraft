@@ -602,7 +602,7 @@ async function processProfile(folder: string, schoolId: string) {
 
 async function main() {
   const t0 = Date.now();
-  console.log("=== GeVin Import v2 (parallel) ===\n");
+  console.log("=== Lotus&Eagle Import v2 (parallel) ===\n");
 
   await ensureBucket();
   const schoolId = await ensureDemoSchool();

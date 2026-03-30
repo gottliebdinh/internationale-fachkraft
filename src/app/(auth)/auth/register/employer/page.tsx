@@ -9,38 +9,36 @@ import { useRouter } from "next/navigation";
 import {
   Loader2,
   ChevronLeft,
-  Building2,
   Briefcase,
-  Users,
+  Search,
+  Calendar,
   User,
   Mail,
   Phone,
 } from "lucide-react";
 import { toast } from "sonner";
 
-import {
-  registerEmployerSchema,
-  type RegisterEmployerFormData,
-} from "@/lib/validators/auth";
+import { leadSchema, type LeadFormData } from "@/lib/validators/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { BrandWordmarkLink } from "@/components/shared/brand-wordmark-link";
 
 const STEPS = [
   { id: "industry", icon: Briefcase, label: "Branche" },
-  { id: "position", icon: Users, label: "Stelle" },
-  { id: "contact", icon: User, label: "Kontaktperson" },
-  { id: "company", icon: Building2, label: "Unternehmen" },
+  { id: "seeking", icon: Search, label: "Suche" },
+  { id: "timing", icon: Calendar, label: "Zeitraum" },
+  { id: "name", icon: User, label: "Name" },
   { id: "email", icon: Mail, label: "E-Mail" },
   { id: "phone", icon: Phone, label: "Telefon" },
 ] as const;
 
-const STEP_FIELDS: Record<string, (keyof RegisterEmployerFormData)[]> = {
+const STEP_FIELDS: Record<string, (keyof LeadFormData)[]> = {
   industry: ["industry", "industryOther"],
-  position: [],
-  contact: ["contactPerson"],
-  company: ["companyName", "address", "city", "plz"],
+  seeking: ["seekingType", "seekingOther"],
+  timing: [],
+  name: ["name"],
   email: ["email"],
   phone: ["phone"],
 };
@@ -51,50 +49,27 @@ const INDUSTRY_OPTIONS = [
   { value: "nursing" as const, labelKey: "nursing" },
 ];
 
+const SEEKING_OPTIONS = [
+  { value: "fachkraft" as const, label: "Fachkraft" },
+  { value: "auszubildender" as const, label: "Auszubildende/r" },
+  { value: "other" as const, label: "Andere" },
+];
+
 const STEP_QUESTIONS: Record<number, string> = {
   0: "Aus welcher Branche kommen Sie?",
-  1: "Welche Stelle möchten Sie besetzen?",
-  2: "Wer ist die Kontaktperson?",
-  3: "Wie heißt Ihr Unternehmen?",
+  1: "Wonach suchen Sie?",
+  2: "Ab wann und wie viele?",
+  3: "Wie heißen Sie?",
   4: "Unter welcher E-Mail erreichen wir Sie?",
   5: "Unter welcher Telefonnummer erreichen wir Sie?",
 };
 
-const POSITION_OPTIONS_BY_INDUSTRY: Record<
-  string,
-  { value: string; label: string }[]
-> = {
-  hospitality: [
-    { value: "chef", label: "Koch / Köchin" },
-    { value: "service", label: "Servicekraft" },
-    { value: "hotel", label: "Hotelfachkraft" },
-    { value: "trainee_h", label: "Auszubildende/r" },
-  ],
-  hairdressing: [
-    { value: "hairdresser", label: "Friseur/in" },
-    { value: "trainee_f", label: "Auszubildende/r" },
-    { value: "salon", label: "Salon-Assistent/in" },
-  ],
-  nursing: [
-    { value: "nurse", label: "Pflegefachkraft" },
-    { value: "assistant", label: "Pflegehelfer/in" },
-    { value: "trainee_n", label: "Auszubildende/r Pflege" },
-  ],
-  other: [
-    { value: "specialist", label: "Fachkraft" },
-    { value: "trainee", label: "Auszubildende/r" },
-  ],
-};
-
 export default function RegisterEmployerPage() {
-  const tEmployer = useTranslations("employer");
   const tIndustry = useTranslations("industry");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
   const [pendingAdvance, setPendingAdvance] = useState(false);
-  const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
-  const [customPositionText, setCustomPositionText] = useState("");
   const [startDateValue, setStartDateValue] = useState("");
   const [chooseSpecificStartDate, setChooseSpecificStartDate] = useState(false);
   const [slotsValue, setSlotsValue] = useState("1");
@@ -105,22 +80,24 @@ export default function RegisterEmployerPage() {
     trigger,
     watch,
     getValues,
+    setValue,
     formState: { errors },
-  } = useForm<RegisterEmployerFormData>({
-    resolver: zodResolver(registerEmployerSchema),
+  } = useForm<LeadFormData>({
+    resolver: zodResolver(leadSchema),
     mode: "onTouched",
     defaultValues: {
-      contactPerson: "",
-      address: "",
-      city: "",
-      plz: "",
+      slots: 1,
+      name: "",
       phone: "",
     },
   });
 
   const selectedIndustry = watch("industry");
+  const selectedSeeking = watch("seekingType");
   const previousIndustryRef = useRef<string | undefined>(undefined);
+  const previousSeekingRef = useRef<string | undefined>(undefined);
 
+  // Auto-advance after industry selection (non-other)
   useEffect(() => {
     if (step !== 0 || !selectedIndustry || selectedIndustry === "other") {
       setPendingAdvance(false);
@@ -150,8 +127,40 @@ export default function RegisterEmployerPage() {
     };
   }, [selectedIndustry, step, trigger]);
 
+  // Auto-advance after seeking selection (non-other)
+  useEffect(() => {
+    if (step !== 1 || !selectedSeeking || selectedSeeking === "other") {
+      previousSeekingRef.current = selectedSeeking;
+      return;
+    }
+    const prev = previousSeekingRef.current;
+    previousSeekingRef.current = selectedSeeking;
+    if (prev === selectedSeeking) return;
+
+    setPendingAdvance(true);
+    let cancelled = false;
+    let t: ReturnType<typeof setTimeout> | undefined;
+    trigger("seekingType").then((ok) => {
+      if (cancelled || !ok) {
+        setPendingAdvance(false);
+        return;
+      }
+      t = setTimeout(() => {
+        setStep(2);
+        setPendingAdvance(false);
+      }, 800);
+    });
+    return () => {
+      cancelled = true;
+      if (t != null) clearTimeout(t);
+    };
+  }, [selectedSeeking, step, trigger]);
+
   async function goNext() {
-    if (step === 1) {
+    if (step === 2) {
+      // timing step has no zod fields, just local state
+      setValue("startDate", startDateValue.trim() || undefined);
+      setValue("slots", Math.max(1, parseInt(slotsValue, 10) || 1));
       setStep((s) => s + 1);
       return;
     }
@@ -180,26 +189,22 @@ export default function RegisterEmployerPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: data.email,
-          company_name: data.companyName,
           industry: data.industry,
           industry_other: data.industryOther,
-          contact_person: data.contactPerson,
-          address: data.address,
-          city: data.city,
-          plz: data.plz,
-          phone: data.phone,
-          position_types: selectedPositions,
-          position_custom: customPositionText,
-          slots_total: Math.max(1, parseInt(slotsValue, 10) || 1),
+          seeking_type: data.seekingType,
+          seeking_other: data.seekingOther,
           start_date: startDateValue.trim() || undefined,
+          slots: Math.max(1, parseInt(slotsValue, 10) || 1),
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
         }),
       });
 
       const json = await res.json();
 
       if (!res.ok) {
-        toast.error(json.error || "Registrierung fehlgeschlagen.");
+        toast.error(json.error || "Anfrage fehlgeschlagen.");
         return;
       }
 
@@ -219,17 +224,17 @@ export default function RegisterEmployerPage() {
     : ((step + 1) / STEPS.length) * 100;
 
   return (
-    <div className="auth-card-enter flex h-full min-h-0 w-full flex-col items-stretch overflow-hidden">
-      <div className="w-full shrink-0 overflow-hidden rounded-b-2xl">
+    <div className="auth-register-reveal-scope flex h-full min-h-0 w-full flex-col items-stretch overflow-hidden">
+      <div className="home-reveal home-reveal-delay-1 w-full shrink-0 overflow-hidden rounded-b-2xl">
         <div className="h-2 w-full overflow-hidden bg-muted/80">
           <div
-            className="h-full rounded-full bg-[oklch(0.38_0.12_255)] transition-all duration-500 ease-out"
+            className="h-full rounded-full bg-[oklch(0.38_0.12_255)] transition-all duration-200 ease-out"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
       </div>
 
-      <div className="flex w-full shrink-0 items-center px-4 py-2">
+      <div className="home-reveal home-reveal-delay-1 flex w-full shrink-0 items-center px-4 py-2">
         {step > 0 ? (
           <button
             type="button"
@@ -244,42 +249,41 @@ export default function RegisterEmployerPage() {
         )}
       </div>
 
-      <div className="flex min-h-0 w-full flex-1 flex-col justify-center py-8">
-        <div className="w-full max-w-6xl pl-[28vw] pr-8">
-          <Link
+      <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
+        <div className="flex w-full min-w-0 flex-1 flex-col justify-center py-8 sm:py-12">
+          <div className="w-full max-w-6xl shrink-0 pl-[28vw] pr-8">
+          <BrandWordmarkLink
             href="/"
-            className="mb-6 block text-left rounded-md focus:outline-none focus:ring-2 focus:ring-[oklch(0.38_0.12_255)] focus:ring-offset-2"
-          >
-            <h1 className="font-[var(--font-display)] text-3xl font-semibold tracking-tight text-foreground">
-              Ge<span className="text-[oklch(0.50_0.11_195)]">Vin</span>
-            </h1>
-          </Link>
+            size="xl"
+            className="home-reveal home-reveal-delay-2 mb-6 inline-flex h-12 max-h-14 items-center focus-visible:ring-[oklch(0.38_0.12_255)]"
+          />
 
           <div
             key={step}
-            className="mb-6 flex items-start gap-3 text-left animate-in fade-in-0 slide-in-from-top-4 duration-300"
+            className="home-reveal home-reveal-delay-3 auth-register-step-reveal mb-6 flex min-h-[4.5rem] items-start gap-3 text-left sm:min-h-[3.75rem]"
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-[oklch(0.38_0.12_255)] text-sm font-semibold text-white">
+            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded bg-[oklch(0.38_0.12_255)] text-sm font-semibold text-white">
               {step + 1}
             </span>
-            <h2 className="font-[var(--font-display)] text-xl font-normal tracking-tight text-foreground sm:text-2xl">
+            <h2 className="font-[var(--font-display)] text-xl font-normal leading-snug tracking-tight text-foreground sm:text-2xl">
               {STEP_QUESTIONS[step]}
             </h2>
           </div>
 
-          <div className="relative">
+          <div className="relative min-h-[min(22rem,50vh)]">
             {/* Step 0: Branche */}
             <div
               className={cn(
-                "space-y-6 transition-opacity duration-200",
+                "space-y-6",
                 step !== 0 && "pointer-events-none absolute inset-0 opacity-0"
               )}
               aria-hidden={step !== 0}
             >
               <div
+                key={`0-${step === 0 ? "active" : "idle"}`}
                 className={cn(
                   step === 0 &&
-                    "animate-in fade-in-0 slide-in-from-top-4 duration-300"
+                    "home-reveal home-reveal-delay-4 auth-register-step-reveal"
                 )}
               >
                 <div className="space-y-2">
@@ -290,7 +294,7 @@ export default function RegisterEmployerPage() {
                       <div
                         className="flex flex-col gap-2"
                         role="radiogroup"
-                        aria-label={tEmployer("industry")}
+                        aria-label="Branche"
                         aria-invalid={!!errors.industry}
                       >
                         {INDUSTRY_OPTIONS.map((opt, i) => {
@@ -383,75 +387,114 @@ export default function RegisterEmployerPage() {
               </div>
             </div>
 
-            {/* Step 1: Stelle */}
+            {/* Step 1: Wonach suchen Sie? */}
             <div
               className={cn(
-                "space-y-6 transition-opacity duration-200",
+                "space-y-6",
                 step !== 1 && "pointer-events-none absolute inset-0 opacity-0"
               )}
               aria-hidden={step !== 1}
             >
               <div
+                key={`1-${step === 1 ? "active" : "idle"}`}
                 className={cn(
                   step === 1 &&
-                    "animate-in fade-in-0 slide-in-from-top-4 duration-300"
+                    "home-reveal home-reveal-delay-4 auth-register-step-reveal"
                 )}
               >
-                <p className="mb-4 text-sm text-muted-foreground">
-                  Sie können mehrere auswählen. Zusätzlich können Sie unten
-                  eigene Begriffe eingeben.
-                </p>
-                <div className="space-y-3">
-                  {(
-                    POSITION_OPTIONS_BY_INDUSTRY[selectedIndustry || "other"] ??
-                    POSITION_OPTIONS_BY_INDUSTRY.other
-                  ).map((opt) => {
-                    const checked = selectedPositions.includes(opt.value);
-                    return (
-                      <label
-                        key={opt.value}
-                        className={cn(
-                          "flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition-colors",
-                          checked
-                            ? "border-2 border-[oklch(0.38_0.12_255)] bg-[oklch(0.38_0.12_255/0.08)]"
-                            : "border-border bg-muted/30 hover:border-muted-foreground/40"
-                        )}
+                <div className="space-y-2">
+                  <Controller
+                    control={control}
+                    name="seekingType"
+                    render={({ field }) => (
+                      <div
+                        className="flex flex-col gap-2"
+                        role="radiogroup"
+                        aria-label="Wonach suchen Sie?"
+                        aria-invalid={!!errors.seekingType}
                       >
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          onChange={() =>
-                            setSelectedPositions((prev) =>
-                              prev.includes(opt.value)
-                                ? prev.filter((x) => x !== opt.value)
-                                : [...prev, opt.value]
-                            )
-                          }
-                          className="h-4 w-4 rounded border-input"
-                        />
-                        <span className="text-sm font-medium">{opt.label}</span>
-                      </label>
-                    );
-                  })}
-                </div>
-                <div className="mt-6">
-                  <Label
-                    htmlFor="positionCustom"
-                    className="text-sm text-foreground"
-                  >
-                    Nach Wörtern suchen / selbst eingeben (z.{"\u00A0"}B.
-                    „Küchenhilfe", „Teilzeit")
-                  </Label>
-                  <Input
-                    id="positionCustom"
-                    className="mt-2 h-11"
-                    placeholder="Eingabe, die zu Ihrer Branche passt …"
-                    value={customPositionText}
-                    onChange={(e) => setCustomPositionText(e.target.value)}
+                        {SEEKING_OPTIONS.map((opt, i) => {
+                          const letter = String.fromCharCode(65 + i);
+                          const selected = field.value === opt.value;
+                          return (
+                            <button
+                              key={opt.value}
+                              type="button"
+                              onClick={() => field.onChange(opt.value)}
+                              className={cn(
+                                "flex w-full items-center gap-4 rounded-lg border px-5 py-2.5 text-left text-foreground transition-colors",
+                                selected
+                                  ? "border-2 border-[oklch(0.38_0.12_255)] bg-white"
+                                  : "border-border bg-muted/40 hover:border-muted-foreground/40"
+                              )}
+                            >
+                              <span
+                                className={cn(
+                                  "flex h-8 w-8 shrink-0 items-center justify-center rounded border text-sm font-semibold",
+                                  selected
+                                    ? "border-[oklch(0.38_0.12_255)] bg-[oklch(0.42_0.11_255)] text-white"
+                                    : "border-muted-foreground/30 bg-muted/10 text-foreground"
+                                )}
+                              >
+                                {letter}
+                              </span>
+                              <span className="text-base font-medium">
+                                {opt.label}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   />
+                  {errors.seekingType && (
+                    <p className="text-xs text-destructive">
+                      {errors.seekingType.message}
+                    </p>
+                  )}
                 </div>
 
-                <div className="mt-6 space-y-4">
+                {selectedSeeking === "other" && (
+                  <div className="mt-2 rounded-lg border border-border bg-muted/30 px-4 py-4">
+                    <Label
+                      htmlFor="seekingOther"
+                      className="text-sm font-medium text-foreground"
+                    >
+                      Beschreiben Sie, wonach Sie suchen
+                    </Label>
+                    <Input
+                      id="seekingOther"
+                      className="mt-2 h-12 text-base"
+                      placeholder="z.B. Praktikant, Teilzeitkraft …"
+                      {...register("seekingOther")}
+                      aria-invalid={!!errors.seekingOther}
+                    />
+                    {errors.seekingOther && (
+                      <p className="mt-2 text-xs text-destructive">
+                        {errors.seekingOther.message}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Step 2: Ab wann und wie viele */}
+            <div
+              className={cn(
+                "space-y-6",
+                step !== 2 && "pointer-events-none absolute inset-0 opacity-0"
+              )}
+              aria-hidden={step !== 2}
+            >
+              <div
+                key={`2-${step === 2 ? "active" : "idle"}`}
+                className={cn(
+                  step === 2 &&
+                    "home-reveal home-reveal-delay-4 auth-register-step-reveal"
+                )}
+              >
+                <div className="space-y-6">
                   <div>
                     <Label className="text-base text-foreground">
                       Ab wann wird die Stelle benötigt?
@@ -513,143 +556,38 @@ export default function RegisterEmployerPage() {
               </div>
             </div>
 
-            {/* Step 2: Kontaktperson */}
+            {/* Step 3: Name */}
             <div
               className={cn(
-                "space-y-6 transition-opacity duration-200",
-                step !== 2 && "pointer-events-none absolute inset-0 opacity-0"
-              )}
-              aria-hidden={step !== 2}
-            >
-              <div
-                className={cn(
-                  step === 2 &&
-                    "animate-in fade-in-0 slide-in-from-top-4 duration-300"
-                )}
-              >
-                <div className="space-y-3">
-                  <Label
-                    htmlFor="contactPerson"
-                    className="text-base text-foreground"
-                  >
-                    Vor- und Nachname
-                  </Label>
-                  <Input
-                    id="contactPerson"
-                    className="h-12 text-base"
-                    placeholder="z.B. Maria Müller"
-                    {...register("contactPerson")}
-                    aria-invalid={!!errors.contactPerson}
-                    autoFocus={step === 2}
-                  />
-                  {errors.contactPerson && (
-                    <p className="text-xs text-destructive">
-                      {errors.contactPerson.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Step 3: Unternehmen + Adresse */}
-            <div
-              className={cn(
-                "space-y-6 transition-opacity duration-200",
+                "space-y-6",
                 step !== 3 && "pointer-events-none absolute inset-0 opacity-0"
               )}
               aria-hidden={step !== 3}
             >
               <div
+                key={`3-${step === 3 ? "active" : "idle"}`}
                 className={cn(
                   step === 3 &&
-                    "animate-in fade-in-0 slide-in-from-top-4 duration-300"
+                    "home-reveal home-reveal-delay-4 auth-register-step-reveal"
                 )}
               >
-                <div className="space-y-4">
-                  <div className="space-y-3">
-                    <Label
-                      htmlFor="companyName"
-                      className="text-base text-foreground"
-                    >
-                      {tEmployer("companyName")}
-                    </Label>
-                    <Input
-                      id="companyName"
-                      className="h-12 text-base"
-                      placeholder="z.B. Hotel Adlon Kempinski"
-                      {...register("companyName")}
-                      aria-invalid={!!errors.companyName}
-                      autoFocus={step === 3}
-                    />
-                    {errors.companyName && (
-                      <p className="text-xs text-destructive">
-                        {errors.companyName.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-3">
-                    <Label
-                      htmlFor="address"
-                      className="text-base text-foreground"
-                    >
-                      Adresse
-                    </Label>
-                    <Input
-                      id="address"
-                      className="h-12 text-base"
-                      placeholder="Straße und Hausnummer"
-                      {...register("address")}
-                      aria-invalid={!!errors.address}
-                    />
-                    {errors.address && (
-                      <p className="text-xs text-destructive">
-                        {errors.address.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-[7rem_1fr] gap-3">
-                    <div className="space-y-3">
-                      <Label
-                        htmlFor="plz"
-                        className="text-base text-foreground"
-                      >
-                        PLZ
-                      </Label>
-                      <Input
-                        id="plz"
-                        className="h-12 text-base"
-                        placeholder="10117"
-                        {...register("plz")}
-                        aria-invalid={!!errors.plz}
-                      />
-                      {errors.plz && (
-                        <p className="text-xs text-destructive">
-                          {errors.plz.message}
-                        </p>
-                      )}
-                    </div>
-                    <div className="space-y-3">
-                      <Label
-                        htmlFor="city"
-                        className="text-base text-foreground"
-                      >
-                        Stadt
-                      </Label>
-                      <Input
-                        id="city"
-                        className="h-12 text-base"
-                        placeholder="Berlin"
-                        {...register("city")}
-                        aria-invalid={!!errors.city}
-                      />
-                      {errors.city && (
-                        <p className="text-xs text-destructive">
-                          {errors.city.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+                <div className="space-y-3">
+                  <Label htmlFor="name" className="text-base text-foreground">
+                    Vor- und Nachname
+                  </Label>
+                  <Input
+                    id="name"
+                    className="h-12 text-base"
+                    placeholder="z.B. Maria Müller"
+                    {...register("name")}
+                    aria-invalid={!!errors.name}
+                    autoFocus={step === 3}
+                  />
+                  {errors.name && (
+                    <p className="text-xs text-destructive">
+                      {errors.name.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -657,22 +595,20 @@ export default function RegisterEmployerPage() {
             {/* Step 4: E-Mail */}
             <div
               className={cn(
-                "space-y-6 transition-opacity duration-200",
+                "space-y-6",
                 step !== 4 && "pointer-events-none absolute inset-0 opacity-0"
               )}
               aria-hidden={step !== 4}
             >
               <div
+                key={`4-${step === 4 ? "active" : "idle"}`}
                 className={cn(
                   step === 4 &&
-                    "animate-in fade-in-0 slide-in-from-top-4 duration-300"
+                    "home-reveal home-reveal-delay-4 auth-register-step-reveal"
                 )}
               >
                 <div className="space-y-3">
-                  <Label
-                    htmlFor="email"
-                    className="text-base text-foreground"
-                  >
+                  <Label htmlFor="email" className="text-base text-foreground">
                     E-Mail-Adresse
                   </Label>
                   <Input
@@ -696,22 +632,20 @@ export default function RegisterEmployerPage() {
             {/* Step 5: Telefon */}
             <div
               className={cn(
-                "space-y-6 transition-opacity duration-200",
+                "space-y-6",
                 step !== 5 && "pointer-events-none absolute inset-0 opacity-0"
               )}
               aria-hidden={step !== 5}
             >
               <div
+                key={`5-${step === 5 ? "active" : "idle"}`}
                 className={cn(
                   step === 5 &&
-                    "animate-in fade-in-0 slide-in-from-top-4 duration-300"
+                    "home-reveal home-reveal-delay-4 auth-register-step-reveal"
                 )}
               >
                 <div className="space-y-3">
-                  <Label
-                    htmlFor="phone"
-                    className="text-base text-foreground"
-                  >
+                  <Label htmlFor="phone" className="text-base text-foreground">
                     Telefonnummer
                   </Label>
                   <Input
@@ -735,7 +669,10 @@ export default function RegisterEmployerPage() {
             </div>
 
             {/* Navigation */}
-            <div className="mt-8 flex items-center gap-3">
+            <div
+              key={step}
+              className="home-reveal home-reveal-delay-4 auth-register-step-reveal mt-8 flex items-center gap-3"
+            >
               {step < STEPS.length - 1 ? (
                 <Button
                   type="button"
@@ -754,24 +691,13 @@ export default function RegisterEmployerPage() {
                   {isLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    "Kandidaten finden"
+                    "Absenden"
                   )}
                 </Button>
               )}
               <div className="flex-1" />
             </div>
           </div>
-
-          <div className="mt-6 border-t border-border pt-6 text-center text-sm">
-            <p className="text-muted-foreground">
-              Sie haben bereits ein Konto?{" "}
-              <Link
-                href="/auth/login"
-                className="font-medium text-[oklch(0.38_0.12_255)] transition-colors hover:text-[oklch(0.30_0.11_255)]"
-              >
-                Jetzt anmelden
-              </Link>
-            </p>
           </div>
         </div>
       </div>

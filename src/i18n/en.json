@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "GeVin",
-    "tagline": "Skilled Workers for Germany – Trained in Vietnam",
+    "appName": "Lotus&Eagle",
+    "tagline": "Skilled Workers for Germany – Four own language schools in Vietnam",
     "login": "Log in",
     "register": "Find candidates",
     "logout": "Log out",
@@ -39,7 +39,7 @@
     "faq": "FAQ",
     "contact": "Contact",
     "dashboard": "Dashboard",
-    "adminConsole": "GeVin Admin",
+    "adminConsole": "Lotus&Eagle Admin",
     "candidates": "Candidates",
     "positions": "Job Positions",
     "matches": "Matches",
@@ -66,7 +66,7 @@
   },
   "landing": {
     "heroTitle": "International Skilled Workers for Germany",
-    "heroSubtitle": "The professional platform connecting Vietnamese skilled workers and trainees with German businesses – IHK-compliant and GDPR-secure.",
+    "heroSubtitle": "Four own language schools in Vietnam, professional screening and clear accountability in Germany – IHK-compliant and GDPR-secure.",
     "cta": "Get Started",
     "ctaEmployer": "Register as Employer",
     "ctaLearnMore": "Learn More"
@@ -83,6 +83,6 @@
     "imprint": "Imprint",
     "terms": "Terms of Service",
     "contact": "Contact",
-    "copyright": "© {year} GeVin. All rights reserved."
+    "copyright": "© {year} Lotus&Eagle. All rights reserved."
   }
 }

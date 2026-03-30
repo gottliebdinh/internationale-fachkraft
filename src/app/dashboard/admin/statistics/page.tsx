@@ -81,7 +81,7 @@ export default function AdminStatisticsPage() {
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Statistiken</h2>
         <p className="text-muted-foreground">
-          Kennzahlen und Übersichten der GeVin-Plattform
+          Kennzahlen und Übersichten der Lotus&Eagle-Plattform
         </p>
       </div>
 

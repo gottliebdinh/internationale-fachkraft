@@ -21,7 +21,7 @@ export default function ImprintPage() {
                 Angaben gemäß § 5 TMG
               </h2>
               <div className="rounded-xl bg-muted/30 p-6 text-sm ring-1 ring-foreground/10">
-                <p className="font-semibold text-base mb-2">GeVin GmbH</p>
+                <p className="font-semibold text-base mb-2">Lotus&Eagle GmbH</p>
                 <p className="text-muted-foreground">Musterstraße 123</p>
                 <p className="text-muted-foreground">10115 Berlin</p>
                 <p className="text-muted-foreground">Deutschland</p>
@@ -43,10 +43,10 @@ export default function ImprintPage() {
                 <p>
                   E-Mail:{" "}
                   <a
-                    href="mailto:info@gevin.de"
+                    href="mailto:info@lotus-eagle.de"
                     className="text-accent hover:underline"
                   >
-                    info@gevin.de
+                    info@lotus-eagle.de
                   </a>
                 </p>
               </div>

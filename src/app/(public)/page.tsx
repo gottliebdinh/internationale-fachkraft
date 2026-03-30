@@ -19,13 +19,13 @@ import { getPublicSiteUrl } from "@/lib/site-url";
 const siteUrl = getPublicSiteUrl();
 
 export const metadata: Metadata = {
-  title: "GeVin – Internationale Fachkräfte für Deutschland",
+  title: "Lotus&Eagle – Internationale Fachkräfte für Deutschland",
   description:
-    "Die professionelle Plattform für die Vermittlung vietnamesischer Fachkräfte und Auszubildender an deutsche Unternehmen. IHK-konform, DSGVO-sicher. Hotellerie, Friseurhandwerk, Pflege.",
+    "Die professionelle Plattform für die Vermittlung vietnamesischer Fachkräfte und Auszubildender an deutsche Unternehmen. Vier eigene Sprachschulen in Vietnam, professionelles Screening. IHK-konform, DSGVO-sicher.",
   openGraph: {
-    title: "GeVin – Internationale Fachkräfte für Deutschland",
+    title: "Lotus&Eagle – Internationale Fachkräfte für Deutschland",
     description:
-      "IHK-konforme Vermittlung vietnamesischer Fachkräfte. Hotellerie, Friseurhandwerk, Pflege.",
+      "Vier eigene Sprachschulen in Vietnam, professionelles Screening. IHK-konforme Vermittlung. Hotellerie, Friseurhandwerk, Pflege.",
     url: siteUrl,
   },
   alternates: {
@@ -39,17 +39,17 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: "GeVin",
+      name: "Lotus&Eagle",
       url: siteUrl,
       description:
-        "Plattform für die Vermittlung vietnamesischer Fachkräfte und Auszubildender an deutsche Unternehmen. IHK-konform, DSGVO-sicher.",
+        "Plattform für die Vermittlung vietnamesischer Fachkräfte und Auszubildender. Vier eigene Sprachschulen in Vietnam, professionelles Screening. IHK-konform, DSGVO-sicher.",
       areaServed: [{ "@type": "Country", name: "Deutschland" }, { "@type": "Country", name: "Vietnam" }],
     },
     {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "GeVin – Fachkräfte für Deutschland",
+      name: "Lotus&Eagle – Fachkräfte für Deutschland",
       description:
         "IHK-konforme Vermittlung vietnamesischer Fachkräfte in Hotellerie, Friseurhandwerk und Pflege.",
       publisher: { "@id": `${siteUrl}/#organization` },
@@ -68,7 +68,7 @@ export default function HomePage() {
       <main
         className="font-[var(--font-body)]"
         id="main-content"
-        aria-label="Startseite GeVin – Internationale Fachkräfte für Deutschland"
+        aria-label="Startseite Lotus&Eagle – Internationale Fachkräfte für Deutschland"
       >
       {/* Hero: links Textbox mit Hintergrund, rechts Bild über volle Höhe */}
       <section
@@ -89,7 +89,7 @@ export default function HomePage() {
               <span className="text-[oklch(0.50_0.11_195)]">für Ihr Unternehmen</span>
             </h1>
             <p className="home-reveal home-reveal-delay-3 mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Wir sind kein klassischer Vermittler, sondern ein Systemanbieter mit eigener Infrastruktur in Vietnam und klarer Verantwortung in Deutschland – für nachhaltige Fachkräfte- und Ausbildungsgewinnung mit Planungssicherheit.
+              Wir sind kein klassischer Vermittler, sondern ein Systemanbieter mit vier eigenen Sprachschulen in Vietnam und klarer Verantwortung in Deutschland. Weil Rekrutierung, Screening und Sprachausbildung bei uns zusammenlaufen, sind die Abläufe besonders präzise – vom professionellen Auswahlprozess bis zur Abholung am Flughafen.
             </p>
             <div className="home-reveal home-reveal-delay-4 mt-12 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <Button
@@ -191,7 +191,7 @@ export default function HomePage() {
             {[
               { icon: Scale, title: "Rechtliche Unsicherheiten", desc: "Klare Vertragsgestaltung, IHK-/HWK-/ZAV-Koordination." },
               { icon: Clock, title: "Verzögerungen im Behördenprozess", desc: "Strukturierte Begleitung im Anerkennungs- und Visa-Prozess." },
-              { icon: Languages, title: "Sprachliche Defizite", desc: "Sprachtraining und deutschsprachige Vorbereitung in Vietnam." },
+              { icon: Languages, title: "Sprachliche Defizite", desc: "B1/B2-Vorbereitung in vier eigenen Sprachschulen – aufeinander abgestimmt mit unserem Screening." },
               { icon: Globe, title: "Kulturelle Integrationsprobleme", desc: "Interkulturelle Vorbereitung und Integrationsmanagement nach Ankunft." },
               { icon: ShieldCheck, title: "Hohe Fluktuation", desc: "Nachhaltige Vorbereitung und Stabilisierungsphase – keine Einmalvermittlung." },
             ].map((item) => (
@@ -218,16 +218,16 @@ export default function HomePage() {
         aria-labelledby="stats-heading"
       >
         <h2 id="stats-heading" className="sr-only">
-          GeVin in Zahlen
+          Lotus&Eagle in Zahlen
         </h2>
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
           <p className="mb-8 text-center text-sm font-medium text-muted-foreground">
-            Über 85 deutsche Unternehmen und 15 Partnerschulen vertrauen bereits auf GeVin.
+            Über 85 deutsche Unternehmen vertrauen auf Lotus&Eagle – Kandidaten werden in vier eigenen Sprachschulen in Vietnam vorbereitet und professionell begleitet.
           </p>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
             {[
               { value: "120+", label: "Erfolgreiche Platzierungen", icon: Users },
-              { value: "15", label: "Partnerschulen in Vietnam", icon: GraduationCap },
+              { value: "4", label: "Eigene Sprachschulen in Vietnam", icon: GraduationCap },
               { value: "85+", label: "Deutsche Arbeitgeber", icon: Building2 },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
@@ -254,15 +254,15 @@ export default function HomePage() {
             Ablauf
           </p>
           <h2 id="how-heading" className="mt-3 text-center font-[var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-            So funktioniert GeVin
+            So funktioniert Lotus&Eagle
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-muted-foreground">
             Jeder Schritt ist klar definiert und dokumentiert – Planungssicherheit von der Rekrutierung bis zur Integration.
           </p>
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { step: "01", title: "Strukturierte Rekrutierung in Vietnam", desc: "Mehrstufige Auswahl, definierte Kriterien und qualifizierte Kandidaten." },
-              { step: "02", title: "Sprach- und Integrationsvorbereitung", desc: "Sprachtraining, interkulturelle Vorbereitung und Dokumenten-Vorbereitung gemäß deutscher Anforderungen." },
+              { step: "01", title: "Strukturierte Rekrutierung in Vietnam", desc: "Professionelles Screening und mehrstufige Auswahl nach klaren Kriterien – präzise steuerbar, weil wir den Prozess in eigener Verantwortung führen." },
+              { step: "02", title: "Sprach- und Integrationsvorbereitung", desc: "Sprachtraining in vier eigenen Sprachschulen, interkulturelle Vorbereitung und Dokumenten-Vorbereitung gemäß deutscher Anforderungen." },
               { step: "03", title: "Analyse des Personalbedarfs", desc: "Konkreter Bedarf Ihres Unternehmens – strukturiert erfasst und abgestimmt." },
               { step: "04", title: "Vertrags- und Behördenkoordination", desc: "Koordination mit IHK, HWK und ZAV. Automatisierte IHK-Dokumente, strukturierte Vertragsgestaltung." },
               { step: "05", title: "Visa & Einreise", desc: "Begleitung im Visa-Prozess und Koordination der Anreise." },

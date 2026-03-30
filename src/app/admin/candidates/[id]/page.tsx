@@ -246,7 +246,7 @@ export default async function CandidateDetailPage({
       {/* Back button */}
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" asChild>
-          <Link href="/admin" className="gap-2 text-muted-foreground">
+          <Link href="/admin/candidates" className="gap-2 text-muted-foreground">
             <ArrowLeft className="h-4 w-4" />
             Zurück
           </Link>

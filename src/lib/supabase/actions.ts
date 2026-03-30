@@ -165,7 +165,7 @@ export async function signIn(formData: FormData) {
   }
 
   if (role === "admin") {
-    redirect("/admin");
+    redirect("/admin/leads");
   }
   redirect(`/dashboard/${role}`);
 }

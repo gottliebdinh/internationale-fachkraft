@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "GeVin",
-    "tagline": "Nhân lực chuyên môn cho Đức – Đào tạo tại Việt Nam",
+    "appName": "Lotus&Eagle",
+    "tagline": "Nhân lực chuyên môn cho Đức – Bốn trường tiếng Đức tại Việt Nam",
     "login": "Đăng nhập",
     "register": "Tìm ứng viên",
     "logout": "Đăng xuất",
@@ -39,7 +39,7 @@
     "faq": "Câu hỏi thường gặp",
     "contact": "Liên hệ",
     "dashboard": "Bảng điều khiển",
-    "adminConsole": "GeVin Admin",
+    "adminConsole": "Lotus&Eagle Admin",
     "candidates": "Ứng viên",
     "positions": "Vị trí tuyển dụng",
     "matches": "Ghép nối",
@@ -66,7 +66,7 @@
   },
   "landing": {
     "heroTitle": "Nhân lực chuyên môn quốc tế cho Đức",
-    "heroSubtitle": "Nền tảng chuyên nghiệp kết nối nhân lực Việt Nam với doanh nghiệp Đức – tuân thủ IHK và DSGVO.",
+    "heroSubtitle": "Bốn trường tiếng Đức riêng tại Việt Nam, sàng lọc chuyên nghiệp và trách nhiệm rõ ràng tại Đức – tuân thủ IHK và DSGVO.",
     "cta": "Bắt đầu ngay",
     "ctaEmployer": "Đăng ký nhà tuyển dụng",
     "ctaLearnMore": "Tìm hiểu thêm"
@@ -83,6 +83,6 @@
     "imprint": "Thông tin pháp lý",
     "terms": "Điều khoản",
     "contact": "Liên hệ",
-    "copyright": "© {year} GeVin. Mọi quyền được bảo lưu."
+    "copyright": "© {year} Lotus&Eagle. Mọi quyền được bảo lưu."
   }
 }

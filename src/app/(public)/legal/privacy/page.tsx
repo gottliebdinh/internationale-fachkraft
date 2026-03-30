@@ -29,11 +29,11 @@ export default function PrivacyPolicyPage() {
                 sonstiger datenschutzrechtlicher Bestimmungen ist:
               </p>
               <div className="mt-4 rounded-xl bg-muted/30 p-4 text-sm text-muted-foreground ring-1 ring-foreground/10">
-                <p>GeVin GmbH</p>
+                <p>Lotus&Eagle GmbH</p>
                 <p>Musterstraße 123</p>
                 <p>10115 Berlin</p>
                 <p>Deutschland</p>
-                <p className="mt-2">E-Mail: datenschutz@gevin.de</p>
+                <p className="mt-2">E-Mail: datenschutz@lotus-eagle.de</p>
                 <p>Telefon: +49 30 123 456 789</p>
               </div>
             </div>
@@ -153,7 +153,7 @@ export default function PrivacyPolicyPage() {
                   Dokumentenpflichten
                 </li>
                 <li>
-                  An IT-Dienstleister, die im Auftrag von GeVin Daten
+                  An IT-Dienstleister, die im Auftrag von Lotus&Eagle Daten
                   verarbeiten (Auftragsverarbeiter gemäß Art. 28 DSGVO)
                 </li>
                 <li>
@@ -239,7 +239,7 @@ export default function PrivacyPolicyPage() {
               </ul>
               <p className="text-muted-foreground leading-relaxed mt-4">
                 Zur Ausübung Ihrer Rechte wenden Sie sich bitte an:
-                datenschutz@gevin.de
+                datenschutz@lotus-eagle.de
               </p>
             </div>
 

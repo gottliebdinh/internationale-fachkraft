@@ -30,7 +30,7 @@ export function CandidateDeleteSection({ candidateId, displayName }: Props) {
         window.alert(text || "Löschen fehlgeschlagen");
         return;
       }
-      router.push("/admin");
+      router.push("/admin/candidates");
       router.refresh();
     } finally {
       setDeleting(false);

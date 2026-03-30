@@ -118,7 +118,7 @@ export async function updateSession(request: NextRequest) {
       .maybeSingle();
     if (adminProfile?.role === "admin") {
       const url = request.nextUrl.clone();
-      url.pathname = "/admin";
+      url.pathname = "/admin/leads";
       url.search = "";
       return NextResponse.redirect(url);
     }
@@ -165,7 +165,7 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // Altes Platzhalter-Admin unter /dashboard/admin → echtes GeVin-Admin
+  // Altes Platzhalter-Admin unter /dashboard/admin → echtes Lotus&Eagle-Admin
   if (user && pathname.startsWith("/dashboard/admin")) {
     const { data: dashAdmin } = await supabase
       .from("users")
@@ -174,7 +174,7 @@ export async function updateSession(request: NextRequest) {
       .maybeSingle();
     if (dashAdmin?.role === "admin") {
       const url = request.nextUrl.clone();
-      url.pathname = "/admin";
+      url.pathname = "/admin/leads";
       url.search = "";
       return NextResponse.redirect(url);
     }

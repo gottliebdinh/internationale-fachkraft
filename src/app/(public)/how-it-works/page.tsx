@@ -26,9 +26,9 @@ const steps = [
     image: "/funktioniert/matching.png",
     title: "Strukturierte Rekrutierung in Vietnam",
     description:
-      "Mehrstufige Auswahl nach definierten Kriterien. Qualifizierte Kandidaten mit Sprachzertifikaten und fachlicher Vorbereitung – über unsere Infrastruktur vor Ort.",
+      "Mehrstufiges, professionelles Screening nach definierten Kriterien. Qualifizierte Kandidaten mit Sprachzertifikaten und fachlicher Vorbereitung – präzise, weil Rekrutierung und Vorbereitung in unserer eigenen Infrastruktur in Vietnam zusammenlaufen.",
     details: [
-      "Mehrstufige Auswahlverfahren",
+      "Professionelles Screening & Auswahlverfahren",
       "Definierte Rekrutierungskriterien",
       "Kandidatenprofile mit Dokumenten",
       "Sprachzertifikate (B1/B2)",
@@ -40,11 +40,11 @@ const steps = [
     image: "/funktioniert/dokumentenprozess.png",
     title: "Sprach- und Integrationsvorbereitung",
     description:
-      "Sprachtraining in mehreren Sprachzentren mit deutschsprachigen Lehrkräften, interkulturelle Vorbereitung und Dokumentenvorbereitung gemäß deutscher Anforderungen.",
+      "Sprachtraining in vier eigenen Sprachschulen mit deutschsprachigen Lehrkräften, interkulturelle Vorbereitung und Dokumentenvorbereitung gemäß deutscher Anforderungen – durchgängig auf das Screening abgestimmt.",
     details: [
+      "Vier eigene Sprachschulen in Vietnam",
       "Sprachtraining vor Ausreise",
-      "Interkulturelle Vorbereitung",
-      "Dokumentenvorbereitung (deutsche Anforderungen)",
+      "Interkulturelle Vorbereitung & Dokumente (DE)",
       "Minimierung von Integrationsrisiken",
     ],
   },
@@ -82,12 +82,12 @@ const steps = [
     image: "/funktioniert/visumAnkunft.png",
     title: "Visa & Einreise",
     description:
-      "Begleitung im Anerkennungs- und Visa-Prozess, Zusammenstellung der Unterlagen und Koordination der Anreise. Alles aus einer Hand bis zur Ankunft in Deutschland.",
+      "Begleitung im Anerkennungs- und Visa-Prozess, Zusammenstellung der Unterlagen und Koordination der Anreise – inkl. Abholung am Flughafen und strukturierter Erstbetreuung bei der Ankunft.",
     details: [
       "Begleitung im Visa-Prozess",
       "Checkliste Visumsunterlagen",
       "Koordination der Anreise",
-      "Unterstützung bei der Ankunft",
+      "Abholung am Flughafen & Ankunftsbetreuung",
     ],
   },
   {
@@ -129,13 +129,13 @@ const faqs = [
     icon: Languages,
     question: "Welches Sprachniveau wird vorausgesetzt?",
     answer:
-      "Für die Berufsausbildung ist mindestens ein B1-Zertifikat erforderlich. Viele unserer Kandidaten bringen bereits B2 mit. Die Sprachausbildung erfolgt an unseren Partnerschulen in Vietnam.",
+      "Für die Berufsausbildung ist mindestens ein B1-Zertifikat erforderlich. Viele unserer Kandidaten bringen bereits B2 mit. Die Sprachausbildung erfolgt in unseren vier eigenen Sprachschulen in Vietnam.",
   },
   {
     icon: HelpCircle,
     question: "Was passiert nach der Ankunft in Deutschland?",
     answer:
-      "GeVin bietet optionale Onboarding-Unterstützung: Behördengänge, Wohnungssuche und interkulturelle Begleitung in den ersten Wochen. Details werden individuell vereinbart.",
+      "Lotus&Eagle bietet optionale Onboarding-Unterstützung: Behördengänge, Wohnungssuche und interkulturelle Begleitung in den ersten Wochen. Details werden individuell vereinbart.",
   },
 ];
 
@@ -147,7 +147,7 @@ export default function HowItWorksPage() {
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              So funktioniert <span className="text-accent">GeVin</span>
+              So funktioniert <span className="text-accent">Lotus&Eagle</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Sechs klar definierte Schritte – von der Rekrutierung in Vietnam bis zur Integration. Jeder Schritt dokumentiert, transparent und mit Planungssicherheit.

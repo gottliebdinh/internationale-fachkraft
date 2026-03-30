@@ -1,53 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Mail } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 export function RegisterEmployerPendingContent() {
-  const searchParams = useSearchParams();
-  const email = searchParams.get("email")?.trim() ?? "";
-
   return (
-    <div className="auth-card-enter flex h-full min-h-0 w-full flex-col items-stretch overflow-hidden">
-      <div className="flex min-h-0 w-full flex-1 flex-col justify-center py-8">
-        <div className="w-full max-w-6xl pl-[28vw] pr-8">
-          <Link
-            href="/"
-            className="mb-6 block text-left rounded-md focus:outline-none focus:ring-2 focus:ring-[oklch(0.38_0.12_255)] focus:ring-offset-2"
-          >
-            <h1 className="font-[var(--font-display)] text-3xl font-semibold tracking-tight text-foreground">
-              Ge<span className="text-[oklch(0.50_0.11_195)]">Vin</span>
-            </h1>
-          </Link>
-
-          <div className="mb-6 flex items-start gap-3 text-left">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[oklch(0.38_0.12_255)] text-white">
-              <Mail className="h-5 w-5" aria-hidden />
-            </span>
-            <div>
-              <h2 className="font-[var(--font-display)] text-xl font-normal tracking-tight text-foreground sm:text-2xl">
-                Fast geschafft
-              </h2>
-              <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                Wir haben eine E-Mail an{" "}
-                {email ? (
-                  <span className="font-medium text-foreground">{email}</span>
-                ) : (
-                  "Ihre Adresse"
-                )}{" "}
-                gesendet. Öffnen Sie den Link in der E-Mail, um Ihr Passwort zu
-                setzen. Danach gelangen Sie ins Dashboard.
-              </p>
-            </div>
-          </div>
-
-          <Button variant="outline" asChild className="mt-4">
-            <Link href="/auth/login">Zur Anmeldung</Link>
-          </Button>
-        </div>
+    <div className="auth-register-reveal-scope auth-card-enter flex min-h-0 flex-1 w-full flex-col items-center justify-center px-6 py-8 text-center">
+      <div className="mx-auto flex max-w-2xl flex-col items-center">
+        <span className="mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-[oklch(0.50_0.11_195)] text-white shadow-md">
+          <CheckCircle2 className="h-9 w-9" aria-hidden />
+        </span>
+        <h1 className="font-[var(--font-display)] text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          Vielen Dank für Ihr Interesse.
+        </h1>
+        <p className="mt-6 text-xl font-normal leading-relaxed text-muted-foreground sm:text-2xl md:text-2xl">
+          Wir werden uns schnellstmöglich mit Ihnen in Verbindung setzen.
+        </p>
+        <Button
+          asChild
+          className="mt-12 h-12 min-h-12 px-8 text-base font-semibold shadow-sm bg-[oklch(0.38_0.12_255)] text-white transition-colors hover:bg-[oklch(0.30_0.11_255)] hover:scale-[1.01] active:scale-[0.99]"
+        >
+          <Link href="/">Zur Startseite</Link>
+        </Button>
       </div>
     </div>
   );

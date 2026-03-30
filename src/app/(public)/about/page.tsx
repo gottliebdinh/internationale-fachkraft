@@ -39,10 +39,10 @@ const values = [
 ];
 
 const milestones = [
-  { year: "2022", title: "Gründung", desc: "Idee und erste Konzeptentwicklung der GeVin-Plattform." },
-  { year: "2023", title: "Erste Partnerschaften", desc: "Kooperationsverträge mit 5 vietnamesischen Berufsschulen." },
+  { year: "2022", title: "Gründung", desc: "Idee und erste Konzeptentwicklung der Lotus&Eagle-Plattform." },
+  { year: "2023", title: "Eigenes Schulnetz", desc: "Ausbau der vier eigenen Sprachschulen in Vietnam und Professionalisierung von Screening und Ankunftsbetreuung." },
   { year: "2024", title: "Plattform-Launch", desc: "Start der digitalen Plattform mit ersten erfolgreichen Vermittlungen." },
-  { year: "2025", title: "Wachstum", desc: "Über 100 erfolgreiche Platzierungen und 15 Partnerschulen." },
+  { year: "2025", title: "Wachstum", desc: "Über 100 erfolgreiche Platzierungen; vier eigene Sprachschulen als festes Rückgrat der Vorbereitung." },
   { year: "2026", title: "Expansion", desc: "Erweiterung auf weitere Berufsfelder und Ausbau der KI-gestützten Matching-Algorithmen." },
 ];
 
@@ -54,10 +54,10 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              Über <span className="text-accent">GeVin</span>
+              Über <span className="text-accent">Lotus&Eagle</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Wir sind ein strukturierter, international integrierter Partner für nachhaltige Fachkräfte- und Ausbildungsgewinnung zwischen Vietnam und Deutschland – kein klassischer Vermittler, sondern Systemanbieter mit eigener Infrastruktur und klarer Verantwortungsstruktur.
+              Wir sind ein strukturierter, international integrierter Partner für nachhaltige Fachkräfte- und Ausbildungsgewinnung zwischen Vietnam und Deutschland – kein klassischer Vermittler, sondern Systemanbieter mit vier eigenen Sprachschulen in Vietnam, professionellem Screening und klarer Verantwortungsstruktur in Deutschland.
             </p>
             <p className="mt-4 text-base font-medium text-foreground">
               Wenn Sie über uns rekrutieren: <span className="text-accent">völlige Transparenz</span>, <span className="text-accent">Schnelligkeit</span> und <span className="text-accent">Sicherheit</span> – von der Bedarfsanalyse bis zur Integration.
@@ -80,9 +80,10 @@ export default function AboutPage() {
                 suchen.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                GeVin schließt diese Lücke mit einer professionellen digitalen
-                Plattform und einer klaren unternehmerischen Architektur: eigene
-                Infrastruktur in Vietnam, klare Verantwortung in Deutschland.
+                Lotus&Eagle schließt diese Lücke mit einer professionellen digitalen
+                Plattform und einer klaren unternehmerischen Architektur: vier
+                eigene Sprachschulen in Vietnam, professionelles Screening und
+                klare Verantwortung in Deutschland.
                 Von der Kandidatensuche über IHK-konforme Dokumente bis zur
                 Visa-Beantragung und Integration – strukturiert und mit Planungssicherheit.
               </p>
@@ -96,7 +97,7 @@ export default function AboutPage() {
                 <div className="grid grid-cols-2 gap-6">
                   {[
                     { value: "120+", label: "Platzierungen", icon: Users },
-                    { value: "15", label: "Partnerschulen", icon: Globe },
+                    { value: "4", label: "Eigene Sprachschulen (VN)", icon: Globe },
                     { value: "85+", label: "Arbeitgeber", icon: Handshake },
                     { value: "3", label: "Branchen", icon: Target },
                   ].map((stat) => (
@@ -122,7 +123,7 @@ export default function AboutPage() {
             Warum über uns?
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Wenn Sie Ihre Fachkräftegewinnung über GeVin abwickeln, profitieren Sie von drei zentralen Vorteilen.
+            Wenn Sie Ihre Fachkräftegewinnung über Lotus&Eagle abwickeln, profitieren Sie von drei zentralen Vorteilen.
           </p>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <Card className="border-0 shadow-sm bg-card text-center">
@@ -185,20 +186,20 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Operative Grundlage unseres internationalen Modells: strukturierte Rekrutierung, mehrstufige Auswahl, Sprachtraining in mehreren Sprachzentren mit deutschsprachigen Lehrkräften, interkulturelle Vorbereitung und Dokumentenvorbereitung gemäß deutscher Anforderungen. Ziel: Integrationsrisiken, Fehlbesetzungen und Ausbildungsabbrüche minimieren.
+                  Operative Grundlage unseres internationalen Modells: Wir betreiben vier eigene Sprachschulen in Vietnam – dadurch sind Rekrutierung, professionelles Screening und Sprachausbildung durchgängig aufeinander abgestimmt und präzise steuerbar. Sprachtraining mit deutschsprachigen Lehrkräften, interkulturelle Vorbereitung, Abholung am Flughafen bei der Ankunft sowie Dokumentenvorbereitung gemäß deutscher Anforderungen. Ziel: Integrationsrisiken, Fehlbesetzungen und Ausbildungsabbrüche minimieren.
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.50_0.11_195)]" />
-                    Strukturierte Rekrutierung nach definierten Kriterien
+                    Professionelles Screening & mehrstufige Auswahl
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.50_0.11_195)]" />
-                    Sprachtraining & interkulturelle Vorbereitung
+                    Vier eigene Sprachschulen, Sprachtraining & Interkultur
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.50_0.11_195)]" />
-                    Dokumentenvorbereitung gemäß deutscher Anforderungen
+                    Flughafen-Abholung & Dokumente nach deutschen Standards
                   </li>
                 </ul>
               </CardContent>

@@ -36,8 +36,8 @@ const siteUrl = getPublicSiteUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "GeVin – Fachkräfte für Deutschland | IHK-konforme Vermittlung",
-    template: "%s | GeVin",
+    default: "Lotus&Eagle – Fachkräfte für Deutschland | IHK-konforme Vermittlung",
+    template: "%s | Lotus&Eagle",
   },
   description:
     "Die professionelle Plattform für die Vermittlung vietnamesischer Fachkräfte und Auszubildender an deutsche Unternehmen – IHK-konform und DSGVO-sicher. Hotellerie, Friseurhandwerk, Pflege.",
@@ -50,20 +50,20 @@ export const metadata: Metadata = {
     "FEG",
     "DSGVO Recruiting",
   ],
-  authors: [{ name: "GeVin" }],
-  creator: "GeVin",
+  authors: [{ name: "Lotus&Eagle" }],
+  creator: "Lotus&Eagle",
   openGraph: {
     type: "website",
     locale: "de_DE",
     url: siteUrl,
-    siteName: "GeVin",
-    title: "GeVin – Internationale Fachkräfte für Deutschland",
+    siteName: "Lotus&Eagle",
+    title: "Lotus&Eagle – Internationale Fachkräfte für Deutschland",
     description:
       "IHK-konforme Vermittlung vietnamesischer Fachkräfte und Auszubildender. Hotellerie, Friseurhandwerk, Pflege.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "GeVin – Fachkräfte für Deutschland",
+    title: "Lotus&Eagle – Fachkräfte für Deutschland",
     description:
       "IHK-konform und DSGVO-sicher: Vermittlung vietnamesischer Fachkräfte an deutsche Unternehmen.",
   },

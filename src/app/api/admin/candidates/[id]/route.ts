@@ -49,7 +49,7 @@ export async function DELETE(
 
     if (delErr) return new NextResponse(delErr.message, { status: 500 });
 
-    revalidatePath("/admin");
+    revalidatePath("/admin/candidates");
     revalidatePath(`/admin/candidates/${id}`);
 
     return NextResponse.json({ ok: true });

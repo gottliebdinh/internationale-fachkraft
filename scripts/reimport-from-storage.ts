@@ -63,7 +63,7 @@ async function ensureSchool(): Promise<string> {
   if (!userId) {
     const email =
       process.env.REIMPORT_SCHOOL_EMAIL?.trim() ||
-      `school-reimport-${Date.now()}@gevin.local`;
+      `school-reimport-${Date.now()}@lotus-eagle.local`;
     const password = crypto.randomBytes(24).toString("base64url");
     const { data: authData, error: authErr } =
       await supabase.auth.admin.createUser({

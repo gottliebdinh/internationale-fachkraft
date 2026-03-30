@@ -53,7 +53,7 @@ const roleVariant: Record<UserRole, "default" | "secondary" | "outline"> = {
 const placeholderUsers: UserEntry[] = [
   {
     id: "u1",
-    email: "admin@gevin.de",
+    email: "admin@lotus-eagle.de",
     role: "admin",
     verified: true,
     created_at: "2025-06-01",

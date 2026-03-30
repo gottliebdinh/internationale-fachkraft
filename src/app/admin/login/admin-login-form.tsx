@@ -25,7 +25,7 @@ export function AdminLoginForm({ defaultEmail = "" }: Props) {
     searchParams.get("redirect")?.startsWith("/admin") &&
     !searchParams.get("redirect")?.startsWith("//")
       ? searchParams.get("redirect")!
-      : "/admin";
+      : "/admin/leads";
 
   const {
     register,
@@ -66,7 +66,7 @@ export function AdminLoginForm({ defaultEmail = "" }: Props) {
             Admin-Anmeldung
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Nur für autorisierte GeVin-Administratoren. Bitte melden Sie sich
+            Nur für autorisierte Lotus&Eagle-Administratoren. Bitte melden Sie sich
             mit Ihrem Admin-Konto an.
           </p>
         </div>

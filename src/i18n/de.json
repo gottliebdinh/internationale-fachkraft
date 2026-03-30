@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "GeVin",
-    "tagline": "Fachkräfte für Deutschland – Ausbildung in Vietnam",
+    "appName": "Lotus&Eagle",
+    "tagline": "Fachkräfte für Deutschland – vier eigene Sprachschulen in Vietnam",
     "login": "Anmelden",
     "register": "Kandidaten finden",
     "logout": "Abmelden",
@@ -39,7 +39,7 @@
     "faq": "FAQ",
     "contact": "Kontakt",
     "dashboard": "Dashboard",
-    "adminConsole": "GeVin Admin",
+    "adminConsole": "Lotus&Eagle Admin",
     "candidates": "Kandidaten",
     "positions": "Stellenangebote",
     "matches": "Matches",
@@ -164,18 +164,18 @@
   },
   "landing": {
     "heroTitle": "Internationale Fachkräfte für Deutschland",
-    "heroSubtitle": "Die professionelle Plattform für die Vermittlung vietnamesischer Fachkräfte und Auszubildender an deutsche Unternehmen – IHK-konform und DSGVO-sicher.",
+    "heroSubtitle": "Systemanbieter mit vier eigenen Sprachschulen in Vietnam, professionellem Screening und klarer Verantwortung in Deutschland – IHK-konform und DSGVO-sicher.",
     "cta": "Jetzt starten",
     "ctaEmployer": "Als Arbeitgeber registrieren",
     "ctaLearnMore": "Mehr erfahren",
     "statsPlaced": "Erfolgreiche Platzierungen",
-    "statsPartners": "Partnerschulen",
+    "statsPartners": "Eigene Sprachschulen (VN)",
     "statsEmployers": "Arbeitgeber",
     "trustTitle": "Vertrauen & Compliance",
     "trustIHK": "IHK-konformer Prozess",
     "trustDSGVO": "DSGVO-zertifiziert",
     "trustFEG": "Fachkräfteeinwanderungsgesetz",
-    "howTitle": "So funktioniert GeVin",
+    "howTitle": "So funktioniert Lotus&Eagle",
     "step1Title": "Profil erstellen",
     "step1Desc": "Arbeitgeber erstellen ihr Firmenprofil und Stellenangebote. Schulen laden Kandidatenprofile hoch.",
     "step2Title": "Matching & Auswahl",
@@ -191,6 +191,6 @@
     "imprint": "Impressum",
     "terms": "AGB",
     "contact": "Kontakt",
-    "copyright": "© {year} GeVin. Alle Rechte vorbehalten."
+    "copyright": "© {year} Lotus&Eagle. Alle Rechte vorbehalten."
   }
 }

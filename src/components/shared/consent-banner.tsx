@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck } from "lucide-react";
 
-const CONSENT_KEY = "gevin-cookie-consent";
+const CONSENT_KEY = "lotus-eagle-cookie-consent";
 
 type ConsentValue = "all" | "essential" | null;
 

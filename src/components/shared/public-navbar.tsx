@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useState } from "react";
+import { BrandWordmarkLink } from "@/components/shared/brand-wordmark-link";
 
 export function PublicNavbar() {
   const t = useTranslations("nav");
@@ -23,11 +24,7 @@ export function PublicNavbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="text-2xl font-bold tracking-tight text-foreground">
-            GeVin
-          </span>
-        </Link>
+        <BrandWordmarkLink href="/" size="lg" className="flex items-center" />
 
         <nav className="hidden md:flex items-center gap-7">
           {navLinks.map((link) => (
@@ -41,10 +38,7 @@ export function PublicNavbar() {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" asChild>
-            <Link href="/auth/login">{tc("login")}</Link>
-          </Button>
+        <div className="hidden md:flex items-center">
           <Button asChild className="h-11 min-h-11 px-6 text-base font-semibold">
             <Link href="/auth/register/employer">{tc("register")}</Link>
           </Button>
@@ -69,9 +63,6 @@ export function PublicNavbar() {
                 </Link>
               ))}
               <div className="border-t pt-4 flex flex-col gap-2">
-                <Button variant="ghost" asChild>
-                  <Link href="/auth/login">{tc("login")}</Link>
-                </Button>
                 <Button asChild className="h-11 min-h-11 px-6 text-base font-semibold">
                   <Link href="/auth/register/employer">{tc("register")}</Link>
                 </Button>

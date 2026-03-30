@@ -223,7 +223,7 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold mb-1">Adresse</h3>
                         <p className="text-sm text-muted-foreground">
-                          GeVin GmbH
+                          Lotus&Eagle GmbH
                           <br />
                           Musterstraße 123
                           <br />
@@ -240,10 +240,10 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold mb-1">E-Mail</h3>
                         <a
-                          href="mailto:info@gevin.de"
+                          href="mailto:info@lotus-eagle.de"
                           className="text-sm text-accent hover:underline"
                         >
-                          info@gevin.de
+                          info@lotus-eagle.de
                         </a>
                       </div>
                     </div>

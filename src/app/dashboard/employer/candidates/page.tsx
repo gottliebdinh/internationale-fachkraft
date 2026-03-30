@@ -221,7 +221,7 @@ export default function CandidatesPage() {
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Kandidatensuche</h2>
         <p className="text-muted-foreground">
-          Durchsuchen Sie qualifizierte Kandidaten aus vietnamesischen Partnerschulen.
+          Durchsuchen Sie qualifizierte Kandidaten – vorbereitet in unseren eigenen Sprachschulen in Vietnam.
         </p>
       </div>
 

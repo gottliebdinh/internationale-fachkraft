@@ -43,7 +43,7 @@ const requirements = [
   "Staatlich anerkannte Bildungseinrichtung in Vietnam",
   "Curriculum zur Vermittlung deutscher Sprachkenntnisse (mind. B1-Niveau)",
   "Erfahrung in der Ausbildung für Hotellerie, Friseurhandwerk oder Pflege",
-  "Bereitschaft zur digitalen Zusammenarbeit über die GeVin-Plattform",
+  "Bereitschaft zur digitalen Zusammenarbeit über die Lotus&Eagle-Plattform",
   "Kapazität für regelmäßige Kandidatenbereitstellung",
 ];
 
@@ -86,7 +86,7 @@ export default function ForSchoolsPage() {
               <span className="text-accent">Karrierebrücke</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Werden Sie GeVin-Partnerschule und ermöglichen Sie Ihren
+              Werden Sie Lotus&Eagle-Partnerschule und ermöglichen Sie Ihren
               Absolvent/innen den direkten Einstieg in den deutschen
               Arbeitsmarkt.
             </p>
@@ -142,7 +142,7 @@ export default function ForSchoolsPage() {
                 Voraussetzungen für Partnerschulen
               </h2>
               <p className="text-muted-foreground mb-8 leading-relaxed">
-                Um als GeVin-Partnerschule zugelassen zu werden, müssen
+                Um als Lotus&Eagle-Partnerschule zugelassen zu werden, müssen
                 folgende Kriterien erfüllt sein:
               </p>
               <ul className="space-y-3">
@@ -161,9 +161,12 @@ export default function ForSchoolsPage() {
                   <h3 className="font-semibold text-lg">Sprachausbildung</h3>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                  Ein zentraler Bestandteil der Partnerschaft ist die
-                  Sprachausbildung. Ihre Schule sollte ein B1-Curriculum nach
-                  dem Gemeinsamen Europäischen Referenzrahmen (GER) anbieten.
+                  Lotus&Eagle betreibt vier eigene Sprachschulen in Vietnam – dort
+                  läuft die zentrale Deutsch-Vorbereitung mit professionellem
+                  Screening. Als Partnerschule ergänzen Sie mit fachlicher
+                  Bildung; Ihr Angebot sollte Deutsch mindestens auf B1-Niveau
+                  nach dem Gemeinsamen Europäischen Referenzrahmen (GER)
+                  vermitteln.
                 </p>
                 <div className="flex items-center gap-3 mb-4 mt-6">
                   <Building2 className="h-8 w-8 text-accent" />
@@ -224,7 +227,7 @@ export default function ForSchoolsPage() {
         />
         <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
           <h2 id="cta-heading" className="font-[var(--font-display)] text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-            Werden Sie GeVin-Partnerschule
+            Werden Sie Lotus&Eagle-Partnerschule
           </h2>
           <p className="mt-3 text-base text-[oklch(0.88_0.01_260)]">
             Kontaktieren Sie uns noch heute und erfahren Sie, wie Ihre Schule von einer Partnerschaft profitieren kann.

@@ -1,4 +1,4 @@
--- GeVin Seed Data (for development/testing only)
+-- Lotus&Eagle Seed Data (for development/testing only)
 -- Run this after migrations are applied
 
 -- Note: In production, users are created via Supabase Auth.

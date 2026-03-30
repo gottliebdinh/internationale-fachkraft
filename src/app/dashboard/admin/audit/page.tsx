@@ -45,7 +45,7 @@ const placeholderAudit: AuditEntry[] = [
   {
     id: "a1",
     timestamp: "2026-03-09T14:23:00Z",
-    user_email: "admin@gevin.de",
+    user_email: "admin@lotus-eagle.de",
     user_role: "admin",
     action: "user.verified",
     entity_type: "school",
@@ -78,7 +78,7 @@ const placeholderAudit: AuditEntry[] = [
   {
     id: "a4",
     timestamp: "2026-03-08T16:30:00Z",
-    user_email: "admin@gevin.de",
+    user_email: "admin@lotus-eagle.de",
     user_role: "admin",
     action: "user.suspended",
     entity_type: "user",
@@ -111,7 +111,7 @@ const placeholderAudit: AuditEntry[] = [
   {
     id: "a7",
     timestamp: "2026-03-07T08:00:00Z",
-    user_email: "admin@gevin.de",
+    user_email: "admin@lotus-eagle.de",
     user_role: "admin",
     action: "data.exported",
     entity_type: "system",

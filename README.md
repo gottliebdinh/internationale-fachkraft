@@ -1,4 +1,4 @@
-# GeVin – Fachkräfte für Deutschland
+# Lotus&Eagle – Fachkräfte für Deutschland
 
 B2B recruiting platform connecting German employers (hospitality, hairdressing, nursing) with Vietnamese training schools. IHK-compliant, DSGVO-secure.
 

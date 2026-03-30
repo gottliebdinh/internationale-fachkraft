@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { BrandWordmarkLink } from "@/components/shared/brand-wordmark-link";
 import { useTranslations } from "next-intl";
 
 export function Footer() {
@@ -11,12 +12,11 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
-                G
-              </div>
-              <span className="text-lg font-bold">GeVin</span>
-            </div>
+            <BrandWordmarkLink
+              href="/"
+              size="md"
+              className="mb-4 inline-flex"
+            />
             <p className="text-sm text-muted-foreground max-w-xs">
               Die professionelle Brücke zwischen deutschen Unternehmen und
               vietnamesischen Fachkräften.

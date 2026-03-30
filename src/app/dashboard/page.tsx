@@ -10,7 +10,7 @@ export default async function DashboardPage() {
     // Supabase nicht konfiguriert oder Fehler → employer als Fallback
   }
   if (role === "admin") {
-    redirect("/admin");
+    redirect("/admin/leads");
   }
   redirect(`/dashboard/${role}`);
 }

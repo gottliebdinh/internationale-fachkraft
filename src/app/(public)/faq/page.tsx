@@ -21,17 +21,17 @@ const faqCategories: FaqCategory[] = [
     title: "Allgemein",
     items: [
       {
-        question: "Was ist GeVin?",
+        question: "Was ist Lotus&Eagle?",
         answer:
-          "GeVin ist eine professionelle Plattform für die Vermittlung vietnamesischer Fachkräfte und Auszubildender an deutsche Unternehmen. Wir decken den gesamten Prozess ab – von der Kandidatensuche über die IHK-konforme Dokumentenerstellung bis zur Visa-Beantragung und Ankunft in Deutschland.",
+          "Lotus&Eagle ist eine professionelle Plattform für die Vermittlung vietnamesischer Fachkräfte und Auszubildender an deutsche Unternehmen. Wir decken den gesamten Prozess ab – von der Kandidatensuche über die IHK-konforme Dokumentenerstellung bis zur Visa-Beantragung und Ankunft in Deutschland.",
       },
       {
         question: "Wer kann die Plattform nutzen?",
         answer:
-          "GeVin richtet sich an zwei Hauptgruppen: Deutsche Arbeitgeber, die qualifizierte Fachkräfte oder Auszubildende suchen, und vietnamesische Berufsschulen, die ihre Absolvent/innen mit deutschen Unternehmen verbinden möchten. Einzelbewerber können sich über ihre Partnerschule registrieren.",
+          "Lotus&Eagle richtet sich an zwei Hauptgruppen: Deutsche Arbeitgeber, die qualifizierte Fachkräfte oder Auszubildende suchen, und vietnamesische Berufsschulen, die ihre Absolvent/innen mit deutschen Unternehmen verbinden möchten. Einzelbewerber können sich über ihre Partnerschule registrieren.",
       },
       {
-        question: "In welchen Branchen vermittelt GeVin?",
+        question: "In welchen Branchen vermittelt Lotus&Eagle?",
         answer:
           "Aktuell konzentrieren wir uns auf drei Branchen mit besonders hohem Fachkräftebedarf: Hotellerie & Gastronomie, Friseurhandwerk und Pflege. Wir planen, das Angebot in Zukunft auf weitere Branchen auszuweiten.",
       },
@@ -63,7 +63,7 @@ const faqCategories: FaqCategory[] = [
       {
         question: "Welches Sprachniveau haben die Kandidaten?",
         answer:
-          "Alle Kandidaten auf der Plattform verfügen über mindestens ein B1-Sprachzertifikat in Deutsch. Viele bringen bereits B2-Kenntnisse mit. Die Sprachausbildung erfolgt an unseren zertifizierten Partnerschulen in Vietnam.",
+          "Alle Kandidaten auf der Plattform verfügen über mindestens ein B1-Sprachzertifikat in Deutsch. Viele bringen bereits B2-Kenntnisse mit. Die Sprachausbildung läuft in unseren vier eigenen Sprachschulen in Vietnam – abgestimmt auf unser professionelles Screening und die Anforderungen deutscher Arbeitgeber.",
       },
       {
         question: "Kann ich Video-Interviews mit Kandidaten führen?",
@@ -71,7 +71,7 @@ const faqCategories: FaqCategory[] = [
           "Ja, die Plattform unterstützt die Koordination von Video-Interviews. Sie können direkt über das Dashboard Interview-Termine mit Kandidaten vereinbaren.",
       },
       {
-        question: "Arbeitet GeVin mit Arbeitnehmerüberlassung?",
+        question: "Arbeitet Lotus&Eagle mit Arbeitnehmerüberlassung?",
         answer:
           "Nein. Wir arbeiten im Vermittlungsmodell ohne Arbeitnehmerüberlassung. Die Kandidaten werden direkt bei Ihrem Unternehmen angestellt – wir vermitteln und begleiten den Prozess, überlassen aber keine Arbeitnehmer.",
       },
@@ -81,7 +81,7 @@ const faqCategories: FaqCategory[] = [
     title: "Für Schulen",
     items: [
       {
-        question: "Wie wird man GeVin-Partnerschule?",
+        question: "Wie wird man Lotus&Eagle-Partnerschule?",
         answer:
           "Kontaktieren Sie uns über das Kontaktformular oder per E-Mail. Wir prüfen Ihre Einrichtung anhand unserer Qualitätskriterien und führen ein Onboarding durch. Voraussetzungen sind u. a. staatliche Anerkennung, ein B1-Sprachcurriculum und Erfahrung in relevanten Berufsfeldern.",
       },
@@ -101,14 +101,14 @@ const faqCategories: FaqCategory[] = [
     title: "Rechtliches",
     items: [
       {
-        question: "Ist GeVin DSGVO-konform?",
+        question: "Ist Lotus&Eagle DSGVO-konform?",
         answer:
-          "Ja, GeVin ist vollständig DSGVO-konform. Alle personenbezogenen Daten werden verschlüsselt gespeichert und verarbeitet. Wir führen regelmäßige Audits durch und stellen sicher, dass alle Datenschutzanforderungen eingehalten werden. Weitere Details finden Sie in unserer Datenschutzerklärung.",
+          "Ja, Lotus&Eagle ist vollständig DSGVO-konform. Alle personenbezogenen Daten werden verschlüsselt gespeichert und verarbeitet. Wir führen regelmäßige Audits durch und stellen sicher, dass alle Datenschutzanforderungen eingehalten werden. Weitere Details finden Sie in unserer Datenschutzerklärung.",
       },
       {
         question: "Welche Anforderungen stellt das Fachkräfteeinwanderungsgesetz (FEG)?",
         answer:
-          "Das FEG regelt die Einwanderung qualifizierter Fachkräfte nach Deutschland. GeVin unterstützt den gesamten FEG-konformen Prozess, einschließlich der Anerkennung von Berufsabschlüssen, der Sprachzertifizierung und der Erstellung aller erforderlichen Dokumente für die Visumsbeantragung.",
+          "Das FEG regelt die Einwanderung qualifizierter Fachkräfte nach Deutschland. Lotus&Eagle unterstützt den gesamten FEG-konformen Prozess, einschließlich der Anerkennung von Berufsabschlüssen, der Sprachzertifizierung und der Erstellung aller erforderlichen Dokumente für die Visumsbeantragung.",
       },
       {
         question: "Wie werden unsere Daten geschützt?",
@@ -171,7 +171,7 @@ export default function FaqPage() {
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Hier finden Sie Antworten auf die häufigsten Fragen rund um
-              GeVin, den Vermittlungsprozess und unsere Plattform.
+              Lotus&Eagle, den Vermittlungsprozess und unsere Plattform.
             </p>
           </div>
         </div>

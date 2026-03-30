@@ -39,7 +39,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     <div className="flex h-dvh max-h-dvh min-h-0 flex-col overflow-hidden bg-background">
       <header className="flex h-14 shrink-0 items-center gap-6 border-b bg-background px-4">
         <Link
-          href="/admin"
+          href="/admin/leads"
           className="font-[var(--font-display)] text-xl font-semibold tracking-tight text-foreground"
         >
           Ge<span className="text-[oklch(0.50_0.11_195)]">Vin</span>

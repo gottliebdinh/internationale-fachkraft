@@ -4,14 +4,12 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { cn } from "@/lib/utils";
-import { Users, Building2, LogOut } from "lucide-react";
+import { UserPlus, LogOut } from "lucide-react";
 import { signOutFromAdmin } from "@/lib/supabase/actions";
 import { Button } from "@/components/ui/button";
 
-const NAV_ITEMS = [
-  { href: "/admin", label: "Kandidaten", icon: Users, exact: true },
-  { href: "/admin/employers", label: "Unternehmen", icon: Building2 },
-];
+/** Kandidaten / Unternehmen vorübergehend ausgeblendet — nur Leads sichtbar. */
+const NAV_ITEMS = [{ href: "/admin/leads", label: "Leads", icon: UserPlus }];
 
 export function AdminNav() {
   const pathname = usePathname();
@@ -30,9 +28,7 @@ export function AdminNav() {
     <nav className="flex flex-1 items-center justify-between gap-4">
       <div className="flex items-center gap-1">
         {NAV_ITEMS.map((item) => {
-          const active = item.exact
-            ? pathname === item.href || pathname.startsWith("/admin/candidates")
-            : pathname.startsWith(item.href);
+          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           const Icon = item.icon;
 
           return (

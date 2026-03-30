@@ -28,6 +28,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BrandWordmarkLink } from "@/components/shared/brand-wordmark-link";
 
 interface DashboardSidebarProps {
   role: UserRole;
@@ -42,7 +43,7 @@ const navConfig: Record<
     {
       label: "Administration",
       items: [
-        { href: "/admin", labelKey: "adminConsole", icon: LayoutDashboard },
+        { href: "/admin/leads", labelKey: "adminConsole", icon: LayoutDashboard },
       ],
     },
   ],
@@ -80,11 +81,12 @@ export function DashboardSidebar({ role, onSignOut }: DashboardSidebarProps) {
   return (
     <Sidebar>
       <SidebarHeader className="p-4">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <span className="text-lg font-bold text-sidebar-foreground">
-            GeVin
-          </span>
-        </Link>
+        <BrandWordmarkLink
+          href="/dashboard"
+          tone="sidebar"
+          size="sm"
+          className="flex items-center max-w-[min(100%,11rem)] leading-snug"
+        />
       </SidebarHeader>
 
       <SidebarContent>

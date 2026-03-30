@@ -1,4 +1,4 @@
--- GeVin Platform Database Schema
+-- Lotus&Eagle Platform Database Schema
 -- Initial migration: all core tables
 
 -- Enums
