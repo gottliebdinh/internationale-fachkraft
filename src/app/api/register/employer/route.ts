@@ -1,6 +1,22 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendLeadConfirmationEmail } from "@/lib/email";
+import {
+  sendLeadConfirmationEmail,
+  sendNewLeadTeamEmail,
+} from "@/lib/email";
+
+const INDUSTRY_LABELS: Record<string, string> = {
+  hospitality: "Hotellerie / Gastronomie",
+  hairdressing: "Friseurhandwerk",
+  nursing: "Pflege",
+  other: "Sonstige",
+};
+
+const SEEKING_LABELS: Record<string, string> = {
+  fachkraft: "Fachkraft",
+  auszubildender: "Auszubildende/r",
+  other: "Andere",
+};
 
 function jsonError(message: string, status: number) {
   console.error("[register/employer]", status, message);
@@ -82,10 +98,48 @@ export async function POST(req: Request) {
       );
     }
 
+    const industryDisplay =
+      ind === "other"
+        ? String(industry_other ?? "").trim() || INDUSTRY_LABELS.other
+        : INDUSTRY_LABELS[ind] ?? ind;
+
+    const seekingDisplay =
+      seekType === "other"
+        ? String(seeking_other ?? "").trim() || SEEKING_LABELS.other
+        : SEEKING_LABELS[seekType] ?? seekType;
+
+    let startDateDisplay: string | null = null;
+    if (startDateStr) {
+      const d = new Date(`${startDateStr}T12:00:00`);
+      if (!Number.isNaN(d.getTime())) {
+        startDateDisplay = d.toLocaleDateString("de-DE", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        });
+      } else {
+        startDateDisplay = startDateStr;
+      }
+    }
+
     try {
       await sendLeadConfirmationEmail({ to: emailTrim, name: nameTrim });
     } catch (emailErr) {
       console.error("[register/employer] email send failed:", emailErr);
+    }
+
+    try {
+      await sendNewLeadTeamEmail({
+        name: nameTrim,
+        email: emailTrim,
+        phone: phoneTrim,
+        industryDisplay,
+        seekingDisplay,
+        startDateDisplay,
+        slots: slotsNum,
+      });
+    } catch (teamMailErr) {
+      console.error("[register/employer] team notify email failed:", teamMailErr);
     }
 
     return NextResponse.json({ ok: true, email: emailTrim });

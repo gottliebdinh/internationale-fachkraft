@@ -1,3 +1,11 @@
+import {
+  CONTACT_EMAIL,
+  CONTACT_PHONE_DISPLAY,
+  CONTACT_PHONE_TEL,
+  LEGAL_ADDRESS_LINES,
+  LEGAL_ENTITY_NAME,
+} from "@/lib/contact-info";
+
 export default function PrivacyPolicyPage() {
   return (
     <>
@@ -29,12 +37,28 @@ export default function PrivacyPolicyPage() {
                 sonstiger datenschutzrechtlicher Bestimmungen ist:
               </p>
               <div className="mt-4 rounded-xl bg-muted/30 p-4 text-sm text-muted-foreground ring-1 ring-foreground/10">
-                <p>Lotus&Eagle GmbH</p>
-                <p>Musterstraße 123</p>
-                <p>10115 Berlin</p>
-                <p>Deutschland</p>
-                <p className="mt-2">E-Mail: datenschutz@lotus-eagle.de</p>
-                <p>Telefon: +49 30 123 456 789</p>
+                <p>{LEGAL_ENTITY_NAME}</p>
+                {LEGAL_ADDRESS_LINES.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+                <p className="mt-2">
+                  E-Mail:{" "}
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}`}
+                    className="text-accent hover:underline"
+                  >
+                    {CONTACT_EMAIL}
+                  </a>
+                </p>
+                <p>
+                  Telefon:{" "}
+                  <a
+                    href={`tel:${CONTACT_PHONE_TEL}`}
+                    className="text-accent hover:underline"
+                  >
+                    {CONTACT_PHONE_DISPLAY}
+                  </a>
+                </p>
               </div>
             </div>
 
@@ -238,8 +262,13 @@ export default function PrivacyPolicyPage() {
                 </li>
               </ul>
               <p className="text-muted-foreground leading-relaxed mt-4">
-                Zur Ausübung Ihrer Rechte wenden Sie sich bitte an:
-                datenschutz@lotus-eagle.de
+                Zur Ausübung Ihrer Rechte wenden Sie sich bitte an:{" "}
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-accent hover:underline"
+                >
+                  {CONTACT_EMAIL}
+                </a>
               </p>
             </div>
 

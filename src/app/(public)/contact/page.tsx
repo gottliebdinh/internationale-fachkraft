@@ -8,42 +8,34 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
+import {
+  CONTACT_EMAIL,
+  CONTACT_PHONE_DISPLAY,
+  CONTACT_PHONE_TEL,
+  LEGAL_ADDRESS_LINES,
+  LEGAL_ENTITY_NAME,
+} from "@/lib/contact-info";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name muss mindestens 2 Zeichen lang sein"),
   email: z.email("Bitte geben Sie eine gültige E-Mail-Adresse ein"),
-  subject: z.string().min(1, "Bitte wählen Sie einen Betreff"),
+  subject: z
+    .string()
+    .min(2, "Bitte geben Sie einen Betreff ein (mindestens 2 Zeichen)"),
   message: z.string().min(10, "Nachricht muss mindestens 10 Zeichen lang sein"),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
-const subjects = [
-  { value: "employer", label: "Anfrage als Arbeitgeber" },
-  { value: "school", label: "Anfrage als Partnerschule" },
-  { value: "partnership", label: "Partnerschaftsanfrage" },
-  { value: "support", label: "Technischer Support" },
-  { value: "press", label: "Presse & Medien" },
-  { value: "other", label: "Sonstiges" },
-];
-
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState("");
 
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
@@ -56,10 +48,27 @@ export default function ContactPage() {
   });
 
   async function onSubmit(data: ContactFormData) {
-    // Placeholder: would send to API
-    console.log("Contact form submitted:", data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        toast.error(
+          typeof json.error === "string"
+            ? json.error
+            : "Versand fehlgeschlagen."
+        );
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      toast.error(
+        "Verbindungsfehler. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
+      );
+    }
   }
 
   return (
@@ -147,26 +156,12 @@ export default function ContactPage() {
 
                       <div className="space-y-2">
                         <Label htmlFor="subject">Betreff *</Label>
-                        <Select
-                          value={selectedSubject}
-                          onValueChange={(val) => {
-                            setSelectedSubject(val ?? "");
-                            setValue("subject", val ?? "", {
-                              shouldValidate: true,
-                            });
-                          }}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Betreff auswählen" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {subjects.map((s) => (
-                              <SelectItem key={s.value} value={s.value}>
-                                {s.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Input
+                          id="subject"
+                          placeholder="z. B. Frage zum Vermittlungsprozess"
+                          aria-invalid={!!errors.subject}
+                          {...register("subject")}
+                        />
                         {errors.subject && (
                           <p className="text-xs text-destructive">
                             {errors.subject.message}
@@ -223,13 +218,14 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold mb-1">Adresse</h3>
                         <p className="text-sm text-muted-foreground">
-                          Lotus&Eagle GmbH
+                          {LEGAL_ENTITY_NAME}
                           <br />
-                          Musterstraße 123
-                          <br />
-                          10115 Berlin
-                          <br />
-                          Deutschland
+                          {LEGAL_ADDRESS_LINES.map((line) => (
+                            <span key={line}>
+                              {line}
+                              <br />
+                            </span>
+                          ))}
                         </p>
                       </div>
                     </div>
@@ -240,10 +236,10 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold mb-1">E-Mail</h3>
                         <a
-                          href="mailto:info@lotus-eagle.de"
+                          href={`mailto:${CONTACT_EMAIL}`}
                           className="text-sm text-accent hover:underline"
                         >
-                          info@lotus-eagle.de
+                          {CONTACT_EMAIL}
                         </a>
                       </div>
                     </div>
@@ -254,10 +250,10 @@ export default function ContactPage() {
                       <div>
                         <h3 className="font-semibold mb-1">Telefon</h3>
                         <a
-                          href="tel:+4930123456789"
+                          href={`tel:${CONTACT_PHONE_TEL}`}
                           className="text-sm text-accent hover:underline"
                         >
-                          +49 30 123 456 789
+                          {CONTACT_PHONE_DISPLAY}
                         </a>
                       </div>
                     </div>

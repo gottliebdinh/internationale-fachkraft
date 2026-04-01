@@ -1,3 +1,13 @@
+import {
+  CONTACT_EMAIL,
+  CONTACT_PHONE_DISPLAY,
+  CONTACT_PHONE_TEL,
+  LEGAL_ADDRESS_LINES,
+  LEGAL_ENTITY_NAME,
+  LEGAL_STREET_LINE,
+  LEGAL_CITY_LINE,
+} from "@/lib/contact-info";
+
 export default function ImprintPage() {
   return (
     <>
@@ -21,10 +31,12 @@ export default function ImprintPage() {
                 Angaben gemäß § 5 TMG
               </h2>
               <div className="rounded-xl bg-muted/30 p-6 text-sm ring-1 ring-foreground/10">
-                <p className="font-semibold text-base mb-2">Lotus&Eagle GmbH</p>
-                <p className="text-muted-foreground">Musterstraße 123</p>
-                <p className="text-muted-foreground">10115 Berlin</p>
-                <p className="text-muted-foreground">Deutschland</p>
+                <p className="font-semibold text-base mb-2">{LEGAL_ENTITY_NAME}</p>
+                {LEGAL_ADDRESS_LINES.map((line) => (
+                  <p key={line} className="text-muted-foreground">
+                    {line}
+                  </p>
+                ))}
               </div>
             </div>
 
@@ -38,15 +50,22 @@ export default function ImprintPage() {
             <div>
               <h2 className="text-xl font-bold mb-3">Kontakt</h2>
               <div className="space-y-1 text-sm text-muted-foreground">
-                <p>Telefon: +49 30 123 456 789</p>
-                <p>Telefax: +49 30 123 456 790</p>
+                <p>
+                  Telefon:{" "}
+                  <a
+                    href={`tel:${CONTACT_PHONE_TEL}`}
+                    className="text-accent hover:underline"
+                  >
+                    {CONTACT_PHONE_DISPLAY}
+                  </a>
+                </p>
                 <p>
                   E-Mail:{" "}
                   <a
-                    href="mailto:info@lotus-eagle.de"
+                    href={`mailto:${CONTACT_EMAIL}`}
                     className="text-accent hover:underline"
                   >
-                    info@lotus-eagle.de
+                    {CONTACT_EMAIL}
                   </a>
                 </p>
               </div>
@@ -75,8 +94,8 @@ export default function ImprintPage() {
               </h2>
               <div className="space-y-1 text-sm text-muted-foreground">
                 <p>Max Mustermann</p>
-                <p>Musterstraße 123</p>
-                <p>10115 Berlin</p>
+                <p>{LEGAL_STREET_LINE}</p>
+                <p>{LEGAL_CITY_LINE}</p>
               </div>
             </div>
 

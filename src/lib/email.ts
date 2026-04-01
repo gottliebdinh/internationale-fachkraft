@@ -2,6 +2,15 @@
 
 import { Resend } from "resend";
 import { getPublicSiteUrl } from "@/lib/site-url";
+import { CONTACT_EMAIL, getLeadsNotifyEmail } from "@/lib/contact-info";
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -191,6 +200,105 @@ export async function sendLeadConfirmationEmail({
     from: FROM,
     to,
     subject: "Lotus&Eagle — Ihre Anfrage ist eingegangen",
+    html,
+  });
+}
+
+export interface NewLeadTeamEmailParams {
+  name: string;
+  email: string;
+  phone: string;
+  industryDisplay: string;
+  seekingDisplay: string;
+  startDateDisplay: string | null;
+  slots: number;
+}
+
+/** Benachrichtigung ans Team bei neuem Website-Lead (formatiert wie übrige Mails). */
+export async function sendNewLeadTeamEmail(params: NewLeadTeamEmailParams) {
+  const to = getLeadsNotifyEmail();
+  const site = getPublicSiteUrl();
+  const adminLeadsUrl = `${site}/admin/leads`;
+  const slotsLabel =
+    params.slots === 1 ? "1 Stelle / Platz" : `${params.slots} Stellen / Plätze`;
+
+  const row = (label: string, value: string) => `
+    <tr>
+      <td style="padding:10px 14px;font-size:13px;color:#666;vertical-align:top;width:38%;border-bottom:1px solid #eee">${escapeHtml(label)}</td>
+      <td style="padding:10px 14px;font-size:14px;color:#1a1a2e;font-weight:500;vertical-align:top;border-bottom:1px solid #eee">${value}</td>
+    </tr>`;
+
+  const html = baseLayout(`
+    <p style="margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#64748b">Neue Lead-Anfrage</p>
+    <h2 style="margin:0 0 20px;font-size:20px;color:#1a1a2e;line-height:1.3">Interessent über die Website</h2>
+    <p style="margin:0 0 20px;font-size:14px;color:#333;line-height:1.6">
+      Es ist soeben eine neue Anfrage eingegangen. Details:
+    </p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;margin:0 0 24px">
+      ${row("Name", escapeHtml(params.name))}
+      ${row("E-Mail", `<a href="mailto:${escapeHtml(params.email)}" style="color:#1a1a2e">${escapeHtml(params.email)}</a>`)}
+      ${row("Telefon", `<a href="tel:${escapeHtml(params.phone.replace(/\s/g, ""))}" style="color:#1a1a2e">${escapeHtml(params.phone)}</a>`)}
+      ${row("Branche", escapeHtml(params.industryDisplay))}
+      ${row("Suche", escapeHtml(params.seekingDisplay))}
+      ${row("Ab / Start", escapeHtml(params.startDateDisplay ?? "— (nicht angegeben)"))}
+      ${row("Anzahl", escapeHtml(slotsLabel))}
+    </table>
+    <a href="${adminLeadsUrl}" style="display:inline-block;padding:12px 24px;background:#1a1a2e;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">Leads im Admin öffnen</a>
+    <p style="margin:24px 0 0;font-size:12px;color:#888;line-height:1.5">
+      Diese Nachricht wurde automatisch versendet. Antworten an den Interessenten am besten direkt an
+      <a href="mailto:${escapeHtml(params.email)}" style="color:#1a1a2e">${escapeHtml(params.email)}</a>.
+    </p>
+  `);
+
+  return resend.emails.send({
+    from: FROM,
+    to,
+    replyTo: params.email,
+    subject: `Neuer Lead: ${params.name}`,
+    html,
+  });
+}
+
+export interface ContactFormEmailParams {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+/** Eingehende Nachricht vom Kontaktformular an die zentrale Kontaktadresse. */
+export async function sendContactFormEmail(params: ContactFormEmailParams) {
+  const row = (label: string, value: string) => `
+    <tr>
+      <td style="padding:10px 14px;font-size:13px;color:#666;vertical-align:top;width:32%;border-bottom:1px solid #eee">${escapeHtml(label)}</td>
+      <td style="padding:10px 14px;font-size:14px;color:#1a1a2e;font-weight:500;vertical-align:top;border-bottom:1px solid #eee">${value}</td>
+    </tr>`;
+
+  const html = baseLayout(`
+    <p style="margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#64748b">Kontaktformular</p>
+    <h2 style="margin:0 0 20px;font-size:20px;color:#1a1a2e;line-height:1.3">Neue Nachricht von der Website</h2>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;margin:0 0 20px">
+      ${row("Name", escapeHtml(params.name))}
+      ${row("E-Mail", `<a href="mailto:${escapeHtml(params.email)}" style="color:#1a1a2e">${escapeHtml(params.email)}</a>`)}
+      ${row("Betreff", escapeHtml(params.subject))}
+    </table>
+    <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#64748b">Nachricht</p>
+    <div style="padding:16px 18px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;color:#1a1a2e;line-height:1.65;white-space:pre-wrap">${escapeHtml(params.message)}</div>
+    <p style="margin:20px 0 0;font-size:12px;color:#888;line-height:1.5">
+      Zum Antworten in Ihrem Mailprogramm auf diese E-Mail antworten &mdash; <strong>Reply-To</strong> ist die Absenderadresse des Kontaktformulars.
+    </p>
+  `);
+
+  const subjectSafe =
+    params.subject.length > 120
+      ? `${params.subject.slice(0, 117)}…`
+      : params.subject;
+
+  return resend.emails.send({
+    from: FROM,
+    to: CONTACT_EMAIL,
+    replyTo: params.email,
+    subject: `Kontakt: ${subjectSafe}`,
     html,
   });
 }

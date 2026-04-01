@@ -86,7 +86,9 @@ export async function updateSession(request: NextRequest) {
   );
 
   const isDashboard = pathname.startsWith("/dashboard");
-  const isPublicApi = pathname.startsWith("/api/register/");
+  const isPublicApi =
+    pathname.startsWith("/api/register/") ||
+    pathname.startsWith("/api/contact");
 
   if (
     !user &&

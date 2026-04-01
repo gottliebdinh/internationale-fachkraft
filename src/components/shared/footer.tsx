@@ -9,7 +9,7 @@ export function Footer() {
 
   return (
     <footer className="border-t bg-muted/30">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-[min(100%,1340px)] px-4 py-12 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div>
             <BrandWordmarkLink

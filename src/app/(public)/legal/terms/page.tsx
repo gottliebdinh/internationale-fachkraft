@@ -1,3 +1,5 @@
+import { LEGAL_ADDRESS_INLINE } from "@/lib/contact-info";
+
 export default function TermsPage() {
   return (
     <>
@@ -24,8 +26,8 @@ export default function TermsPage() {
               <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
                 <p>
                   (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend
-                  „AGB") gelten für alle Verträge zwischen der Lotus&Eagle GmbH,
-                  Musterstraße 123, 10115 Berlin (nachfolgend „Lotus&Eagle" oder
+                  „AGB") gelten für alle Verträge zwischen der{" "}
+                  {LEGAL_ADDRESS_INLINE} (nachfolgend „Lotus&Eagle" oder
                   „Anbieter") und den Nutzern der Plattform (nachfolgend
                   „Nutzer").
                 </p>
@@ -291,7 +293,7 @@ export default function TermsPage() {
                 </p>
                 <p>
                   (2) Gerichtsstand für alle Streitigkeiten aus oder im
-                  Zusammenhang mit diesem Vertrag ist Berlin, sofern der
+                  Zusammenhang mit diesem Vertrag ist Nürnberg, sofern der
                   Nutzer Kaufmann, juristische Person des öffentlichen Rechts
                   oder öffentlich-rechtliches Sondervermögen ist.
                 </p>

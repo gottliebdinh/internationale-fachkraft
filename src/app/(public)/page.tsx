@@ -75,8 +75,8 @@ export default function HomePage() {
         className="relative overflow-hidden bg-[oklch(0.98_0.008_260)] lg:min-h-screen"
         aria-labelledby="hero-heading"
       >
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-6xl">
+        <div className="mx-auto w-full max-w-[min(100%,1340px)] px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="w-full">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] lg:min-h-[calc(100vh-18rem)]">
             {/* Linke Spalte: nur Internationale Fachkräfte für Deutschland */}
             <div className="flex min-h-0 flex-col justify-center rounded-r-lg bg-[oklch(0.98_0.008_260)] py-10 sm:py-12 lg:py-14">
@@ -117,7 +117,7 @@ export default function HomePage() {
                 fill
                 className="object-cover object-center"
                 priority
-                sizes="50vw"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
               <div className="pointer-events-none absolute inset-0">
                 <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[oklch(0.98_0.008_260)] to-transparent" />
@@ -128,47 +128,49 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* IHK + Zusammenarbeit mit – unter Bild und Hero-Text */}
+        {/* IHK + Zusammenarbeit mit – gleiche Außenlinie wie Hero / folgende Sektionen */}
         <div
           id="trust-heading"
-          className="home-reveal home-reveal-delay-4 border-t border-border bg-[oklch(0.98_0.008_260)] px-4 py-6 pb-8 sm:px-6 sm:py-8 sm:pb-10 lg:px-8"
+          className="home-reveal home-reveal-delay-4 border-t border-border bg-[oklch(0.98_0.008_260)] py-6 pb-8 sm:py-8 sm:pb-10"
         >
-          <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-3xl">
-              <p className="font-[var(--font-display)] text-lg font-semibold text-foreground sm:text-xl">
-                IHK-konforme Prozesse &{" "}
-                <span className="text-[oklch(0.50_0.11_195)]">DSGVO-sichere Plattform</span>
-              </p>
-              <p className="mt-1 max-w-lg text-sm text-muted-foreground">
-                Rechtssicher von der Anerkennung bis zur Platzierung. Über uns: völlige Transparenz, Schnelligkeit und Sicherheit.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2 text-right sm:shrink-0 sm:items-end">
-              <span className="text-[0.7rem] font-medium uppercase tracking-tight text-muted-foreground">
-                In Zusammenarbeit mit
-              </span>
-              <div className="flex items-center justify-end gap-5">
-                <Image
-                  src="/Bundesagentur_für_Arbeit/Bundesagentur_für_Arbeit_idefzv9ho6_2.svg"
-                  alt="Bundesagentur für Arbeit"
-                  width={120}
-                  height={32}
-                  className="h-7 w-auto opacity-90"
-                />
-                <Image
-                  src="/hwk/id7oEa_zCN_logos.png"
-                  alt="HWK"
-                  width={120}
-                  height={32}
-                  className="h-7 w-auto opacity-90"
-                />
-                <Image
-                  src="/ihk/ihk.jpeg"
-                  alt="IHK"
-                  width={140}
-                  height={32}
-                  className="h-7 w-auto opacity-90"
-                />
+          <div className="mx-auto w-full max-w-[min(100%,1340px)] px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-8 lg:gap-10">
+              <div className="min-w-0 max-w-2xl lg:max-w-3xl">
+                <p className="font-[var(--font-display)] text-lg font-semibold leading-snug text-foreground sm:text-xl">
+                  IHK-konforme Prozesse &{" "}
+                  <span className="text-[oklch(0.50_0.11_195)]">DSGVO-sichere Plattform</span>
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:mt-1.5">
+                  Rechtssicher von der Anerkennung bis zur Platzierung. Über uns: völlige Transparenz, Schnelligkeit und Sicherheit.
+                </p>
+              </div>
+              <div className="flex shrink-0 flex-col gap-3 sm:items-end sm:text-right">
+                <span className="text-[0.7rem] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+                  In Zusammenarbeit mit
+                </span>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-4 sm:justify-end">
+                  <Image
+                    src="/Bundesagentur_für_Arbeit/Bundesagentur_für_Arbeit_idefzv9ho6_2.svg"
+                    alt="Bundesagentur für Arbeit"
+                    width={140}
+                    height={36}
+                    className="h-8 w-auto opacity-90"
+                  />
+                  <Image
+                    src="/hwk/id7oEa_zCN_logos.png"
+                    alt="HWK"
+                    width={140}
+                    height={36}
+                    className="h-8 w-auto opacity-90"
+                  />
+                  <Image
+                    src="/ihk/ihk.jpeg"
+                    alt="IHK"
+                    width={160}
+                    height={36}
+                    className="h-8 w-auto opacity-90"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -177,7 +179,7 @@ export default function HomePage() {
 
       {/* Risikominimierung – Stabilität und Planungssicherheit */}
       <section className="border-t border-border bg-[oklch(0.97_0.008_260)] py-16 sm:py-20" aria-labelledby="risk-heading">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-[min(100%,1340px)] px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-[oklch(0.50_0.11_195)]">
             Ihr Vorteil
           </p>
@@ -220,7 +222,7 @@ export default function HomePage() {
         <h2 id="stats-heading" className="sr-only">
           Lotus&Eagle in Zahlen
         </h2>
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
+        <div className="mx-auto w-full max-w-[min(100%,1340px)] px-4 py-12 sm:px-6 sm:py-14 lg:px-8 xl:px-12 2xl:px-16">
           <p className="mb-8 text-center text-sm font-medium text-muted-foreground">
             Über 85 deutsche Unternehmen vertrauen auf Lotus&Eagle – Kandidaten werden in vier eigenen Sprachschulen in Vietnam vorbereitet und professionell begleitet.
           </p>
@@ -249,7 +251,7 @@ export default function HomePage() {
         className="bg-[oklch(0.98_0.008_260)] py-20 sm:py-24"
         aria-labelledby="how-heading"
       >
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-[min(100%,1340px)] px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-[oklch(0.50_0.11_195)]">
             Ablauf
           </p>
@@ -289,7 +291,7 @@ export default function HomePage() {
 
       {/* Industries: gleiche Section-Hierarchie wie „Ablauf“ */}
       <section className="border-t border-border bg-[oklch(0.97_0.008_260)] py-20 sm:py-24" aria-labelledby="industries-heading">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-[min(100%,1340px)] px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-[oklch(0.50_0.11_195)]">
             Branchen
           </p>
@@ -329,7 +331,7 @@ export default function HomePage() {
                       alt={industry.title}
                       fill
                       className="object-cover object-center"
-                      sizes="400px"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-card to-transparent" />
                   </div>
@@ -370,27 +372,29 @@ export default function HomePage() {
             background: "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.55 0.12 195 / 0.4), transparent 70%)",
           }}
         />
-        <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 id="cta-heading" className="font-[var(--font-display)] text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-            Verpassen Sie keine passenden Kandidaten
-          </h2>
-          <p className="mt-3 text-base text-[oklch(0.88_0.01_260)]">
-            Kostenlos registrieren – in wenigen Minuten sehen Sie erste passende Profile. Unverbindlich.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-            <Button
-              size="lg"
-              asChild
-              className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)]"
-            >
-              <Link href="/auth/register/employer">Jetzt kostenlos starten</Link>
-            </Button>
-            <Link
-              href="/contact"
-              className="text-sm font-medium text-[oklch(0.85_0.02_260)] hover:text-white underline underline-offset-2"
-            >
-              Kontakt aufnehmen
-            </Link>
+        <div className="relative mx-auto w-full max-w-[min(100%,1340px)] px-4 text-center sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+          <div className="mx-auto max-w-2xl">
+            <h2 id="cta-heading" className="font-[var(--font-display)] text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+              Verpassen Sie keine passenden Kandidaten
+            </h2>
+            <p className="mt-3 text-base text-[oklch(0.88_0.01_260)]">
+              Kostenlos registrieren – in wenigen Minuten sehen Sie erste passende Profile. Unverbindlich.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+              <Button
+                size="lg"
+                asChild
+                className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)]"
+              >
+                <Link href="/auth/register/employer">Jetzt kostenlos starten</Link>
+              </Button>
+              <Link
+                href="/contact"
+                className="text-sm font-medium text-[oklch(0.85_0.02_260)] hover:text-white underline underline-offset-2"
+              >
+                Kontakt aufnehmen
+              </Link>
+            </div>
           </div>
         </div>
       </section>
