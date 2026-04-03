@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Lotus&Eagle",
+    "appName": "LOTUS & EAGLE",
     "tagline": "Strategic Partner for Skilled Workers from Vietnam",
     "login": "Log in",
     "register": "Find candidates",
@@ -37,7 +37,7 @@
     "forApplicants": "For Applicants",
     "contact": "Contact",
     "dashboard": "Dashboard",
-    "adminConsole": "Lotus&Eagle Admin",
+    "adminConsole": "LOTUS & EAGLE Admin",
     "candidates": "Candidates",
     "positions": "Job Positions",
     "matches": "Matches",
@@ -82,6 +82,6 @@
     "imprint": "Imprint",
     "terms": "Terms of Service",
     "contact": "Contact",
-    "copyright": "© {year} Lotus&Eagle. All rights reserved."
+    "copyright": "© {year} LOTUS & EAGLE. All rights reserved."
   }
 }

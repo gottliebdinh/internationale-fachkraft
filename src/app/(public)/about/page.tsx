@@ -137,7 +137,7 @@ export default function AboutPage() {
       <section className="py-20 bg-muted/20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-2">
-            Warum Lotus&Eagle?
+            Warum LOTUS & EAGLE?
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
             Was uns von klassischen Vermittlungsagenturen unterscheidet.

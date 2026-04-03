@@ -332,7 +332,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ───── HERAUSFORDERUNG ↔ ANTWORT (wie Warum Lotus&Eagle: einheitlich dunkelblau) ───── */}
+        {/* ───── HERAUSFORDERUNG ↔ ANTWORT (wie Warum LOTUS & EAGLE: einheitlich dunkelblau) ───── */}
         <section
           className={`border-t border-white/10 bg-[oklch(0.22_0.06_255)] ${homeSectionY}`}
           aria-labelledby="problem-heading solution-heading"
@@ -477,7 +477,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ───── PARTNER: Warum Lotus&Eagle (Gold / warmes Bernstein) ───── */}
+        {/* ───── PARTNER: Warum LOTUS & EAGLE (Gold / warmes Bernstein) ───── */}
         <section
           className={`border-t border-[oklch(0.42_0.06_78)]/35 bg-[oklch(0.30_0.065_78)] ${homeSectionY}`}
           aria-labelledby="usp-heading"
@@ -495,7 +495,7 @@ export default function HomePage() {
                 id="usp-heading"
                 className="mt-4 font-[var(--font-display)] text-2xl font-semibold tracking-tight text-[oklch(0.98_0.015_95)] sm:text-3xl"
               >
-                Warum Lotus&Eagle?
+                Warum LOTUS & EAGLE?
               </h2>
             </header>
 

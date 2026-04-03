@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Lotus&Eagle",
+    "appName": "LOTUS & EAGLE",
     "tagline": "Đối tác chiến lược cho nhân lực chuyên môn từ Việt Nam",
     "login": "Đăng nhập",
     "register": "Tìm ứng viên",
@@ -37,7 +37,7 @@
     "forApplicants": "Cho ứng viên",
     "contact": "Liên hệ",
     "dashboard": "Bảng điều khiển",
-    "adminConsole": "Lotus&Eagle Admin",
+    "adminConsole": "LOTUS & EAGLE Admin",
     "candidates": "Ứng viên",
     "positions": "Vị trí tuyển dụng",
     "matches": "Ghép nối",
@@ -82,6 +82,6 @@
     "imprint": "Thông tin pháp lý",
     "terms": "Điều khoản",
     "contact": "Liên hệ",
-    "copyright": "© {year} Lotus&Eagle. Mọi quyền được bảo lưu."
+    "copyright": "© {year} LOTUS & EAGLE. Mọi quyền được bảo lưu."
   }
 }

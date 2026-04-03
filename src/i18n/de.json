@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Lotus&Eagle",
+    "appName": "LOTUS & EAGLE",
     "tagline": "Strategischer Partner für Fachkräfte aus Vietnam",
     "login": "Anmelden",
     "register": "Fachkräfte anfragen",
@@ -37,7 +37,7 @@
     "forApplicants": "Für Bewerber",
     "contact": "Kontakt",
     "dashboard": "Dashboard",
-    "adminConsole": "Lotus&Eagle Admin",
+    "adminConsole": "LOTUS & EAGLE Admin",
     "candidates": "Kandidaten",
     "positions": "Stellenangebote",
     "matches": "Matches",
@@ -190,6 +190,6 @@
     "imprint": "Impressum",
     "terms": "AGB",
     "contact": "Kontakt",
-    "copyright": "© {year} Lotus&Eagle. Alle Rechte vorbehalten."
+    "copyright": "© {year} LOTUS & EAGLE. Alle Rechte vorbehalten."
   }
 }

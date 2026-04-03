@@ -42,7 +42,7 @@ export function PublicNavbar() {
           />
           <span className="flex min-w-0 flex-col gap-0 leading-none">
             <span className="font-[var(--font-display)] text-lg font-semibold uppercase leading-tight tracking-tight sm:text-xl md:text-2xl">
-              Lotus & Eagle
+              LOTUS & EAGLE
             </span>
             <span className="mt-px flex items-center gap-2 font-[var(--font-body)] text-[0.72rem] font-semibold uppercase leading-none tracking-[0.2em] text-[#0A2240] dark:text-foreground sm:text-[0.8rem]">
               <span
