@@ -240,7 +240,7 @@ export async function sendNewLeadTeamEmail(params: NewLeadTeamEmailParams) {
       ${row("Telefon", `<a href="tel:${escapeHtml(params.phone.replace(/\s/g, ""))}" style="color:#1a1a2e">${escapeHtml(params.phone)}</a>`)}
       ${row("Branche", escapeHtml(params.industryDisplay))}
       ${row("Suche", escapeHtml(params.seekingDisplay))}
-      ${row("Ab / Start", escapeHtml(params.startDateDisplay ?? "— (nicht angegeben)"))}
+      ${row("Ab / Start", escapeHtml(params.startDateDisplay?.trim() || "Ab sofort"))}
       ${row("Anzahl", escapeHtml(slotsLabel))}
     </table>
     <a href="${adminLeadsUrl}" style="display:inline-block;padding:12px 24px;background:#1a1a2e;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">Leads im Admin öffnen</a>

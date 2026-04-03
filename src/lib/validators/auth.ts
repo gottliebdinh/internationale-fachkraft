@@ -13,7 +13,13 @@ export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
 export const leadSchema = z
   .object({
-    industry: z.enum(["hospitality", "hairdressing", "nursing", "other"]),
+    industry: z.enum([
+      "hospitality",
+      "healthcare",
+      "trade",
+      "retail",
+      "other",
+    ]),
     industryOther: z.string().optional(),
     seekingType: z.enum(["fachkraft", "auszubildender", "other"]),
     seekingOther: z.string().optional(),
@@ -25,19 +31,7 @@ export const leadSchema = z
       .string()
       .min(6, "Bitte geben Sie eine gültige Telefonnummer ein.")
       .max(40),
-  })
-  .refine(
-    (data) =>
-      data.industry !== "other" ||
-      (typeof data.industryOther === "string" && data.industryOther.trim().length > 0),
-    { message: "Bitte geben Sie Ihre Branche ein.", path: ["industryOther"] }
-  )
-  .refine(
-    (data) =>
-      data.seekingType !== "other" ||
-      (typeof data.seekingOther === "string" && data.seekingOther.trim().length > 0),
-    { message: "Bitte beschreiben Sie, wonach Sie suchen.", path: ["seekingOther"] }
-  );
+  });
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type LeadFormData = z.infer<typeof leadSchema>;

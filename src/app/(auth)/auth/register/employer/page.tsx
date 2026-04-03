@@ -35,8 +35,8 @@ const STEPS = [
 ] as const;
 
 const STEP_FIELDS: Record<string, (keyof LeadFormData)[]> = {
-  industry: ["industry", "industryOther"],
-  seeking: ["seekingType", "seekingOther"],
+  industry: ["industry"],
+  seeking: ["seekingType"],
   timing: [],
   name: ["name"],
   email: ["email"],
@@ -45,8 +45,10 @@ const STEP_FIELDS: Record<string, (keyof LeadFormData)[]> = {
 
 const INDUSTRY_OPTIONS = [
   { value: "hospitality" as const, labelKey: "hospitality" },
-  { value: "hairdressing" as const, labelKey: "hairdressing" },
-  { value: "nursing" as const, labelKey: "nursing" },
+  { value: "healthcare" as const, labelKey: "healthcare" },
+  { value: "trade" as const, labelKey: "trade" },
+  { value: "retail" as const, labelKey: "retail" },
+  { value: "other" as const, labelKey: "other" },
 ];
 
 const SEEKING_OPTIONS = [
@@ -99,7 +101,7 @@ export default function RegisterEmployerPage() {
 
   // Auto-advance after industry selection (non-other)
   useEffect(() => {
-    if (step !== 0 || !selectedIndustry || selectedIndustry === "other") {
+    if (step !== 0 || !selectedIndustry) {
       setPendingAdvance(false);
       previousIndustryRef.current = selectedIndustry;
       return;
@@ -127,9 +129,9 @@ export default function RegisterEmployerPage() {
     };
   }, [selectedIndustry, step, trigger]);
 
-  // Auto-advance after seeking selection (non-other)
+  // Auto-advance after seeking selection
   useEffect(() => {
-    if (step !== 1 || !selectedSeeking || selectedSeeking === "other") {
+    if (step !== 1 || !selectedSeeking) {
       previousSeekingRef.current = selectedSeeking;
       return;
     }
@@ -192,7 +194,6 @@ export default function RegisterEmployerPage() {
           industry: data.industry,
           industry_other: data.industryOther,
           seeking_type: data.seekingType,
-          seeking_other: data.seekingOther,
           start_date: startDateValue.trim() || undefined,
           slots: Math.max(1, parseInt(slotsValue, 10) || 1),
           name: data.name,
@@ -328,30 +329,6 @@ export default function RegisterEmployerPage() {
                             </button>
                           );
                         })}
-                        <button
-                          type="button"
-                          onClick={() => field.onChange("other")}
-                          className={cn(
-                            "mt-3 flex w-full items-center gap-4 rounded-lg border px-5 py-2.5 text-left text-foreground transition-colors",
-                            field.value === "other"
-                              ? "border-2 border-[oklch(0.38_0.12_255)] bg-white"
-                              : "border-border bg-muted/40 hover:border-muted-foreground/40"
-                          )}
-                        >
-                          <span
-                            className={cn(
-                              "flex h-8 w-8 shrink-0 items-center justify-center rounded border text-sm font-semibold",
-                              field.value === "other"
-                                ? "border-[oklch(0.38_0.12_255)] bg-[oklch(0.42_0.11_255)] text-white"
-                                : "border-muted-foreground/30 bg-muted/10 text-foreground"
-                            )}
-                          >
-                            D
-                          </span>
-                          <span className="text-base font-medium">
-                            {tIndustry("other")}
-                          </span>
-                        </button>
                       </div>
                     )}
                   />
@@ -362,28 +339,6 @@ export default function RegisterEmployerPage() {
                   )}
                 </div>
 
-                {selectedIndustry === "other" && (
-                  <div className="mt-2 rounded-lg border border-border bg-muted/30 px-4 py-4">
-                    <Label
-                      htmlFor="industryOther"
-                      className="text-sm font-medium text-foreground"
-                    >
-                      Geben Sie Ihre Branche ein
-                    </Label>
-                    <Input
-                      id="industryOther"
-                      className="mt-2 h-12 text-base"
-                      placeholder="z.B. Bäckerei, Elektrotechnik, Logistik …"
-                      {...register("industryOther")}
-                      aria-invalid={!!errors.industryOther}
-                    />
-                    {errors.industryOther && (
-                      <p className="mt-2 text-xs text-destructive">
-                        {errors.industryOther.message}
-                      </p>
-                    )}
-                  </div>
-                )}
               </div>
             </div>
 
@@ -453,29 +408,6 @@ export default function RegisterEmployerPage() {
                     </p>
                   )}
                 </div>
-
-                {selectedSeeking === "other" && (
-                  <div className="mt-2 rounded-lg border border-border bg-muted/30 px-4 py-4">
-                    <Label
-                      htmlFor="seekingOther"
-                      className="text-sm font-medium text-foreground"
-                    >
-                      Beschreiben Sie, wonach Sie suchen
-                    </Label>
-                    <Input
-                      id="seekingOther"
-                      className="mt-2 h-12 text-base"
-                      placeholder="z.B. Praktikant, Teilzeitkraft …"
-                      {...register("seekingOther")}
-                      aria-invalid={!!errors.seekingOther}
-                    />
-                    {errors.seekingOther && (
-                      <p className="mt-2 text-xs text-destructive">
-                        {errors.seekingOther.message}
-                      </p>
-                    )}
-                  </div>
-                )}
               </div>
             </div>
 

@@ -1,9 +1,9 @@
 {
   "common": {
     "appName": "Lotus&Eagle",
-    "tagline": "Fachkräfte für Deutschland – vier eigene Sprachschulen in Vietnam",
+    "tagline": "Strategischer Partner für Fachkräfte aus Vietnam",
     "login": "Anmelden",
-    "register": "Kandidaten finden",
+    "register": "Fachkräfte anfragen",
     "logout": "Abmelden",
     "save": "Speichern",
     "cancel": "Abbrechen",
@@ -33,10 +33,8 @@
   "nav": {
     "home": "Startseite",
     "about": "Über uns",
-    "howItWorks": "So funktioniert's",
     "forEmployers": "Für Arbeitgeber",
-    "forSchools": "Für Schulen",
-    "faq": "FAQ",
+    "forApplicants": "Für Bewerber",
     "contact": "Kontakt",
     "dashboard": "Dashboard",
     "adminConsole": "Lotus&Eagle Admin",
@@ -151,9 +149,10 @@
     "documentsRequired": "Benötigte Dokumente"
   },
   "industry": {
-    "hospitality": "Hotellerie & Gastronomie",
-    "hairdressing": "Friseurhandwerk",
-    "nursing": "Pflege",
+    "hospitality": "Hotellerie / Gastronomie",
+    "healthcare": "Gesundheitsbranche",
+    "trade": "Handwerk",
+    "retail": "Einzelhandel",
     "other": "Andere"
   },
   "urgency": {
@@ -163,27 +162,27 @@
     "flexible": "Flexibel"
   },
   "landing": {
-    "heroTitle": "Internationale Fachkräfte für Deutschland",
-    "heroSubtitle": "Systemanbieter mit vier eigenen Sprachschulen in Vietnam, professionellem Screening und klarer Verantwortung in Deutschland – IHK-konform und DSGVO-sicher.",
-    "cta": "Jetzt starten",
-    "ctaEmployer": "Als Arbeitgeber registrieren",
+    "heroTitle": "Fachkräfte aus Vietnam – zuverlässig, vorbereitet und langfristig integriert",
+    "heroSubtitle": "Wir unterstützen deutsche Unternehmen bei der Gewinnung qualifizierter Auszubildender und Fachkräfte – von der Auswahl bis zur erfolgreichen Integration.",
+    "cta": "Kostenlose Erstberatung",
+    "ctaEmployer": "Fachkräfte anfragen",
     "ctaLearnMore": "Mehr erfahren",
     "statsPlaced": "Erfolgreiche Platzierungen",
-    "statsPartners": "Eigene Sprachschulen (VN)",
+    "statsPartners": "Standorte (DE + VN)",
     "statsEmployers": "Arbeitgeber",
-    "trustTitle": "Vertrauen & Compliance",
-    "trustIHK": "IHK-konformer Prozess",
-    "trustDSGVO": "DSGVO-zertifiziert",
+    "trustTitle": "Vertrauen durch Struktur und Erfahrung",
+    "trustIHK": "Strukturierter Prozess",
+    "trustDSGVO": "DSGVO-konform",
     "trustFEG": "Fachkräfteeinwanderungsgesetz",
-    "howTitle": "So funktioniert Lotus&Eagle",
-    "step1Title": "Profil erstellen",
-    "step1Desc": "Arbeitgeber erstellen ihr Firmenprofil und Stellenangebote. Schulen laden Kandidatenprofile hoch.",
-    "step2Title": "Matching & Auswahl",
-    "step2Desc": "Unser intelligentes Matching verbindet passende Kandidaten mit den richtigen Stellen.",
-    "step3Title": "IHK-Prozess",
-    "step3Desc": "Automatisierte Erstellung aller IHK-Dokumente und Begleitung durch den gesamten Prozess.",
-    "step4Title": "Erfolgreiche Platzierung",
-    "step4Desc": "Vom Visumsantrag bis zur Ankunft – wir begleiten jeden Schritt."
+    "howTitle": "Unser strukturierter Prozess",
+    "step1Title": "Analyse Ihres Personalbedarfs",
+    "step1Desc": "Wir erfassen Ihren konkreten Bedarf strukturiert und abgestimmt.",
+    "step2Title": "Auswahl geeigneter Kandidaten",
+    "step2Desc": "Gezielte Auswahl passender Kandidaten mit relevanter Qualifikation.",
+    "step3Title": "Sprachliche und fachliche Vorbereitung",
+    "step3Desc": "Vorbereitung der Kandidaten für einen erfolgreichen Start in Deutschland.",
+    "step4Title": "Integration und langfristige Betreuung",
+    "step4Desc": "Begleitung bei Visum, Einreise und langfristiger Integration."
   },
   "footer": {
     "legal": "Rechtliches",

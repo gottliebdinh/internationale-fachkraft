@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "Lotus&Eagle",
-    "tagline": "Skilled Workers for Germany – Four own language schools in Vietnam",
+    "tagline": "Strategic Partner for Skilled Workers from Vietnam",
     "login": "Log in",
     "register": "Find candidates",
     "logout": "Log out",
@@ -33,10 +33,8 @@
   "nav": {
     "home": "Home",
     "about": "About Us",
-    "howItWorks": "How It Works",
     "forEmployers": "For Employers",
-    "forSchools": "For Schools",
-    "faq": "FAQ",
+    "forApplicants": "For Applicants",
     "contact": "Contact",
     "dashboard": "Dashboard",
     "adminConsole": "Lotus&Eagle Admin",
@@ -72,9 +70,10 @@
     "ctaLearnMore": "Learn More"
   },
   "industry": {
-    "hospitality": "Hospitality & Gastronomy",
-    "hairdressing": "Hairdressing",
-    "nursing": "Nursing",
+    "hospitality": "Hotels & Gastronomy",
+    "healthcare": "Healthcare",
+    "trade": "Skilled trades",
+    "retail": "Retail",
     "other": "Other"
   },
   "footer": {

@@ -1,19 +1,28 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   Heart,
   Globe,
   ShieldCheck,
   Handshake,
-  Milestone,
   Target,
   Users,
   Building2,
   Leaf,
-  Eye,
-  Zap,
-  Shield,
+  Network,
+  Briefcase,
+  Lightbulb,
+  MessageCircle,
 } from "lucide-react";
+import type { Metadata } from "next";
+import { CONTACT_PHONE_TEL } from "@/lib/contact-info";
+
+export const metadata: Metadata = {
+  title: "Über uns – Lotus&Eagle",
+  description:
+    "Lotus&Eagle ist Ihr strategischer Partner für die nachhaltige Gewinnung internationaler Fachkräfte aus Vietnam – mit Struktur in Deutschland und Vietnam.",
+};
 
 const values = [
   {
@@ -23,8 +32,8 @@ const values = [
   },
   {
     icon: ShieldCheck,
-    title: "Compliance & Qualität",
-    desc: "IHK-konforme Prozesse, DSGVO-Konformität und die Einhaltung des Fachkräfteeinwanderungsgesetzes stehen im Mittelpunkt.",
+    title: "Qualität & Compliance",
+    desc: "Strukturierte Prozesse, rechtssichere Vertragsgestaltung und Einhaltung aller relevanten Gesetze stehen im Mittelpunkt.",
   },
   {
     icon: Heart,
@@ -38,12 +47,22 @@ const values = [
   },
 ];
 
-const milestones = [
-  { year: "2022", title: "Gründung", desc: "Idee und erste Konzeptentwicklung der Lotus&Eagle-Plattform." },
-  { year: "2023", title: "Eigenes Schulnetz", desc: "Ausbau der vier eigenen Sprachschulen in Vietnam und Professionalisierung von Screening und Ankunftsbetreuung." },
-  { year: "2024", title: "Plattform-Launch", desc: "Start der digitalen Plattform mit ersten erfolgreichen Vermittlungen." },
-  { year: "2025", title: "Wachstum", desc: "Über 100 erfolgreiche Platzierungen; vier eigene Sprachschulen als festes Rückgrat der Vorbereitung." },
-  { year: "2026", title: "Expansion", desc: "Erweiterung auf weitere Berufsfelder und Ausbau der KI-gestützten Matching-Algorithmen." },
+const uspItems = [
+  {
+    icon: Network,
+    title: "Struktur in Deutschland und Vietnam",
+    desc: "Durch unsere Präsenz in beiden Ländern steuern wir den gesamten Prozess – von der Auswahl bis zur Integration.",
+  },
+  {
+    icon: Briefcase,
+    title: "Erfahrung aus der Praxis",
+    desc: "Wir kennen die Anforderungen aus realen Projekten und verfügen über umfassende Erfahrung im Umgang mit Behörden, Kammern und Unternehmen.",
+  },
+  {
+    icon: Lightbulb,
+    title: "Unternehmerisches Netzwerk",
+    desc: "Unser Team besteht aus Fachkräften, Unternehmern und Ausbildern, die die Herausforderungen deutscher Betriebe aus erster Hand verstehen.",
+  },
 ];
 
 export default function AboutPage() {
@@ -57,16 +76,16 @@ export default function AboutPage() {
               Über <span className="text-accent">Lotus&Eagle</span>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Wir sind ein strukturierter, international integrierter Partner für nachhaltige Fachkräfte- und Ausbildungsgewinnung zwischen Vietnam und Deutschland – kein klassischer Vermittler, sondern Systemanbieter mit vier eigenen Sprachschulen in Vietnam, professionellem Screening und klarer Verantwortungsstruktur in Deutschland.
-            </p>
-            <p className="mt-4 text-base font-medium text-foreground">
-              Wenn Sie über uns rekrutieren: <span className="text-accent">völlige Transparenz</span>, <span className="text-accent">Schnelligkeit</span> und <span className="text-accent">Sicherheit</span> – von der Bedarfsanalyse bis zur Integration.
+              Lotus&Eagle ist Ihr strategischer Partner für die Gewinnung
+              internationaler Fachkräfte aus Vietnam. Wir begleiten den
+              gesamten Prozess – von der gezielten Auswahl über die sprachliche
+              und fachliche Vorbereitung bis zur vollständigen Integration.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Mission */}
+      {/* Mission + Stats */}
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 items-center">
@@ -80,16 +99,14 @@ export default function AboutPage() {
                 suchen.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Lotus&Eagle schließt diese Lücke mit einer professionellen digitalen
-                Plattform und einer klaren unternehmerischen Architektur: vier
-                eigene Sprachschulen in Vietnam, professionelles Screening und
-                klare Verantwortung in Deutschland.
-                Von der Kandidatensuche über IHK-konforme Dokumente bis zur
-                Visa-Beantragung und Integration – strukturiert und mit Planungssicherheit.
+                Unser Anspruch ist nicht die kurzfristige Vermittlung, sondern
+                der Aufbau stabiler und langfristiger Personalstrukturen. Wir
+                verbinden internationale Rekrutierung mit operativer Umsetzung
+                in Deutschland.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Unser Ziel: Langfristige Partnerschaft statt Einmalvermittlung.
-                Transparent, rechtssicher und mit Fokus auf Stabilität für alle Beteiligten.
+                Unser Ziel: Langfristige Partnerschaften mit Unternehmen, die
+                auf Qualität, Verlässlichkeit und nachhaltige Lösungen setzen.
               </p>
             </div>
             <Card className="border-0 bg-muted/30">
@@ -97,9 +114,9 @@ export default function AboutPage() {
                 <div className="grid grid-cols-2 gap-6">
                   {[
                     { value: "120+", label: "Platzierungen", icon: Users },
-                    { value: "4", label: "Eigene Sprachschulen (VN)", icon: Globe },
+                    { value: "2", label: "Fokusbranchen", icon: Target },
                     { value: "85+", label: "Arbeitgeber", icon: Handshake },
-                    { value: "3", label: "Branchen", icon: Target },
+                    { value: "2", label: "Standorte (DE + VN)", icon: Globe },
                   ].map((stat) => (
                     <div key={stat.label} className="text-center">
                       <stat.icon className="h-6 w-6 mx-auto mb-2 text-accent" />
@@ -116,61 +133,45 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Transparenz, Schnelligkeit, Sicherheit – Warum über uns */}
-      <section className="py-20">
+      {/* USP */}
+      <section className="py-20 bg-muted/20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-2">
-            Warum über uns?
+            Warum Lotus&Eagle?
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Wenn Sie Ihre Fachkräftegewinnung über Lotus&Eagle abwickeln, profitieren Sie von drei zentralen Vorteilen.
+            Was uns von klassischen Vermittlungsagenturen unterscheidet.
           </p>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            <Card className="border-0 shadow-sm bg-card text-center">
-              <CardContent className="pt-8 pb-8">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent/15 mb-4">
-                  <Eye className="h-7 w-7 text-accent" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Völlige Transparenz</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Jeder Schritt ist nachvollziehbar und dokumentiert – von der Rekrutierung bis zur Integration. Sie sehen jederzeit den Status, die Unterlagen und die nächsten Schritte.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="border-0 shadow-sm bg-card text-center">
-              <CardContent className="pt-8 pb-8">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent/15 mb-4">
-                  <Zap className="h-7 w-7 text-accent" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Schnelligkeit</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Klare Prozesse, digitale Plattform und erfahrene Koordination mit Behörden und Partnern – damit Ihr Personalbedarf zügig und planbar gedeckt wird.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="border-0 shadow-sm bg-card text-center">
-              <CardContent className="pt-8 pb-8">
-                <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent/15 mb-4">
-                  <Shield className="h-7 w-7 text-accent" />
-                </div>
-                <h3 className="font-semibold text-lg mb-2">Sicherheit</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Rechtssichere Verträge, IHK-/HWK-/ZAV-Konformität, DSGVO-konforme Datenverarbeitung und klare Verantwortung – Sie sind auf der sicheren Seite.
-                </p>
-              </CardContent>
-            </Card>
+            {uspItems.map((item) => (
+              <Card
+                key={item.title}
+                className="border-0 shadow-sm bg-card text-center"
+              >
+                <CardContent className="pt-8 pb-8">
+                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent/15 mb-4">
+                    <item.icon className="h-7 w-7 text-accent" />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {item.desc}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Zwei-Säulen-Modell – Green Germany / Lotus & Eagle Alliance */}
-      <section className="py-20 bg-muted/20">
+      {/* Zwei-Säulen-Modell */}
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-4">
             Unser integriertes System
           </h2>
           <p className="text-center text-muted-foreground mb-4 max-w-2xl mx-auto">
-            Klare Zuständigkeitsstruktur für Planungssicherheit – in Vietnam und in Deutschland.
+            Klare Zuständigkeitsstruktur für Planungssicherheit – in Vietnam und
+            in Deutschland.
           </p>
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mt-12">
             <Card className="border-0 shadow-sm bg-card overflow-hidden">
@@ -181,25 +182,29 @@ export default function AboutPage() {
                     <Leaf className="h-6 w-6 text-[oklch(0.50_0.11_195)]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">Green Germany GmbH – Vietnam</h3>
-                    <p className="text-xs text-muted-foreground">seit 2018</p>
+                    <h3 className="font-semibold text-lg">Vietnam</h3>
+                    <p className="text-xs text-muted-foreground">
+                      Auswahl & Vorbereitung
+                    </p>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Operative Grundlage unseres internationalen Modells: Wir betreiben vier eigene Sprachschulen in Vietnam – dadurch sind Rekrutierung, professionelles Screening und Sprachausbildung durchgängig aufeinander abgestimmt und präzise steuerbar. Sprachtraining mit deutschsprachigen Lehrkräften, interkulturelle Vorbereitung, Abholung am Flughafen bei der Ankunft sowie Dokumentenvorbereitung gemäß deutscher Anforderungen. Ziel: Integrationsrisiken, Fehlbesetzungen und Ausbildungsabbrüche minimieren.
+                  Gezielte Auswahl geeigneter Kandidaten, sprachliche und
+                  fachliche Vorbereitung, interkulturelle Schulung und
+                  Dokumentenvorbereitung gemäß deutscher Anforderungen.
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.50_0.11_195)]" />
-                    Professionelles Screening & mehrstufige Auswahl
+                    Professionelles Screening & Auswahl
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.50_0.11_195)]" />
-                    Vier eigene Sprachschulen, Sprachtraining & Interkultur
+                    Sprachtraining & interkulturelle Vorbereitung
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.50_0.11_195)]" />
-                    Flughafen-Abholung & Dokumente nach deutschen Standards
+                    Dokumente nach deutschen Standards
                   </li>
                 </ul>
               </CardContent>
@@ -212,12 +217,16 @@ export default function AboutPage() {
                     <Building2 className="h-6 w-6 text-[oklch(0.28_0.06_255)]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">Lotus & Eagle Alliance – Deutschland</h3>
-                    <p className="text-xs text-muted-foreground">Verantwortung gegenüber Partnerunternehmen</p>
+                    <h3 className="font-semibold text-lg">Deutschland</h3>
+                    <p className="text-xs text-muted-foreground">
+                      Vermittlung & Integration
+                    </p>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Übernimmt die unternehmerische Verantwortung gegenüber deutschen Partnerunternehmen: Analyse des konkreten Personalbedarfs, strukturierte Vertragsgestaltung, Koordination mit IHK, HWK und ZAV, Begleitung im Anerkennungs- und Visa-Prozess sowie Integrationsmanagement nach Ankunft.
+                  Analyse des konkreten Personalbedarfs, strukturierte
+                  Vertragsgestaltung, Behördenkoordination, Begleitung im
+                  Visa-Prozess und Integrationsmanagement nach Ankunft.
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
@@ -226,7 +235,7 @@ export default function AboutPage() {
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.28_0.06_255)]" />
-                    Koordination IHK, HWK, ZAV & Visa
+                    Koordination Behörden & Visa
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[oklch(0.28_0.06_255)]" />
@@ -242,12 +251,10 @@ export default function AboutPage() {
       {/* Values */}
       <section className="py-20 bg-muted/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-4">
-            Unsere Werte
-          </h2>
+          <h2 className="text-3xl font-bold text-center mb-4">Unsere Werte</h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Diese Grundsätze leiten unser Handeln und prägen jede
-            Entscheidung, die wir treffen.
+            Diese Grundsätze leiten unser Handeln und prägen jede Entscheidung,
+            die wir treffen.
           </p>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             {values.map((value) => (
@@ -265,49 +272,47 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="py-20 bg-muted/20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-4">
-            Unsere Geschichte
+      {/* CTA */}
+      <section
+        className="relative overflow-hidden bg-[oklch(0.16_0.03_260)] py-20 sm:py-24"
+        aria-labelledby="cta-heading"
+      >
+        <div
+          className="absolute inset-0 opacity-25"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 80% at 50% 50%, oklch(0.55 0.12 195 / 0.4), transparent 70%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-2xl px-4 text-center sm:px-6 lg:px-8">
+          <h2
+            id="cta-heading"
+            className="font-[var(--font-display)] text-2xl font-semibold tracking-tight text-white sm:text-3xl"
+          >
+            Lassen Sie uns gemeinsam starten
           </h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Von der Idee zur führenden Plattform für deutsch-vietnamesische
-            Fachkräftevermittlung.
+          <p className="mt-3 text-base text-[oklch(0.88_0.01_260)]">
+            Erfahren Sie, wie Lotus&Eagle Sie bei der nachhaltigen Sicherung
+            von Fachkräften unterstützen kann.
           </p>
-          <div className="relative max-w-3xl mx-auto">
-            <div className="absolute left-4 top-0 bottom-0 w-px bg-border md:left-1/2" />
-            <div className="space-y-12">
-              {milestones.map((milestone, i) => (
-                <div
-                  key={milestone.year}
-                  className={`relative flex items-start gap-6 md:gap-12 ${
-                    i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                  }`}
-                >
-                  <div className="hidden md:block md:w-1/2" />
-                  <div className="absolute left-4 md:left-1/2 -translate-x-1/2 z-10">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent">
-                      <Milestone className="h-4 w-4 text-accent-foreground" />
-                    </div>
-                  </div>
-                  <Card className="ml-12 md:ml-0 md:w-1/2 border-0 shadow-sm">
-                    <CardContent className="pt-4">
-                      <Badge variant="outline" className="mb-2">
-                        {milestone.year}
-                      </Badge>
-                      <h3 className="font-semibold text-base mb-1">
-                        {milestone.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {milestone.desc}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
-            </div>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+            <Button
+              size="lg"
+              asChild
+              className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)]"
+            >
+              <Link href="/auth/register/employer">Kostenlose Erstberatung</Link>
+            </Button>
           </div>
+          <a
+            href={`https://wa.me/${CONTACT_PHONE_TEL.replace("+", "")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[oklch(0.85_0.02_260)] hover:text-white transition-colors"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Oder direkt per WhatsApp schreiben
+          </a>
         </div>
       </section>
     </>

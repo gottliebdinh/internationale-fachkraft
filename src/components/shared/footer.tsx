@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { BrandWordmarkLink } from "@/components/shared/brand-wordmark-link";
 import { useTranslations } from "next-intl";
+import { CONTACT_PHONE_TEL } from "@/lib/contact-info";
 
 export function Footer() {
   const t = useTranslations("footer");
@@ -18,8 +19,8 @@ export function Footer() {
               className="mb-4 inline-flex"
             />
             <p className="text-sm text-muted-foreground max-w-xs">
-              Die professionelle Brücke zwischen deutschen Unternehmen und
-              vietnamesischen Fachkräften.
+              Ihr strategischer Partner für die Gewinnung internationaler
+              Fachkräfte aus Vietnam.
             </p>
           </div>
 
@@ -54,7 +55,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-3 text-sm">Plattform</h3>
+            <h3 className="font-semibold mb-3 text-sm">Unternehmen</h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -66,18 +67,18 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/for-schools"
+                  href="/for-applicants"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Für Schulen
+                  Für Bewerber
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/how-it-works"
+                  href="/about"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  So funktioniert&apos;s
+                  Über uns
                 </Link>
               </li>
             </ul>
@@ -95,12 +96,14 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/faq"
+                <a
+                  href={`https://wa.me/${CONTACT_PHONE_TEL.replace("+", "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  FAQ
-                </Link>
+                  WhatsApp
+                </a>
               </li>
             </ul>
           </div>

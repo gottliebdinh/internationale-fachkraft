@@ -14,10 +14,9 @@ export function PublicNavbar() {
   const [open, setOpen] = useState(false);
 
   const navLinks = [
-    { href: "/how-it-works", label: t("howItWorks") },
     { href: "/for-employers", label: t("forEmployers") },
-    { href: "/for-schools", label: t("forSchools") },
-    { href: "/faq", label: t("faq") },
+    { href: "/for-applicants", label: t("forApplicants") },
+    { href: "/about", label: t("about") },
     { href: "/contact", label: t("contact") },
   ];
 

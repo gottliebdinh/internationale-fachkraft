@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthRecoveryRedirect } from "@/components/auth/auth-recovery-redirect";
 import { getPublicSiteUrl } from "@/lib/site-url";
+import { BRAND_SYMBOL_SRC } from "@/lib/brand-logo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,19 +37,20 @@ const siteUrl = getPublicSiteUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Lotus&Eagle – Fachkräfte für Deutschland | IHK-konforme Vermittlung",
+    default: "Lotus&Eagle – Fachkräfte aus Vietnam für deutsche Unternehmen",
     template: "%s | Lotus&Eagle",
   },
   description:
-    "Die professionelle Plattform für die Vermittlung vietnamesischer Fachkräfte und Auszubildender an deutsche Unternehmen – IHK-konform und DSGVO-sicher. Hotellerie, Friseurhandwerk, Pflege.",
+    "Ihr strategischer Partner für die Gewinnung qualifizierter Fachkräfte und Auszubildender aus Vietnam – von der Auswahl bis zur erfolgreichen Integration. Gastronomie, Pflege.",
   keywords: [
     "Fachkräfte Vietnam",
-    "Fachkräfteeinwanderungsgesetz",
-    "IHK Ausbildung",
     "Fachkräftemangel",
+    "Fachkräfteeinwanderungsgesetz",
+    "Gastronomie Fachkräfte",
+    "Pflege Fachkräfte",
     "Arbeitsvermittlung Deutschland Vietnam",
-    "FEG",
-    "DSGVO Recruiting",
+    "Ausbildung Vietnam",
+    "Integration Fachkräfte",
   ],
   authors: [{ name: "Lotus&Eagle" }],
   creator: "Lotus&Eagle",
@@ -57,15 +59,15 @@ export const metadata: Metadata = {
     locale: "de_DE",
     url: siteUrl,
     siteName: "Lotus&Eagle",
-    title: "Lotus&Eagle – Internationale Fachkräfte für Deutschland",
+    title: "Lotus&Eagle – Fachkräfte aus Vietnam für deutsche Unternehmen",
     description:
-      "IHK-konforme Vermittlung vietnamesischer Fachkräfte und Auszubildender. Hotellerie, Friseurhandwerk, Pflege.",
+      "Strategischer Partner für die nachhaltige Gewinnung von Fachkräften und Auszubildenden aus Vietnam. Gastronomie, Pflege.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lotus&Eagle – Fachkräfte für Deutschland",
+    title: "Lotus&Eagle – Fachkräfte aus Vietnam",
     description:
-      "IHK-konform und DSGVO-sicher: Vermittlung vietnamesischer Fachkräfte an deutsche Unternehmen.",
+      "Strategischer Partner für die nachhaltige Gewinnung qualifizierter Fachkräfte aus Vietnam.",
   },
   robots: {
     index: true,
@@ -73,6 +75,11 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+  },
+  icons: {
+    icon: [{ url: BRAND_SYMBOL_SRC, type: "image/png" }],
+    shortcut: BRAND_SYMBOL_SRC,
+    apple: [{ url: BRAND_SYMBOL_SRC }],
   },
 };
 

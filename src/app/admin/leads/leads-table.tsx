@@ -30,10 +30,13 @@ const STATUS_OPTIONS = [
 ];
 
 const INDUSTRY_LABELS: Record<string, string> = {
-  hospitality: "Hotellerie & Gastronomie",
+  hospitality: "Hotellerie / Gastronomie",
+  healthcare: "Gesundheitsbranche",
+  trade: "Handwerk",
+  retail: "Einzelhandel",
+  other: "Andere",
   hairdressing: "Friseurhandwerk",
   nursing: "Pflege",
-  other: "Andere",
 };
 
 const SEEKING_LABELS: Record<string, string> = {

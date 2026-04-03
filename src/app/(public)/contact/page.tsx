@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle2, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -256,6 +256,28 @@ export default function ContactPage() {
                           {CONTACT_PHONE_DISPLAY}
                         </a>
                       </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* WhatsApp */}
+              <Card className="border-0 shadow-sm bg-[oklch(0.50_0.11_195/0.08)]">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[oklch(0.50_0.11_195/0.15)] shrink-0">
+                      <MessageCircle className="h-5 w-5 text-[oklch(0.50_0.11_195)]" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">WhatsApp</h3>
+                      <a
+                        href={`https://wa.me/${CONTACT_PHONE_TEL.replace("+", "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-[oklch(0.50_0.11_195)] hover:underline font-medium"
+                      >
+                        Direkt per WhatsApp schreiben
+                      </a>
                     </div>
                   </div>
                 </CardContent>

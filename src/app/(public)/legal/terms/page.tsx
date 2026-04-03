@@ -54,7 +54,7 @@ export default function TermsPage() {
                   (1) Lotus&Eagle betreibt eine internetbasierte Plattform zur
                   Vermittlung vietnamesischer Fachkräfte und Auszubildender an
                   deutsche Unternehmen in den Bereichen Hotellerie &
-                  Gastronomie, Friseurhandwerk und Pflege.
+                  Gastronomie und Pflege sowie weiterer Branchen.
                 </p>
                 <p>(2) Die Leistungen umfassen insbesondere:</p>
                 <ul className="list-[lower-alpha] pl-6 space-y-1">

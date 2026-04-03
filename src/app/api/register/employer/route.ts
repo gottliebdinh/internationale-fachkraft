@@ -7,9 +7,13 @@ import {
 
 const INDUSTRY_LABELS: Record<string, string> = {
   hospitality: "Hotellerie / Gastronomie",
+  healthcare: "Gesundheitsbranche",
+  trade: "Handwerk",
+  retail: "Einzelhandel",
+  other: "Andere",
+  // Legacy-Werte älterer Leads
   hairdressing: "Friseurhandwerk",
   nursing: "Pflege",
-  other: "Sonstige",
 };
 
 const SEEKING_LABELS: Record<string, string> = {
@@ -30,9 +34,7 @@ export async function POST(req: Request) {
 
     const {
       industry,
-      industry_other,
       seeking_type,
-      seeking_other,
       start_date,
       slots,
       name,
@@ -55,17 +57,26 @@ export async function POST(req: Request) {
       return jsonError("Bitte geben Sie eine gültige Telefonnummer ein.", 400);
     }
 
-    const ind = String(industry ?? "other").trim();
-    if (ind === "other" && !String(industry_other ?? "").trim()) {
-      return jsonError("Bitte geben Sie Ihre Branche ein.", 400);
+    const ind = String(industry ?? "").trim();
+    const allowedIndustries = new Set([
+      "hospitality",
+      "healthcare",
+      "trade",
+      "retail",
+      "other",
+    ]);
+    if (!allowedIndustries.has(ind)) {
+      return jsonError("Ungültige Branche.", 400);
     }
 
     const seekType = String(seeking_type ?? "").trim();
-    if (!seekType) {
-      return jsonError("Bitte geben Sie an, wonach Sie suchen.", 400);
-    }
-    if (seekType === "other" && !String(seeking_other ?? "").trim()) {
-      return jsonError("Bitte beschreiben Sie, wonach Sie suchen.", 400);
+    const allowedSeeking = new Set([
+      "fachkraft",
+      "auszubildender",
+      "other",
+    ]);
+    if (!allowedSeeking.has(seekType)) {
+      return jsonError("Ungültige Angabe zur Suche.", 400);
     }
 
     const slotsNum = Math.max(1, Math.floor(Number(slots)) || 1);
@@ -76,13 +87,9 @@ export async function POST(req: Request) {
 
     const { error: insertErr } = await supabase.from("leads").insert({
       industry: ind,
-      industry_other:
-        ind === "other" ? String(industry_other ?? "").trim() || null : null,
+      industry_other: null,
       seeking_type: seekType,
-      seeking_other:
-        seekType === "other"
-          ? String(seeking_other ?? "").trim() || null
-          : null,
+      seeking_other: null,
       start_date: startDateStr,
       slots: slotsNum,
       name: nameTrim,
@@ -98,15 +105,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const industryDisplay =
-      ind === "other"
-        ? String(industry_other ?? "").trim() || INDUSTRY_LABELS.other
-        : INDUSTRY_LABELS[ind] ?? ind;
+    const industryDisplay = INDUSTRY_LABELS[ind] ?? ind;
 
-    const seekingDisplay =
-      seekType === "other"
-        ? String(seeking_other ?? "").trim() || SEEKING_LABELS.other
-        : SEEKING_LABELS[seekType] ?? seekType;
+    const seekingDisplay = SEEKING_LABELS[seekType] ?? seekType;
 
     let startDateDisplay: string | null = null;
     if (startDateStr) {
