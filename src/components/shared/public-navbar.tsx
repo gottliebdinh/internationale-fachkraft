@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useState } from "react";
-import { BrandWordmarkLink } from "@/components/shared/brand-wordmark-link";
+import { BRAND_SYMBOL_SRC } from "@/lib/brand-logo";
+import { cn } from "@/lib/utils";
 
 export function PublicNavbar() {
   const t = useTranslations("nav");
@@ -23,12 +25,38 @@ export function PublicNavbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-20 w-full max-w-[min(100%,1340px)] items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
-        <BrandWordmarkLink
+        <Link
           href="/"
-          size="lg"
-          className="flex items-center"
-          withSymbol
-        />
+          className={cn(
+            "flex items-center gap-3 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md sm:gap-4",
+            "text-[#0A2240] dark:text-foreground",
+          )}
+        >
+          <Image
+            src={BRAND_SYMBOL_SRC}
+            alt=""
+            width={80}
+            height={80}
+            className="h-9 w-9 shrink-0 object-contain sm:h-10 sm:w-10 md:h-11 md:w-11"
+            priority
+          />
+          <span className="flex min-w-0 flex-col gap-0 leading-none">
+            <span className="font-[var(--font-display)] text-lg font-semibold uppercase leading-tight tracking-tight sm:text-xl md:text-2xl">
+              Lotus & Eagle
+            </span>
+            <span className="mt-px flex items-center gap-2 font-[var(--font-body)] text-[0.72rem] font-semibold uppercase leading-none tracking-[0.2em] text-[#0A2240] dark:text-foreground sm:text-[0.8rem]">
+              <span
+                className="h-px w-8 shrink-0 bg-current opacity-45 sm:w-10"
+                aria-hidden
+              />
+              <span className="shrink-0">Alliance</span>
+              <span
+                className="h-px w-8 shrink-0 bg-current opacity-45 sm:w-10"
+                aria-hidden
+              />
+            </span>
+          </span>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-7">
           {navLinks.map((link) => (
