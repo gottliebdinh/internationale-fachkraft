@@ -3,8 +3,8 @@
 /** Gesellschaftsname (Impressum, AGB, Datenschutz) */
 export const LEGAL_ENTITY_NAME = "Lotus & Eagle Alliance UG";
 
-export const LEGAL_STREET_LINE = "Katharinengasse 14";
-export const LEGAL_CITY_LINE = "90403 Nürnberg";
+export const LEGAL_STREET_LINE = "Bartholomäusstraße 26d";
+export const LEGAL_CITY_LINE = "90489 Nürnberg";
 export const LEGAL_COUNTRY_LINE = "Deutschland";
 
 /** Adresszeilen unter dem Firmennamen (ohne Name) */
@@ -20,7 +20,7 @@ export const LEGAL_ADDRESS_INLINE = `${LEGAL_ENTITY_NAME}, ${LEGAL_STREET_LINE},
 export const CONTACT_EMAIL = "contact@le-alliance.de";
 
 /** Anzeigeformat der Rufnummer */
-export const CONTACT_PHONE_DISPLAY = "0151 1696 9999";
+export const CONTACT_PHONE_DISPLAY = "0151 16969999";
 
 /** E.164 für `tel:`-Links (015116969999 → +49 151 16969999) */
 export const CONTACT_PHONE_TEL = "+4915116969999";

@@ -43,7 +43,7 @@ export default function ImprintPage() {
             <div>
               <h2 className="text-xl font-bold mb-3">Vertreten durch</h2>
               <p className="text-muted-foreground">
-                Geschäftsführer: Max Mustermann
+                Geschäftsführer: Tuan Le
               </p>
             </div>
 
@@ -75,17 +75,9 @@ export default function ImprintPage() {
               <h2 className="text-xl font-bold mb-3">Registereintrag</h2>
               <div className="space-y-1 text-sm text-muted-foreground">
                 <p>Eintragung im Handelsregister</p>
-                <p>Registergericht: Amtsgericht Berlin-Charlottenburg</p>
-                <p>Registernummer: HRB 123456 B</p>
+                <p>Registergericht: Amtsgericht Regensburg</p>
+                <p>Handelsregister: HRB 21552</p>
               </div>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-bold mb-3">Umsatzsteuer-ID</h2>
-              <p className="text-sm text-muted-foreground">
-                Umsatzsteuer-Identifikationsnummer gemäß § 27 a
-                Umsatzsteuergesetz: DE 123 456 789
-              </p>
             </div>
 
             <div>
@@ -93,7 +85,7 @@ export default function ImprintPage() {
                 Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV
               </h2>
               <div className="space-y-1 text-sm text-muted-foreground">
-                <p>Max Mustermann</p>
+                <p>Tuan Le</p>
                 <p>{LEGAL_STREET_LINE}</p>
                 <p>{LEGAL_CITY_LINE}</p>
               </div>

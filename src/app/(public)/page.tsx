@@ -427,7 +427,7 @@ export default function HomePage() {
                 Unser strukturierter Prozess
               </h2>
               <div
-                className="mx-auto mt-5 h-0.5 w-12 rounded-full bg-[oklch(0.50_0.11_195)]"
+                className="mx-auto mt-5 h-1 w-12 rounded-full bg-[oklch(0.50_0.11_195)]"
                 aria-hidden
               />
               <p
@@ -441,7 +441,7 @@ export default function HomePage() {
             <div className="relative mt-12 sm:mt-14">
               {/* Horizontale Linie zwischen 01–05 (nur wenn alle in einer Reihe) */}
               <div
-                className="pointer-events-none absolute left-[10%] right-[10%] top-6 z-0 hidden h-0.5 rounded-full bg-[oklch(0.50_0.11_195)]/40 lg:block"
+                className="pointer-events-none absolute left-[10%] right-[10%] top-[1.375rem] z-0 hidden h-1 rounded-full bg-[oklch(0.50_0.11_195)]/40 lg:block"
                 aria-hidden
               />
               <div className="relative z-[1] grid w-full grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-5 lg:grid-rows-[auto_auto_1fr] lg:gap-x-2 lg:gap-y-4 xl:gap-x-3 2xl:gap-x-4">
