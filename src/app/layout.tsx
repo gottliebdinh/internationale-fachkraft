@@ -37,8 +37,8 @@ const siteUrl = getPublicSiteUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Lotus&Eagle – Fachkräfte aus Vietnam für deutsche Unternehmen",
-    template: "%s | Lotus&Eagle",
+    default: "LOTUS & EAGLE – Fachkräfte aus Vietnam für deutsche Unternehmen",
+    template: "%s | LOTUS & EAGLE",
   },
   description:
     "Ihr strategischer Partner für die Gewinnung qualifizierter Fachkräfte und Auszubildender aus Vietnam – von der Auswahl bis zur erfolgreichen Integration. Gastronomie, Pflege.",
@@ -52,20 +52,20 @@ export const metadata: Metadata = {
     "Ausbildung Vietnam",
     "Integration Fachkräfte",
   ],
-  authors: [{ name: "Lotus&Eagle" }],
-  creator: "Lotus&Eagle",
+  authors: [{ name: "LOTUS & EAGLE" }],
+  creator: "LOTUS & EAGLE",
   openGraph: {
     type: "website",
     locale: "de_DE",
     url: siteUrl,
-    siteName: "Lotus&Eagle",
-    title: "Lotus&Eagle – Fachkräfte aus Vietnam für deutsche Unternehmen",
+    siteName: "LOTUS & EAGLE",
+    title: "LOTUS & EAGLE – Fachkräfte aus Vietnam für deutsche Unternehmen",
     description:
       "Strategischer Partner für die nachhaltige Gewinnung von Fachkräften und Auszubildenden aus Vietnam. Gastronomie, Pflege.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lotus&Eagle – Fachkräfte aus Vietnam",
+    title: "LOTUS & EAGLE – Fachkräfte aus Vietnam",
     description:
       "Strategischer Partner für die nachhaltige Gewinnung qualifizierter Fachkräfte aus Vietnam.",
   },

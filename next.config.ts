@@ -6,6 +6,9 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  async redirects() {
+    return [{ source: "/for-applicants", destination: "/", permanent: true }];
+  },
   async rewrites() {
     return [
       // Browsers request /favicon.ico by default; serve our mark (no default triangle .ico).

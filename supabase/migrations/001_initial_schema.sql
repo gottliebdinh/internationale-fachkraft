@@ -1,4 +1,4 @@
--- Lotus&Eagle Platform Database Schema
+-- LOTUS & EAGLE Platform Database Schema
 -- Initial migration: all core tables
 
 -- Enums

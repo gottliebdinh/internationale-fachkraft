@@ -27,7 +27,7 @@ export default function TermsPage() {
                 <p>
                   (1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend
                   „AGB") gelten für alle Verträge zwischen der{" "}
-                  {LEGAL_ADDRESS_INLINE} (nachfolgend „Lotus&Eagle" oder
+                  {LEGAL_ADDRESS_INLINE} (nachfolgend „LOTUS & EAGLE" oder
                   „Anbieter") und den Nutzern der Plattform (nachfolgend
                   „Nutzer").
                 </p>
@@ -35,11 +35,11 @@ export default function TermsPage() {
                   (2) Nutzer im Sinne dieser AGB sind sowohl Arbeitgeber
                   (natürliche oder juristische Personen) als auch
                   Partnerschulen (Bildungseinrichtungen), die die
-                  Lotus&Eagle-Plattform nutzen.
+                  LOTUS & EAGLE-Plattform nutzen.
                 </p>
                 <p>
                   (3) Abweichende, entgegenstehende oder ergänzende AGB des
-                  Nutzers werden nur dann Vertragsbestandteil, wenn Lotus&Eagle
+                  Nutzers werden nur dann Vertragsbestandteil, wenn LOTUS & EAGLE
                   ihrer Geltung ausdrücklich schriftlich zugestimmt hat.
                 </p>
               </div>
@@ -51,7 +51,7 @@ export default function TermsPage() {
               </h2>
               <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
                 <p>
-                  (1) Lotus&Eagle betreibt eine internetbasierte Plattform zur
+                  (1) LOTUS & EAGLE betreibt eine internetbasierte Plattform zur
                   Vermittlung vietnamesischer Fachkräfte und Auszubildender an
                   deutsche Unternehmen in den Bereichen Hotellerie &
                   Gastronomie und Pflege sowie weiterer Branchen.
@@ -75,7 +75,7 @@ export default function TermsPage() {
                   <li>Kommunikationstools und Dashboard-Funktionen</li>
                 </ul>
                 <p>
-                  (3) Lotus&Eagle schuldet keine bestimmte Vermittlungserfolge. Die
+                  (3) LOTUS & EAGLE schuldet keine bestimmte Vermittlungserfolge. Die
                   Plattform stellt die technischen Mittel zur Verfügung; die
                   endgültige Auswahlentscheidung liegt beim jeweiligen
                   Arbeitgeber.
@@ -89,7 +89,7 @@ export default function TermsPage() {
                 <p>
                   (1) Die Nutzung der Plattform setzt eine vorherige
                   Registrierung voraus. Mit der Registrierung kommt ein
-                  Nutzungsvertrag zwischen dem Nutzer und Lotus&Eagle zustande.
+                  Nutzungsvertrag zwischen dem Nutzer und LOTUS & EAGLE zustande.
                 </p>
                 <p>
                   (2) Der Nutzer ist verpflichtet, bei der Registrierung
@@ -102,7 +102,7 @@ export default function TermsPage() {
                   an Dritte weitergegeben werden.
                 </p>
                 <p>
-                  (4) Lotus&Eagle behält sich das Recht vor, Registrierungen ohne
+                  (4) LOTUS & EAGLE behält sich das Recht vor, Registrierungen ohne
                   Angabe von Gründen abzulehnen.
                 </p>
               </div>
@@ -179,7 +179,7 @@ export default function TermsPage() {
               </h2>
               <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
                 <p>
-                  (1) Lotus&Eagle haftet unbeschränkt für Schäden, die auf einer
+                  (1) LOTUS & EAGLE haftet unbeschränkt für Schäden, die auf einer
                   vorsätzlichen oder grob fahrlässigen Pflichtverletzung
                   beruhen, sowie für Schäden aus der Verletzung des Lebens,
                   des Körpers oder der Gesundheit.
@@ -190,12 +190,12 @@ export default function TermsPage() {
                   den vorhersehbaren, vertragstypischen Schaden begrenzt.
                 </p>
                 <p>
-                  (3) Lotus&Eagle haftet nicht für die Richtigkeit, Vollständigkeit
+                  (3) LOTUS & EAGLE haftet nicht für die Richtigkeit, Vollständigkeit
                   und Aktualität der von den Nutzern auf der Plattform
                   bereitgestellten Informationen.
                 </p>
                 <p>
-                  (4) Lotus&Eagle übernimmt keine Garantie für den Erfolg einer
+                  (4) LOTUS & EAGLE übernimmt keine Garantie für den Erfolg einer
                   Vermittlung oder für die Eignung eines Kandidaten.
                 </p>
                 <p>
@@ -209,7 +209,7 @@ export default function TermsPage() {
               <h2 className="text-2xl font-bold mb-4">§ 7 Datenschutz</h2>
               <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
                 <p>
-                  (1) Lotus&Eagle verarbeitet personenbezogene Daten der Nutzer
+                  (1) LOTUS & EAGLE verarbeitet personenbezogene Daten der Nutzer
                   gemäß den geltenden Datenschutzgesetzen, insbesondere der
                   DSGVO und des BDSG.
                 </p>
@@ -271,7 +271,7 @@ export default function TermsPage() {
               <div className="space-y-3 text-sm text-muted-foreground leading-relaxed">
                 <p>
                   (1) Alle Rechte an der Plattform, einschließlich Design,
-                  Texte, Grafiken, Software und Logos, stehen Lotus&Eagle oder
+                  Texte, Grafiken, Software und Logos, stehen LOTUS & EAGLE oder
                   deren Lizenzgebern zu.
                 </p>
                 <p>
@@ -305,7 +305,7 @@ export default function TermsPage() {
                   Zweck der unwirksamen Bestimmung am nächsten kommt.
                 </p>
                 <p>
-                  (4) Lotus&Eagle behält sich das Recht vor, diese AGB jederzeit zu
+                  (4) LOTUS & EAGLE behält sich das Recht vor, diese AGB jederzeit zu
                   ändern. Änderungen werden dem Nutzer rechtzeitig mitgeteilt.
                   Widerspricht der Nutzer nicht innerhalb von 30 Tagen nach
                   Zugang der Änderungsmitteilung, gelten die geänderten AGB

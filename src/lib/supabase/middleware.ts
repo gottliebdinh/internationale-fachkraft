@@ -165,7 +165,7 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // Altes Platzhalter-Admin unter /dashboard/admin → echtes Lotus&Eagle-Admin
+  // Altes Platzhalter-Admin unter /dashboard/admin → echtes LOTUS & EAGLE-Admin
   if (user && pathname.startsWith("/dashboard/admin")) {
     const { data: dashAdmin } = await supabase
       .from("users")

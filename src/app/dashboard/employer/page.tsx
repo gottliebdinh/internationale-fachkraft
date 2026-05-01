@@ -6,7 +6,7 @@ import { EmployerDashboardView } from "@/components/dashboard/employer-dashboard
 import { getEmployerDashboardViewModel } from "@/lib/employer-dashboard-data";
 
 export const metadata: Metadata = {
-  title: "Dashboard | Lotus&Eagle",
+  title: "Dashboard | LOTUS & EAGLE",
   description: "Ihr Arbeitgeber-Dashboard mit Stellen und Kandidaten.",
 };
 

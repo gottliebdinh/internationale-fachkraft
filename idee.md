@@ -1,5 +1,5 @@
 PROJEKTGRUNDLAGE – WEBSITE & MARKTPOSITIONIERUNG
-Lotus & Eagle Alliance UG (haftungsbeschränkt)
+LOTUS & EAGLE Alliance UG (haftungsbeschränkt)
 
 Strategische Grundlage für den Vertriebspartner
 
@@ -15,7 +15,7 @@ Innerhalb weniger Minuten muss erkennbar sein:
 - Fokus auf langfristige Partnerschaften statt Einmalvermittlung
 
 2. Marktpositionierung
-Lotus & Eagle Alliance positioniert sich als strukturierter, mittelständischer, international integrierter Partner für nachhaltige Fachkräfte- und Ausbildungsgewinnung zwischen Vietnam und Deutschland.
+LOTUS & EAGLE Alliance positioniert sich als strukturierter, mittelständischer, international integrierter Partner für nachhaltige Fachkräfte- und Ausbildungsgewinnung zwischen Vietnam und Deutschland.
 
 Wir treten nicht als klassische Vermittlungsagentur auf, sondern als Systemanbieter mit eigener Infrastruktur in Vietnam und klarer Verantwortungsstruktur in Deutschland.
 
@@ -32,8 +32,8 @@ Green Germany GmbH bildet die operative Grundlage unseres internationalen Modell
 
 Ziel ist die systematische Vorbereitung der Kandidaten, um Integrationsrisiken, Fehlbesetzungen und Ausbildungsabbrüche zu minimieren.
 
-3.2 Lotus & Eagle Alliance – Deutschland
-Lotus & Eagle Alliance übernimmt die unternehmerische Verantwortung gegenüber deutschen Partnerunternehmen.
+3.2 LOTUS & EAGLE Alliance – Deutschland
+LOTUS & EAGLE Alliance übernimmt die unternehmerische Verantwortung gegenüber deutschen Partnerunternehmen.
 
 - Analyse des konkreten Personalbedarfs
 - Strukturierte Vertragsgestaltung
@@ -83,11 +83,11 @@ Die Website dient als Vertriebsinstrument zur Stabilisierung von Erstkontakten u
 
 ---
 
-## Offene Punkte – Website-Anpassungen (Stand Abgleich mit Lotus&Eagle-Codebase)
+## Offene Punkte – Website-Anpassungen (Stand Abgleich mit LOTUS & EAGLE-Codebase)
 
 ### Rechtliches / Impressum
-- [ ] **Impressum:** Firmenname von „Lotus&Eagle GmbH“ auf **Lotus & Eagle Alliance UG (haftungsbeschränkt)** umstellen (oder Lotus&Eagle als Marke, Betreiber: Lotus & Eagle Alliance).
-- [ ] Adresse, Geschäftsführer, Register, USt-ID etc. mit echten Daten der Lotus & Eagle Alliance UG pflegen.
+- [ ] **Impressum:** Firmenname von „LOTUS & EAGLE GmbH“ auf **LOTUS & EAGLE Alliance UG (haftungsbeschränkt)** umstellen (oder LOTUS & EAGLE als Marke, Betreiber: LOTUS & EAGLE Alliance).
+- [ ] Adresse, Geschäftsführer, Register, USt-ID etc. mit echten Daten der LOTUS & EAGLE Alliance UG pflegen.
 - [ ] Optional: **Green Germany GmbH** (Vietnam) im Impressum oder unter „Struktur“ erwähnen (operativer Partner Vietnam).
 
 ### Positionierung & Texte
@@ -95,10 +95,10 @@ Die Website dient als Vertriebsinstrument zur Stabilisierung von Erstkontakten u
 - [ ] Begriffe aus idee.md stärker nutzen: **„nachhaltige Fachkräfte- und Ausbildungsgewinnung“**, **„Planungssicherheit“**, **„langfristige Partnerschaft“** (keine Einmalvermittlung).
 - [ ] Optional: Kurzer Hinweis auf **Vermittlungsmodell ohne Arbeitnehmerüberlassung** (Punkt 8 idee.md), z. B. im FAQ oder Für Arbeitgeber.
 
-### Zwei-Säulen-Modell (Green Germany / Lotus & Eagle Alliance)
+### Zwei-Säulen-Modell (Green Germany / LOTUS & EAGLE Alliance)
 - [ ] **Über-uns-Seite:** Zwei-Säulen-Modell beschreiben:
   - **Green Germany GmbH – Vietnam (seit 2018):** Rekrutierung, Sprachtraining, interkulturelle und Dokumenten-Vorbereitung.
-  - **Lotus & Eagle Alliance – Deutschland:** Bedarfsanalyse, Verträge, Koordination IHK/HWK/ZAV, Visa, Integrationsmanagement.
+  - **LOTUS & EAGLE Alliance – Deutschland:** Bedarfsanalyse, Verträge, Koordination IHK/HWK/ZAV, Visa, Integrationsmanagement.
 - [ ] Botschaft: **„Klare Zuständigkeitsstruktur → Planungssicherheit für deutsche Unternehmen.“**
 
 ### Risikominimierung (Kernargument idee.md)

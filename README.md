@@ -1,4 +1,4 @@
-# Lotus&Eagle – Fachkräfte für Deutschland
+# LOTUS & EAGLE – Fachkräfte für Deutschland
 
 B2B recruiting platform connecting German employers (hospitality, hairdressing, nursing) with Vietnamese training schools. IHK-compliant, DSGVO-secure.
 

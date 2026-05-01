@@ -1,7 +1,7 @@
 /** Zentrale Kontaktdaten (Kontaktseite, Impressum, Lead-Benachrichtigung). */
 
 /** Gesellschaftsname (Impressum, AGB, Datenschutz) */
-export const LEGAL_ENTITY_NAME = "Lotus & Eagle Alliance UG";
+export const LEGAL_ENTITY_NAME = "LOTUS & EAGLE Alliance UG";
 
 export const LEGAL_STREET_LINE = "Bartholomäusstraße 26d";
 export const LEGAL_CITY_LINE = "90489 Nürnberg";

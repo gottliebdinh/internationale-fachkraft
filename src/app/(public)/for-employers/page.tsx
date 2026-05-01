@@ -21,7 +21,7 @@ import { CONTACT_WHATSAPP_ERSTBERATUNG_URL } from "@/lib/contact-info";
 export const metadata: Metadata = {
   title: "Für Arbeitgeber – Fachkräfte nachhaltig sichern",
   description:
-    "Lotus&Eagle ist Ihr strategischer Partner für die Gewinnung internationaler Fachkräfte aus Vietnam. Ausbildung, Fachkräfte und kurzfristige Beschäftigung.",
+    "LOTUS & EAGLE ist Ihr strategischer Partner für die Gewinnung internationaler Fachkräfte aus Vietnam. Ausbildung, Fachkräfte und kurzfristige Beschäftigung.",
 };
 
 /** Gleiche Tokens wie Startseite (public home) */
@@ -76,7 +76,8 @@ const processSteps: {
   {
     step: "02",
     title: "Kennenlernen per Video Call",
-    detail: "Persönliches Kennenlernen des Kandidaten digital und unkompliziert.",
+    detail:
+      "Sie treffen den Kandidaten gemeinsam mit unserem Berater im Video Call – persönlich und strukturiert.",
   },
   {
     step: "03",
@@ -160,12 +161,13 @@ const industries: {
     icon: UtensilsCrossed,
     title: "Gastronomie",
     desc: "Küche, Service und Ausbildung – von Auszubildenden bis zu erfahrenen Fachkräften.",
-    image: "/schwerpunkt/köchin.png",
+    image: "/schwerpunkt/gastro.png",
   },
   {
     icon: Hotel,
     title: "Hotellerie",
     desc: "Front Office, Housekeeping und Empfang – zuverlässige Teams für Ihren Betrieb.",
+    image: "/schwerpunkt/hotellerie.png",
   },
   {
     icon: HeartPulse,
@@ -177,11 +179,13 @@ const industries: {
     icon: Hammer,
     title: "Handwerk",
     desc: "Gewerke mit klarem Qualitätsanspruch – von Montage bis zu spezialisierten Berufen.",
+    image: "/schwerpunkt/handerwerker.png",
   },
   {
     icon: Store,
     title: "Einzelhandel",
     desc: "Verkauf, Lager und Kundenservice – flexibel besetzbar bei Bedarf.",
+    image: "/schwerpunkt/einzelhandel.png",
   },
 ];
 
@@ -223,7 +227,7 @@ export default function ForEmployersPage() {
     <div
       className="font-[var(--font-body)]"
       id="main-content"
-      aria-label="Für Arbeitgeber – Lotus&Eagle"
+      aria-label="Für Arbeitgeber – LOTUS & EAGLE"
     >
       {/* Hero — Hintergrund wie Startseite „Unser strukturierter Prozess“ */}
       <section
@@ -247,7 +251,7 @@ export default function ForEmployersPage() {
             <p
               className={`mt-6 text-lg leading-relaxed sm:text-[1.0625rem] ${homeBodyMuted}`}
             >
-              Lotus&Eagle ist Ihr strategischer Partner für die Gewinnung
+              LOTUS & EAGLE ist Ihr strategischer Partner für die Gewinnung
               internationaler Fachkräfte aus Vietnam. Wir begleiten den gesamten
               Prozess – von der Auswahl bis zur erfolgreichen Integration in Ihr
               Unternehmen.
@@ -293,7 +297,7 @@ export default function ForEmployersPage() {
               id="benefits-heading"
               className="mt-3 font-[var(--font-display)] text-2xl font-semibold tracking-tight text-white sm:text-3xl"
             >
-              Ihre Vorteile mit Lotus&Eagle
+              Ihre Vorteile mit LOTUS & EAGLE
             </h2>
             <div
               className="mx-auto mt-5 h-0.5 w-12 rounded-full bg-white/35"

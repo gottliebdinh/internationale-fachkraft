@@ -18,11 +18,11 @@ import { CONTACT_WHATSAPP_ERSTBERATUNG_URL } from "@/lib/contact-info";
 const siteUrl = getPublicSiteUrl();
 
 export const metadata: Metadata = {
-  title: "Lotus&Eagle – Fachkräfte aus Vietnam für deutsche Unternehmen",
+  title: "LOTUS & EAGLE – Fachkräfte aus Vietnam für deutsche Unternehmen",
   description:
     "Ihr strategischer Partner für die Gewinnung qualifizierter Fachkräfte und Auszubildender aus Vietnam – von der Auswahl bis zur erfolgreichen Integration.",
   openGraph: {
-    title: "Lotus&Eagle – Fachkräfte aus Vietnam für deutsche Unternehmen",
+    title: "LOTUS & EAGLE – Fachkräfte aus Vietnam für deutsche Unternehmen",
     description:
       "Wir unterstützen deutsche Unternehmen bei der Gewinnung qualifizierter Auszubildender und Fachkräfte – von der Auswahl bis zur erfolgreichen Integration.",
     url: siteUrl,
@@ -36,7 +36,7 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": `${siteUrl}/#organization`,
-      name: "Lotus&Eagle",
+      name: "LOTUS & EAGLE",
       url: siteUrl,
       description:
         "Strategischer Partner für die Gewinnung internationaler Fachkräfte aus Vietnam für deutsche Unternehmen.",
@@ -49,7 +49,7 @@ const jsonLd = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "Lotus&Eagle – Fachkräfte aus Vietnam",
+      name: "LOTUS & EAGLE – Fachkräfte aus Vietnam",
       description:
         "Strategischer Partner für die nachhaltige Gewinnung von Fachkräften und Auszubildenden aus Vietnam.",
       publisher: { "@id": `${siteUrl}/#organization` },
@@ -135,7 +135,8 @@ const processSteps: {
   {
     step: "02",
     title: "Kennenlernen per Video Call",
-    detail: "Persönliches Kennenlernen des Kandidaten digital und unkompliziert.",
+    detail:
+      "Sie treffen den Kandidaten gemeinsam mit unserem Berater im Video Call – persönlich und strukturiert.",
   },
   {
     step: "03",
@@ -197,7 +198,7 @@ export default function HomePage() {
       <main
         className="font-[var(--font-body)]"
         id="main-content"
-        aria-label="Startseite Lotus&Eagle – Fachkräfte aus Vietnam"
+        aria-label="Startseite LOTUS & EAGLE – Fachkräfte aus Vietnam"
       >
         {/* ───── HERO ───── */}
         <section
@@ -385,7 +386,7 @@ export default function HomePage() {
                 </h2>
                 <div className="mt-6 min-w-0 space-y-4 text-base leading-relaxed text-white/88 lg:col-start-3 lg:row-start-3 lg:mt-6 lg:pl-8 xl:pl-12">
                   <p>
-                    Lotus&Eagle ist Ihr strategischer Partner für die Gewinnung
+                    LOTUS & EAGLE ist Ihr strategischer Partner für die Gewinnung
                     internationaler Fachkräfte aus Vietnam.
                   </p>
                   <p>

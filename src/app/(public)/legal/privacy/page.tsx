@@ -177,7 +177,7 @@ export default function PrivacyPolicyPage() {
                   Dokumentenpflichten
                 </li>
                 <li>
-                  An IT-Dienstleister, die im Auftrag von Lotus&Eagle Daten
+                  An IT-Dienstleister, die im Auftrag von LOTUS & EAGLE Daten
                   verarbeiten (Auftragsverarbeiter gemäß Art. 28 DSGVO)
                 </li>
                 <li>
