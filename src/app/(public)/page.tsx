@@ -8,13 +8,12 @@ import {
   Globe,
   Briefcase,
   Clock,
-  ShieldCheck,
   Network,
   Lightbulb,
 } from "lucide-react";
 import type { Metadata } from "next";
 import { getPublicSiteUrl } from "@/lib/site-url";
-import { CONTACT_PHONE_TEL } from "@/lib/contact-info";
+import { CONTACT_WHATSAPP_ERSTBERATUNG_URL } from "@/lib/contact-info";
 
 const siteUrl = getPublicSiteUrl();
 
@@ -130,28 +129,28 @@ const processSteps: {
 }[] = [
   {
     step: "01",
-    title: "Analyse Ihres Personalbedarfs",
-    detail: "Bedarf und Profil klar definieren – zielgenaue Suche.",
+    title: "Aussuchen des Kandidaten",
+    detail: "Gezielte Auswahl passender Profile für Ihren Betrieb.",
   },
   {
     step: "02",
-    title: "Selektive Kandidatenauswahl",
-    detail: "Streng selektiv: nur passende Profile, kein Massengeschäft.",
+    title: "Kennenlernen per Video Call",
+    detail: "Persönliches Kennenlernen des Kandidaten digital und unkompliziert.",
   },
   {
     step: "03",
-    title: "Intensive Kandidatenvorbereitung",
-    detail: "Sprache, Fachkompetenz, Kultur – fit für den Job in Deutschland.",
+    title: "Unterlagen vorbereiten (Arbeitsverhältnis)",
+    detail: "Verträge und Unterlagen für das Arbeitsverhältnis – strukturiert und vollständig.",
   },
   {
     step: "04",
-    title: "Visum und Einreise",
-    detail: "Behörden und Formalitäten koordiniert – Sie bleiben entlastet.",
+    title: "Visum beantragen",
+    detail: "Antrag und Behördenweg begleitet – Sie bleiben entlastet.",
   },
   {
     step: "05",
-    title: "Integration & langfristige Betreuung",
-    detail: "Einarbeitung vor Ort und Begleitung über den Start hinaus.",
+    title: "Azubis kommen in der Stadt an",
+    detail: "Die Auszubildenden treffen an Ihrem Ort ein – bereit für den Start.",
   },
 ];
 
@@ -233,13 +232,15 @@ export default function HomePage() {
                       asChild
                       className="h-12 min-h-12 px-8 text-base font-semibold shadow-sm bg-[oklch(0.28_0.06_255)] text-white hover:bg-[oklch(0.22_0.06_255)]"
                     >
-                      <Link
-                        href="/auth/register/employer"
+                      <a
+                        href={CONTACT_WHATSAPP_ERSTBERATUNG_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-2"
                       >
                         Kostenlose Erstberatung
                         <ArrowRight className="h-4 w-4 shrink-0" />
-                      </Link>
+                      </a>
                     </Button>
                     <Button
                       size="lg"
@@ -433,8 +434,8 @@ export default function HomePage() {
               <p
                 className={`mt-7 text-base leading-[1.65] sm:text-[1.0625rem] ${homeBodyMuted}`}
               >
-                Von der Analyse bis Visum, Einreise und langfristiger Betreuung –
-                der komplette Ablauf aus einer Hand.
+                Von der Auswahl bis zur Ankunft der Auszubildenden in Ihrer Stadt –
+                klar strukturiert und aus einer Hand begleitet.
               </p>
             </div>
 
@@ -472,6 +473,49 @@ export default function HomePage() {
                 </div>
               );
             })}
+              </div>
+            </div>
+
+            {/* Zeitachse unter den Schritten: Strich 1–4 (1,5 Wochen) · Strich 4→5 (3–4 Wochen) */}
+            <div
+              className="mx-auto mt-12 max-w-5xl"
+              role="group"
+              aria-label="Zeitlicher Ablauf: Schritte 1 bis 4 in etwa 1,5 Wochen, von Schritt 4 bis zur Ankunft in Schritt 5 typischerweise 3 bis 4 weitere Wochen."
+            >
+              <p
+                className={`mb-6 text-center text-xs font-medium uppercase tracking-[0.18em] ${homeEyebrow}`}
+              >
+                Zeitlicher Ablauf
+              </p>
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-5 lg:gap-x-2 lg:gap-y-0 xl:gap-x-3 2xl:gap-x-4">
+                <div className="flex flex-col lg:col-span-4">
+                  <div
+                    className="h-[4px] w-full rounded-full bg-[oklch(0.42_0.11_195)] shadow-[0_1px_0_oklch(0.55_0.11_195/0.35)]"
+                    aria-hidden
+                  />
+                  <div className="mt-4 space-y-1 text-center lg:text-left lg:pl-1">
+                    <p className="text-sm font-semibold text-[oklch(0.28_0.06_255)]">
+                      ca. 1,5 Wochen
+                    </p>
+                    <p className={`text-xs leading-relaxed sm:text-sm ${homeBodyMuted}`}>
+                      für Schritte 1 bis 4 (Auswahl bis Visumsantrag)
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col border-t border-dashed border-[oklch(0.50_0.11_195)]/45 pt-8 lg:col-span-1 lg:border-l lg:border-t-0 lg:pt-0 lg:pl-4 xl:pl-5">
+                  <div
+                    className="h-[4px] w-full rounded-full bg-[oklch(0.55_0.11_195)]"
+                    aria-hidden
+                  />
+                  <div className="mt-4 space-y-1 text-center lg:text-left">
+                    <p className="text-sm font-semibold text-[oklch(0.28_0.06_255)]">
+                      3–4 Wochen
+                    </p>
+                    <p className={`text-xs leading-relaxed sm:text-sm ${homeBodyMuted}`}>
+                      von Schritt 4 bis zur Ankunft (Schritt 5)
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -655,9 +699,13 @@ export default function HomePage() {
                   asChild
                   className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.50_0.11_195)] text-white shadow-md hover:bg-[oklch(0.44_0.11_195)]"
                 >
-                  <Link href="/auth/register/employer">
+                  <a
+                    href={CONTACT_WHATSAPP_ERSTBERATUNG_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Kostenlose Erstberatung sichern
-                  </Link>
+                  </a>
                 </Button>
                 <Button
                   size="lg"
@@ -668,16 +716,6 @@ export default function HomePage() {
                   <Link href="/contact">Jetzt Kontakt aufnehmen</Link>
                 </Button>
               </div>
-              {/* WhatsApp */}
-              <a
-                href={`https://wa.me/${CONTACT_PHONE_TEL.replace("+", "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[oklch(0.85_0.02_260)] transition-colors hover:text-white"
-              >
-                <ShieldCheck className="h-4 w-4" />
-                Oder direkt per WhatsApp schreiben
-              </a>
             </div>
           </div>
         </section>

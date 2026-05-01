@@ -17,7 +17,6 @@ export function PublicNavbar() {
 
   const navLinks = [
     { href: "/for-employers", label: t("forEmployers") },
-    { href: "/for-applicants", label: t("forApplicants") },
     { href: "/about", label: t("about") },
     { href: "/contact", label: t("contact") },
   ];

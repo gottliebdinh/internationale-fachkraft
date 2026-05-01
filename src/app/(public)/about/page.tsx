@@ -13,10 +13,9 @@ import {
   Network,
   Briefcase,
   Lightbulb,
-  MessageCircle,
 } from "lucide-react";
 import type { Metadata } from "next";
-import { CONTACT_PHONE_TEL } from "@/lib/contact-info";
+import { CONTACT_WHATSAPP_ERSTBERATUNG_URL } from "@/lib/contact-info";
 
 export const metadata: Metadata = {
   title: "Über uns – Lotus&Eagle",
@@ -301,18 +300,15 @@ export default function AboutPage() {
               asChild
               className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto bg-[oklch(0.50_0.11_195)] text-white hover:bg-[oklch(0.44_0.11_195)]"
             >
-              <Link href="/auth/register/employer">Kostenlose Erstberatung</Link>
+              <a
+                href={CONTACT_WHATSAPP_ERSTBERATUNG_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Kostenlose Erstberatung
+              </a>
             </Button>
           </div>
-          <a
-            href={`https://wa.me/${CONTACT_PHONE_TEL.replace("+", "")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[oklch(0.85_0.02_260)] hover:text-white transition-colors"
-          >
-            <MessageCircle className="h-4 w-4" />
-            Oder direkt per WhatsApp schreiben
-          </a>
         </div>
       </section>
     </>
