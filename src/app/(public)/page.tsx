@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +12,11 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 import { getPublicSiteUrl } from "@/lib/site-url";
-import { CONTACT_WHATSAPP_ERSTBERATUNG_URL } from "@/lib/contact-info";
+import {
+  CONTACT_WHATSAPP_ERSTBERATUNG_URL,
+  CONTACT_WHATSAPP_FACHKRAEFTE_ANFRAGE_URL,
+  CONTACT_WHATSAPP_URL,
+} from "@/lib/contact-info";
 
 const siteUrl = getPublicSiteUrl();
 
@@ -248,9 +251,13 @@ export default function HomePage() {
                       asChild
                       className="h-12 min-h-12 px-8 text-base font-semibold bg-[oklch(0.50_0.11_195)] text-white shadow-sm hover:bg-[oklch(0.44_0.11_195)]"
                     >
-                      <Link href="/auth/register/employer">
+                      <a
+                        href={CONTACT_WHATSAPP_FACHKRAEFTE_ANFRAGE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         Fachkräfte anfragen
-                      </Link>
+                      </a>
                     </Button>
                   </div>
                 </div>
@@ -714,7 +721,13 @@ export default function HomePage() {
                   asChild
                   className="h-12 min-h-12 px-8 text-base font-semibold w-full sm:w-auto border-2 border-white/55 bg-transparent text-white hover:bg-white/12 hover:text-white"
                 >
-                  <Link href="/contact">Jetzt Kontakt aufnehmen</Link>
+                  <a
+                    href={CONTACT_WHATSAPP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Jetzt Kontakt aufnehmen
+                  </a>
                 </Button>
               </div>
             </div>

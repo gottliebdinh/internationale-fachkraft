@@ -20,10 +20,10 @@ export const LEGAL_ADDRESS_INLINE = `${LEGAL_ENTITY_NAME}, ${LEGAL_STREET_LINE},
 export const CONTACT_EMAIL = "contact@le-alliance.de";
 
 /** Anzeigeformat der Rufnummer */
-export const CONTACT_PHONE_DISPLAY = "0151 16969999";
+export const CONTACT_PHONE_DISPLAY = "+49 1511 6037860";
 
-/** E.164 für `tel:`-Links (015116969999 → +49 151 16969999) */
-export const CONTACT_PHONE_TEL = "+4915116969999";
+/** E.164 für `tel:`-Links und WhatsApp (`wa.me`) */
+export const CONTACT_PHONE_TEL = "+4915116037860";
 
 /** WhatsApp-Chat (`wa.me`, Nummer ohne „+“). */
 export const CONTACT_WHATSAPP_URL = `https://wa.me/${CONTACT_PHONE_TEL.replace("+", "")}`;
@@ -31,6 +31,11 @@ export const CONTACT_WHATSAPP_URL = `https://wa.me/${CONTACT_PHONE_TEL.replace("
 /** CTAs „Kostenlose Erstberatung“: öffnet WhatsApp mit Kurznachricht. */
 export const CONTACT_WHATSAPP_ERSTBERATUNG_URL = `${CONTACT_WHATSAPP_URL}?text=${encodeURIComponent(
   "Hallo, ich möchte eine kostenlose Erstberatung.",
+)}`;
+
+/** CTAs „Fachkräfte anfragen“ / Arbeitgeber-Register in der Navigation. */
+export const CONTACT_WHATSAPP_FACHKRAEFTE_ANFRAGE_URL = `${CONTACT_WHATSAPP_URL}?text=${encodeURIComponent(
+  "Hallo, ich möchte Fachkräfte anfragen.",
 )}`;
 
 /** Interne E-Mail bei neuem Lead; optional `LEADS_NOTIFY_EMAIL` in `.env` setzen. */

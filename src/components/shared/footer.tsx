@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { CONTACT_PHONE_TEL } from "@/lib/contact-info";
+import { CONTACT_WHATSAPP_URL } from "@/lib/contact-info";
 import { BRAND_SYMBOL_SRC } from "@/lib/brand-logo";
 import { cn } from "@/lib/utils";
 
@@ -108,21 +108,13 @@ export function Footer() {
             <h3 className="font-semibold mb-3 text-sm">{t("contact")}</h3>
             <ul className="space-y-2">
               <li>
-                <Link
-                  href="/contact"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {t("contact")}
-                </Link>
-              </li>
-              <li>
                 <a
-                  href={`https://wa.me/${CONTACT_PHONE_TEL.replace("+", "")}`}
+                  href={CONTACT_WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  WhatsApp
+                  {t("contact")}
                 </a>
               </li>
             </ul>

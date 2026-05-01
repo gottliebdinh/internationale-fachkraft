@@ -14,6 +14,7 @@ import { signIn } from "@/lib/supabase/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CONTACT_WHATSAPP_FACHKRAEFTE_ANFRAGE_URL } from "@/lib/contact-info";
 
 export default function LoginPage() {
   const t = useTranslations("auth");
@@ -130,12 +131,14 @@ export default function LoginPage() {
 
       <div className="mt-8 border-t border-border pt-6 text-center">
         <div className="flex flex-col gap-2">
-          <Link
-            href="/auth/register/employer"
+          <a
+            href={CONTACT_WHATSAPP_FACHKRAEFTE_ANFRAGE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-sm font-semibold text-primary transition-colors hover:text-primary/80"
           >
-            Jetzt kostenlos registrieren →
-          </Link>
+            Fachkräfte per WhatsApp anfragen →
+          </a>
         </div>
       </div>
     </div>

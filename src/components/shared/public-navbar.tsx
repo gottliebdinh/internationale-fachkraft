@@ -9,6 +9,10 @@ import { Menu } from "lucide-react";
 import { useState } from "react";
 import { BRAND_SYMBOL_SRC } from "@/lib/brand-logo";
 import { cn } from "@/lib/utils";
+import {
+  CONTACT_WHATSAPP_FACHKRAEFTE_ANFRAGE_URL,
+  CONTACT_WHATSAPP_URL,
+} from "@/lib/contact-info";
 
 export function PublicNavbar() {
   const t = useTranslations("nav");
@@ -16,9 +20,13 @@ export function PublicNavbar() {
   const [open, setOpen] = useState(false);
 
   const navLinks = [
-    { href: "/for-employers", label: t("forEmployers") },
-    { href: "/about", label: t("about") },
-    { href: "/contact", label: t("contact") },
+    { href: "/for-employers", label: t("forEmployers"), external: false },
+    { href: "/about", label: t("about"), external: false },
+    {
+      href: CONTACT_WHATSAPP_URL,
+      label: t("contact"),
+      external: true,
+    },
   ];
 
   return (
@@ -58,20 +66,38 @@ export function PublicNavbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-7">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) =>
+            link.external ? (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            ),
+          )}
         </nav>
 
         <div className="hidden md:flex items-center">
           <Button asChild className="h-11 min-h-11 px-6 text-base font-semibold">
-            <Link href="/auth/register/employer">{tc("register")}</Link>
+            <a
+              href={CONTACT_WHATSAPP_FACHKRAEFTE_ANFRAGE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {tc("register")}
+            </a>
           </Button>
         </div>
 
@@ -84,19 +110,39 @@ export function PublicNavbar() {
           </SheetTrigger>
           <SheetContent side="right" className="w-72">
             <nav className="flex flex-col gap-4 mt-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground py-2"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) =>
+                link.external ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground py-2"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground py-2"
+                  >
+                    {link.label}
+                  </Link>
+                ),
+              )}
               <div className="border-t pt-4 flex flex-col gap-2">
                 <Button asChild className="h-11 min-h-11 px-6 text-base font-semibold">
-                  <Link href="/auth/register/employer">{tc("register")}</Link>
+                  <a
+                    href={CONTACT_WHATSAPP_FACHKRAEFTE_ANFRAGE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                  >
+                    {tc("register")}
+                  </a>
                 </Button>
               </div>
             </nav>
